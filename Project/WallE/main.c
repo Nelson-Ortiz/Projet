@@ -47,7 +47,6 @@ messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
-parameter_namespace_t parameter_root, aseba_ns;
 
 static bool load_config(void)
 {
