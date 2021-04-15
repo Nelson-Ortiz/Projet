@@ -49,8 +49,6 @@ CONDVAR_DECL(bus_condvar);
 
 parameter_namespace_t parameter_root, aseba_ns;
 
-static THD_WORKING_AREA(selector_thd_wa, 2048);
-
 static bool load_config(void)
 {
     extern uint32_t _config_start;
@@ -83,7 +81,6 @@ int main(void)
     messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
     proximity_msg_t prox_values;
 
-   // parameter_namespace_declare(&parameter_root, NULL, NULL);
 
     //starts the serial communication
     serial_start();
@@ -96,29 +93,19 @@ int main(void)
    
     int dist=0;
 
-
-    // Initialise Aseba system, declaring parameters
-    //parameter_namespace_declare(&aseba_ns, &parameter_root, "aseba");
-    //aseba_declare_parameters(&aseba_ns);
-
-    /* Load parameter tree from flash. */
-    load_config();
-
-    /* Start AsebaCAN. Must be after config was loaded because the CAN id
-     * cannot be changed at runtime. */
-    //aseba_vm_init();
-    //aseba_can_start(&vmState);
-
-    //chThdCreateStatic(selector_thd_wa, sizeof(selector_thd_wa), NORMALPRIO, selector_thd, NULL);
+    //wait 2 sec to be sure the e-puck is in a stable position
+    chThdSleepMilliseconds(2000);
 
     /* Infinite loop. */
     while (1) {
-        messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+
+    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
 
         
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
-        chThdSleepMilliseconds(1000);
+
+        chThdSleepMilliseconds(100);
     }
 }
 
