@@ -1,3 +1,7 @@
+#solen
+*.xml
+*.lst
+
 # Prerequisites
 *.d
 
