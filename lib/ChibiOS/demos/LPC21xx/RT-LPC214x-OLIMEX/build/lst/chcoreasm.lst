@@ -1,0 +1,319 @@
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 1
+
+
+   1              	# 1 "../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s"
+   1              	/*
+   0              	
+   0              	
+   2              	    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+   3              	
+   4              	    This file is part of ChibiOS.
+   5              	
+   6              	    ChibiOS is free software; you can redistribute it and/or modify
+   7              	    it under the terms of the GNU General Public License as published by
+   8              	    the Free Software Foundation; either version 3 of the License, or
+   9              	    (at your option) any later version.
+  10              	
+  11              	    ChibiOS is distributed in the hope that it will be useful,
+  12              	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  13              	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  14              	    GNU General Public License for more details.
+  15              	
+  16              	    You should have received a copy of the GNU General Public License
+  17              	    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  18              	*/
+  19              	
+  20              	/**
+  21              	 * @file    ARM/compilers/GCC/chcoreasm.s
+  22              	 * @brief   ARM architecture port low level code.
+  23              	 *
+  24              	 * @addtogroup ARM_CORE
+  25              	 * @{
+  26              	 */
+  27              	
+  28              	#define _FROM_ASM_
+  29              	#include "chconf.h"
+   1              	/*
+  30              	#include "armparams.h"
+   1              	/*
+  31              	
+  32              	#define FALSE 0
+  33              	#define TRUE 1
+  34              	
+  35              	#if !defined(__DOXYGEN__)
+  36              	
+  37              	                .set    MODE_USR, 0x10
+  38              	                .set    MODE_FIQ, 0x11
+  39              	                .set    MODE_IRQ, 0x12
+  40              	                .set    MODE_SVC, 0x13
+  41              	                .set    MODE_ABT, 0x17
+  42              	                .set    MODE_UND, 0x1B
+  43              	                .set    MODE_SYS, 0x1F
+  44              	
+  45              	                .equ    I_BIT, 0x80
+  46              	                .equ    F_BIT, 0x40
+  47              	
+  48              	                .text
+  49              	
+  50              	/*
+  51              	 * The following functions are only present if there is THUMB code in
+  52              	 * the system.
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 2
+
+
+  53              	 */
+  54              	#if defined(THUMB_PRESENT)
+  55              	                .balign 16
+  56              	                .code   16
+  57              	                .thumb_func
+  58              	                .global _port_get_cpsr
+  59              	_port_get_cpsr:
+  60              	                mov     r0, pc
+  61              	                bx      r0
+  62              	.code 32
+  63              	                mrs     r0, CPSR
+  64              	                bx      lr
+  65              	
+  66              	                .balign 16
+  67              	                .code   16
+  68              	                .thumb_func
+  69              	                .global _port_disable_thumb
+  70              	_port_disable_thumb:
+  71              	                mov     r3, pc
+  72              	                bx      r3
+  73              	.code 32
+  74              	                mrs     r3, CPSR
+  75              	                orr     r3, #I_BIT
+  76              	                msr     CPSR_c, r3
+  77              	                orr     r3, #F_BIT
+  78              	                msr     CPSR_c, r3
+  79              	                bx      lr
+  80              	
+  81              	                .balign 16
+  82              	                .code   16
+  83              	                .thumb_func
+  84              	                .global _port_suspend_thumb
+  85              	_port_suspend_thumb:
+  86              	                // Goes into _port_unlock_thumb
+  87              	
+  88              	                .code   16
+  89              	                .global _port_lock_thumb
+  90              	_port_lock_thumb:
+  91              	                mov     r3, pc
+  92              	                bx      r3
+  93              	                .code   32
+  94              	                msr     CPSR_c, #MODE_SYS | I_BIT
+  95              	                bx      lr
+  96              	
+  97              	                .balign 16
+  98              	                .code   16
+  99              	                .thumb_func
+ 100              	                .global _port_enable_thumb
+ 101              	_port_enable_thumb:
+ 102              	                // Goes into _port_unlock_thumb
+ 103              	
+ 104              	                .code   16
+ 105              	                .global _port_unlock_thumb
+ 106              	_port_unlock_thumb:
+ 107              	                mov     r3, pc
+ 108              	                bx      r3
+ 109              	                .code   32
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 3
+
+
+ 110              	                msr     CPSR_c, #MODE_SYS
+ 111              	                bx      lr
+ 112              	#endif /* defined(THUMB_PRESENT) */
+ 113              	
+ 114              	                .balign 16
+ 115              	#if defined(THUMB_PRESENT)
+ 116              	                .code   16
+ 117              	                .thumb_func
+ 118              	                .global _port_switch_thumb
+ 119              	_port_switch_thumb:
+ 120              	                mov     r2, pc
+ 121              	                bx      r2
+ 122              	                // Goes into _port_switch_arm in ARM mode
+ 123              	#endif /* defined(THUMB_PRESENT) */
+ 124              	
+ 125              	                .code   32
+ 126              	                .global _port_switch_arm
+ 127              	_port_switch_arm:
+ 128 0000 F04F2DE9 	                stmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+ 129 0004 0CD081E5 	                str     sp, [r1, #12]
+ 130 0008 0CD090E5 	                ldr     sp, [r0, #12]
+ 131              	#if defined(THUMB_PRESENT)
+ 132              	                ldmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+ 133              	                bx      lr
+ 134              	#else /* !defined(THUMB_PRESENT)T */
+ 135 000c F08FBDE8 	                ldmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+ 136              	#endif /* !defined(THUMB_PRESENT) */
+ 137              	
+ 138              	/*
+ 139              	 * Common IRQ code. It expects a macro ARM_IRQ_VECTOR_REG with the address
+ 140              	 * of a register holding the address of the ISR to be invoked, the ISR
+ 141              	 * then returns in the common epilogue code where the context switch will
+ 142              	 * be performed, if required.
+ 143              	 * System stack frame structure after a context switch in the
+ 144              	 * interrupt handler:
+ 145              	 *
+ 146              	 * High +------------+
+ 147              	 *      |   LR_USR   | -+
+ 148              	 *      |     r12    |  |
+ 149              	 *      |     r3     |  |
+ 150              	 *      |     r2     |  | External context: IRQ handler frame
+ 151              	 *      |     r1     |  |
+ 152              	 *      |     r0     |  |
+ 153              	 *      |   LR_IRQ   |  |   (user code return address)
+ 154              	 *      |   PSR_USR  | -+   (user code status)
+ 155              	 *      |    ....    | <- chSchDoReschedule() stack frame, optimize it for space
+ 156              	 *      |     LR     | -+   (system code return address)
+ 157              	 *      |     r11    |  |
+ 158              	 *      |     r10    |  |
+ 159              	 *      |     r9     |  |
+ 160              	 *      |     r8     |  | Internal context: chSysSwitch() frame
+ 161              	 *      |     r7     |  |
+ 162              	 *      |     r6     |  |
+ 163              	 *      |     r5     |  |
+ 164              	 * SP-> |     r4     | -+
+ 165              	 * Low  +------------+
+ 166              	 */
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 4
+
+
+ 167              	                .balign 16
+ 168              	                .code   32
+ 169              	                .global Irq_Handler
+ 170              	Irq_Handler:
+ 171 0010 0F502DE9 	                stmfd   sp!, {r0-r3, r12, lr}
+ 172 0014 70009FE5 	                ldr     r0, =ARM_IRQ_VECTOR_REG
+ 173 0018 000090E5 	                ldr     r0, [r0]
+ 174              	#if !defined(THUMB_NO_INTERWORKING)
+ 175 001c 6CE09FE5 	                ldr     lr, =_irq_ret_arm       // ISR return point.
+ 176 0020 10FF2FE1 	                bx      r0                      // Calling the ISR.
+ 177              	_irq_ret_arm:
+ 178              	#else /* defined(THUMB_NO_INTERWORKING) */
+ 179              	                add     r1, pc, #1
+ 180              	                bx      r1
+ 181              	                .code   16
+ 182              	                bl      _bxr0                   // Calling the ISR.
+ 183              	                mov     lr, pc
+ 184              	                bx      lr
+ 185              	                .code   32
+ 186              	#endif /* defined(THUMB_NO_INTERWORKING) */
+ 187 0024 000050E3 	                cmp     r0, #0
+ 188 0028 0F50BDE8 	                ldmfd   sp!, {r0-r3, r12, lr}
+ 189 002c 04F05E02 	                subeqs  pc, lr, #4              // No reschedule, returns.
+ 190              	
+ 191              	                // Now the frame is created in the system stack, the IRQ
+ 192              	                // stack is empty.
+ 193 0030 9FF021E3 	                msr     CPSR_c, #MODE_SYS | I_BIT
+ 194 0034 0F502DE9 	                stmfd   sp!, {r0-r3, r12, lr}
+ 195 0038 92F021E3 	                msr     CPSR_c, #MODE_IRQ | I_BIT
+ 196 003c 00004FE1 	                mrs     r0, SPSR
+ 197 0040 0E10A0E1 	                mov     r1, lr
+ 198 0044 9FF021E3 	                msr     CPSR_c, #MODE_SYS | I_BIT
+ 199 0048 03002DE9 	                stmfd   sp!, {r0, r1}           // Push R0=SPSR, R1=LR_IRQ.
+ 200              	
+ 201              	                // Context switch.
+ 202              	#if defined(THUMB_NO_INTERWORKING)
+ 203              	                add     r0, pc, #1
+ 204              	                bx      r0
+ 205              	                .code   16
+ 206              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 207              	                bl      _dbg_check_lock
+ 208              	#endif
+ 209              	                bl      chSchDoReschedule
+ 210              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 211              	                bl      _dbg_check_unlock
+ 212              	#endif
+ 213              	                mov     lr, pc
+ 214              	                bx      lr
+ 215              	                .code   32
+ 216              	#else /* !defined(THUMB_NO_INTERWORKING) */
+ 217              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 218              	                bl      _dbg_check_lock
+ 219              	#endif
+ 220 004c FEFFFFEB 	                bl      chSchDoReschedule
+ 221              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 222              	                bl      _dbg_check_unlock
+ 223              	#endif
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 5
+
+
+ 224              	#endif /* !defined(THUMB_NO_INTERWORKING) */
+ 225              	
+ 226              	                // Re-establish the IRQ conditions again.
+ 227 0050 0300BDE8 	                ldmfd   sp!, {r0, r1}           // Pop R0=SPSR, R1=LR_IRQ.
+ 228 0054 92F021E3 	                msr     CPSR_c, #MODE_IRQ | I_BIT
+ 229 0058 00F06FE1 	                msr     SPSR_fsxc, r0
+ 230 005c 01E0A0E1 	                mov     lr, r1
+ 231 0060 9FF021E3 	                msr     CPSR_c, #MODE_SYS | I_BIT
+ 232 0064 0F50BDE8 	                ldmfd   sp!, {r0-r3, r12, lr}
+ 233 0068 92F021E3 	                msr     CPSR_c, #MODE_IRQ | I_BIT
+ 234 006c 04F05EE2 	                subs    pc, lr, #4
+ 235              	#if defined(THUMB_NO_INTERWORKING)
+ 236              	                .code   16
+ 237              	_bxr0:          bx      r0
+ 238              	#endif
+ 239              	
+ 240              	/*
+ 241              	 * Threads trampoline code.
+ 242              	 * NOTE: The threads always start in ARM mode and then switches to the
+ 243              	 * thread-function mode.
+ 244              	 */
+ 245              	                .balign 16
+ 246              	                .code   32
+ 247              	                .globl  _port_thread_start
+ 248              	_port_thread_start:
+ 249              	#if defined(THUMB_NO_INTERWORKING)
+ 250              	                add     r0, pc, #1
+ 251              	                bx      r0
+ 252              	                .code   16
+ 253              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 254              	                bl      _dbg_check_unlock
+ 255              	#endif
+ 256              	                bl      _port_unlock_thumb
+ 257              	                mov     r0, r5
+ 258              	                bl      _bxr4
+ 259              	                bl      chThdExit
+ 260              	_zombies:       b       _zombies
+ 261              	_bxr4:          bx      r4
+ 262              	
+ 263              	#else /* !defined(THUMB_NO_INTERWORKING) */
+ 264              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 265              	                bl      _dbg_check_unlock
+ 266              	#endif
+ 267 0070 1FF021E3 	                msr     CPSR_c, #MODE_SYS
+ 268 0074 0500A0E1 	                mov     r0, r5
+ 269 0078 0FE0A0E1 	                mov     lr, pc
+ 270 007c 14FF2FE1 	                bx      r4
+ 271 0080 0000A0E3 	                mov     r0, #0              /* MSG_OK */
+ 272 0084 FEFFFFEB 	                bl      chThdExit
+ 273 0088 FEFFFFEA 	_zombies:       b       _zombies
+ 273      30F0FFFF 
+ 273      24000000 
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccMkfr6C.s 			page 6
+
+
+DEFINED SYMBOLS
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:37     *ABS*:0000000000000010 MODE_USR
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:38     *ABS*:0000000000000011 MODE_FIQ
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:39     *ABS*:0000000000000012 MODE_IRQ
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:40     *ABS*:0000000000000013 MODE_SVC
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:41     *ABS*:0000000000000017 MODE_ABT
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:42     *ABS*:000000000000001b MODE_UND
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:43     *ABS*:000000000000001f MODE_SYS
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:45     *ABS*:0000000000000080 I_BIT
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:46     *ABS*:0000000000000040 F_BIT
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:114    .text:0000000000000000 $a
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:127    .text:0000000000000000 _port_switch_arm
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:170    .text:0000000000000010 Irq_Handler
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:177    .text:0000000000000024 _irq_ret_arm
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:248    .text:0000000000000070 _port_thread_start
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:273    .text:0000000000000088 _zombies
+../../../os/rt/ports/ARM/compilers/GCC/chcoreasm.s:273    .text:000000000000008c $d
+
+UNDEFINED SYMBOLS
+chSchDoReschedule
+chThdExit

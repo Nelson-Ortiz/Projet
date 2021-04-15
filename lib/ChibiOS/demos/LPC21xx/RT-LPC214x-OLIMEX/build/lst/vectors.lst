@@ -1,0 +1,131 @@
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cc4Ccc9l.s 			page 1
+
+
+   1              	# 1 "../../../os/common/ports/ARM/compilers/GCC/vectors.s"
+   1              	/*
+   0              	
+   0              	
+   2              	    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+   3              	
+   4              	    This file is part of ChibiOS.
+   5              	
+   6              	    ChibiOS is free software; you can redistribute it and/or modify
+   7              	    it under the terms of the GNU General Public License as published by
+   8              	    the Free Software Foundation; either version 3 of the License, or
+   9              	    (at your option) any later version.
+  10              	
+  11              	    ChibiOS is distributed in the hope that it will be useful,
+  12              	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  13              	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  14              	    GNU General Public License for more details.
+  15              	
+  16              	    You should have received a copy of the GNU General Public License
+  17              	    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  18              	*/
+  19              	
+  20              	/**
+  21              	 * @file    ARM/compilers/GCC/vectors.s
+  22              	 * @brief   Interrupt vectors for ARM devices.
+  23              	 *
+  24              	 * @defgroup ARM_VECTORS ARM Exception Vectors
+  25              	 * @{
+  26              	 */
+  27              	
+  28              	#if defined(__DOXYGEN__)
+  29              	/**
+  30              	 * @brief   Unhandled exceptions handler.
+  31              	 * @details Any undefined exception vector points to this function by default.
+  32              	 *          This function simply stops the system into an infinite loop.
+  33              	 * @note    The default implementation is a weak symbol, the application
+  34              	 *          can override the default implementation.
+  35              	 *
+  36              	 * @notapi
+  37              	 */
+  38              	void _unhandled_exception(void) {}
+  39              	#endif
+  40              	
+  41              	#if !defined(__DOXYGEN__)
+  42              	
+  43              	                .section .vectors, "ax"
+  44              	                .code   32
+  45              	                .balign 4
+  46              	
+  47              	/*
+  48              	 * System entry points.
+  49              	 */
+  50              	                .global _start
+  51              	_start:
+  52 0000 18F09FE5 	                ldr     pc, _reset
+  53 0004 18F09FE5 	                ldr     pc, _undefined
+  54 0008 18F09FE5 	                ldr     pc, _swi
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cc4Ccc9l.s 			page 2
+
+
+  55 000c 18F09FE5 	                ldr     pc, _prefetch
+  56 0010 18F09FE5 	                ldr     pc, _abort
+  57 0014 0000A0E1 	                nop
+  58 0018 18F09FE5 	                ldr     pc, _irq
+  59 001c 10F09FE5 	                ldr     pc, _fiq
+  60              	
+  61              	_reset:
+  62 0020 00000000 	                .word   Reset_Handler
+  63              	_undefined:
+  64 0024 00000000 	                .word   Und_Handler
+  65              	_swi:
+  66 0028 00000000 	                .word   Swi_Handler
+  67              	_prefetch:
+  68 002c 00000000 	                .word   Prefetch_Handler
+  69              	_abort:
+  70 0030 00000000 	                .word   Abort_Handler
+  71              	_fiq:
+  72 0034 00000000 	                .word   Fiq_Handler
+  73              	_irq:
+  74 0038 00000000 	                .word   Irq_Handler
+  75              	
+  76              	/*
+  77              	 * Default exceptions handlers. The handlers are declared weak in order to be
+  78              	 * replaced by the real handling code. Everything is defaulted to an infinite
+  79              	 * loop.
+  80              	 */
+  81              	                .weak   Reset_Handler
+  82              	Reset_Handler:
+  83              	                .weak   Und_Handler
+  84              	Und_Handler:
+  85              	                .weak   Swi_Handler
+  86              	Swi_Handler:
+  87              	                .weak   Prefetch_Handler
+  88              	Prefetch_Handler:
+  89              	                .weak   Abort_Handler
+  90              	Abort_Handler:
+  91              	                .weak   Fiq_Handler
+  92              	Fiq_Handler:
+  93              	                .weak   Irq_Handler
+  94              	Irq_Handler:
+  95              	                .weak   _unhandled_exception
+  96              	_unhandled_exception:
+  97 003c FEFFFFEA 	                b       _unhandled_exception
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cc4Ccc9l.s 			page 3
+
+
+DEFINED SYMBOLS
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:45     .vectors:0000000000000000 $a
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:51     .vectors:0000000000000000 _start
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:61     .vectors:0000000000000020 _reset
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:63     .vectors:0000000000000024 _undefined
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:65     .vectors:0000000000000028 _swi
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:67     .vectors:000000000000002c _prefetch
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:69     .vectors:0000000000000030 _abort
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:73     .vectors:0000000000000038 _irq
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:71     .vectors:0000000000000034 _fiq
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:62     .vectors:0000000000000020 $d
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:82     .vectors:000000000000003c Reset_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:84     .vectors:000000000000003c Und_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:86     .vectors:000000000000003c Swi_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:88     .vectors:000000000000003c Prefetch_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:90     .vectors:000000000000003c Abort_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:92     .vectors:000000000000003c Fiq_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:94     .vectors:000000000000003c Irq_Handler
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:96     .vectors:000000000000003c _unhandled_exception
+../../../os/common/ports/ARM/compilers/GCC/vectors.s:97     .vectors:000000000000003c $a
+
+NO UNDEFINED SYMBOLS

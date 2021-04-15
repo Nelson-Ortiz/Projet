@@ -1,0 +1,1014 @@
+
+build/ch.elf:     file format elf32-littlearm
+
+
+Disassembly of section startup:
+
+00000000 <__ram1_start__>:
+   0:	e59ff018 	ldr	pc, [pc, #24]	; 20 <_reset>
+   4:	e59ff018 	ldr	pc, [pc, #24]	; 24 <_undefined>
+   8:	e59ff018 	ldr	pc, [pc, #24]	; 28 <_swi>
+   c:	e59ff018 	ldr	pc, [pc, #24]	; 2c <_prefetch>
+  10:	e59ff018 	ldr	pc, [pc, #24]	; 30 <_abort>
+  14:	e1a00000 	nop			; (mov r0, r0)
+  18:	e59ff018 	ldr	pc, [pc, #24]	; 38 <_irq>
+  1c:	e59ff010 	ldr	pc, [pc, #16]	; 34 <_fiq>
+
+00000020 <_reset>:
+  20:	00000040 	.word	0x00000040
+
+00000024 <_undefined>:
+  24:	0000003c 	.word	0x0000003c
+
+00000028 <_swi>:
+  28:	0000003c 	.word	0x0000003c
+
+0000002c <_prefetch>:
+  2c:	0000003c 	.word	0x0000003c
+
+00000030 <_abort>:
+  30:	0000003c 	.word	0x0000003c
+
+00000034 <_fiq>:
+  34:	0000003c 	.word	0x0000003c
+
+00000038 <_irq>:
+  38:	00000120 	.word	0x00000120
+
+0000003c <Abort_Handler>:
+  3c:	eafffffe 	b	3c <Abort_Handler>
+
+Disassembly of section .text:
+
+00000040 <Reset_Handler>:
+  40:	e59f0098 	ldr	r0, [pc, #152]	; e0 <bssloop+0x18>
+  44:	e321f0db 	msr	CPSR_c, #219	; 0xdb
+  48:	e1a0d000 	mov	sp, r0
+  4c:	e59f1090 	ldr	r1, [pc, #144]	; e4 <bssloop+0x1c>
+  50:	e0400001 	sub	r0, r0, r1
+  54:	e321f0d7 	msr	CPSR_c, #215	; 0xd7
+  58:	e1a0d000 	mov	sp, r0
+  5c:	e59f1084 	ldr	r1, [pc, #132]	; e8 <bssloop+0x20>
+  60:	e0400001 	sub	r0, r0, r1
+  64:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+  68:	e1a0d000 	mov	sp, r0
+  6c:	e59f1078 	ldr	r1, [pc, #120]	; ec <bssloop+0x24>
+  70:	e0400001 	sub	r0, r0, r1
+  74:	e321f0d2 	msr	CPSR_c, #210	; 0xd2
+  78:	e1a0d000 	mov	sp, r0
+  7c:	e59f106c 	ldr	r1, [pc, #108]	; f0 <bssloop+0x28>
+  80:	e0400001 	sub	r0, r0, r1
+  84:	e321f0d3 	msr	CPSR_c, #211	; 0xd3
+  88:	e1a0d000 	mov	sp, r0
+  8c:	e59f1060 	ldr	r1, [pc, #96]	; f4 <bssloop+0x2c>
+  90:	e0400001 	sub	r0, r0, r1
+  94:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+  98:	e1a0d000 	mov	sp, r0
+  9c:	eb0001cf 	bl	7e0 <__early_init>
+  a0:	e59f1050 	ldr	r1, [pc, #80]	; f8 <bssloop+0x30>
+  a4:	e59f2050 	ldr	r2, [pc, #80]	; fc <bssloop+0x34>
+  a8:	e59f3050 	ldr	r3, [pc, #80]	; 100 <bssloop+0x38>
+
+000000ac <dataloop>:
+  ac:	e1520003 	cmp	r2, r3
+  b0:	34910004 	ldrcc	r0, [r1], #4
+  b4:	34820004 	strcc	r0, [r2], #4
+  b8:	3afffffb 	bcc	ac <dataloop>
+  bc:	e3a00000 	mov	r0, #0
+  c0:	e59f103c 	ldr	r1, [pc, #60]	; 104 <bssloop+0x3c>
+  c4:	e59f203c 	ldr	r2, [pc, #60]	; 108 <bssloop+0x40>
+
+000000c8 <bssloop>:
+  c8:	e1510002 	cmp	r1, r2
+  cc:	34810004 	strcc	r0, [r1], #4
+  d0:	3afffffc 	bcc	c8 <bssloop>
+  d4:	eb0001bd 	bl	7d0 <__late_init>
+  d8:	eb0000f0 	bl	4a0 <main>
+  dc:	ea0001b7 	b	7c0 <__default_exit>
+  e0:	40000a58 	.word	0x40000a58
+  e4:	00000008 	.word	0x00000008
+  e8:	00000008 	.word	0x00000008
+  ec:	00000040 	.word	0x00000040
+  f0:	00000400 	.word	0x00000400
+  f4:	00000008 	.word	0x00000008
+  f8:	00000828 	.word	0x00000828
+  fc:	40000a58 	.word	0x40000a58
+ 100:	40000a58 	.word	0x40000a58
+ 104:	40000a58 	.word	0x40000a58
+ 108:	40000ce8 	.word	0x40000ce8
+ 10c:	00000000 	.word	0x00000000
+
+00000110 <_port_switch_arm>:
+ 110:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 114:	e581d00c 	str	sp, [r1, #12]
+ 118:	e590d00c 	ldr	sp, [r0, #12]
+ 11c:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+
+00000120 <Irq_Handler>:
+ 120:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+ 124:	e59f0070 	ldr	r0, [pc, #112]	; 19c <_zombies+0x4>
+ 128:	e5900000 	ldr	r0, [r0]
+ 12c:	e59fe06c 	ldr	lr, [pc, #108]	; 1a0 <_zombies+0x8>
+ 130:	e12fff10 	bx	r0
+
+00000134 <_irq_ret_arm>:
+ 134:	e3500000 	cmp	r0, #0
+ 138:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+ 13c:	025ef004 	subseq	pc, lr, #4
+ 140:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ 144:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+ 148:	e321f092 	msr	CPSR_c, #146	; 0x92
+ 14c:	e14f0000 	mrs	r0, SPSR
+ 150:	e1a0100e 	mov	r1, lr
+ 154:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ 158:	e92d0003 	push	{r0, r1}
+ 15c:	eb00017b 	bl	750 <chSchDoReschedule>
+ 160:	e8bd0003 	pop	{r0, r1}
+ 164:	e321f092 	msr	CPSR_c, #146	; 0x92
+ 168:	e16ff000 	msr	SPSR_fsxc, r0
+ 16c:	e1a0e001 	mov	lr, r1
+ 170:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ 174:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+ 178:	e321f092 	msr	CPSR_c, #146	; 0x92
+ 17c:	e25ef004 	subs	pc, lr, #4
+
+00000180 <_port_thread_start>:
+ 180:	e321f01f 	msr	CPSR_c, #31
+ 184:	e1a00005 	mov	r0, r5
+ 188:	e1a0e00f 	mov	lr, pc
+ 18c:	e12fff14 	bx	r4
+ 190:	e3a00000 	mov	r0, #0
+ 194:	eb000145 	bl	6b0 <chThdExit>
+
+00000198 <_zombies>:
+ 198:	eafffffe 	b	198 <_zombies>
+ 19c:	fffff030 	.word	0xfffff030
+ 1a0:	00000134 	.word	0x00000134
+	...
+
+000001b0 <_idle_thread>:
+ *          that this thread is executed only if there are no other ready
+ *          threads in the system.
+ *
+ * @param[in] p         the thread parameter, unused in this scenario
+ */
+static void _idle_thread(void *p) {
+ 1b0:	eafffffe 	b	1b0 <_idle_thread>
+	...
+
+000001c0 <chCoreAlloc>:
+ * @return              A pointer to the allocated memory block.
+ * @retval NULL         allocation failed, core memory exhausted.
+ *
+ * @api
+ */
+void *chCoreAlloc(size_t size) {
+ 1c0:	e1a03000 	mov	r3, r0
+static inline void port_lock(void) {
+
+#if defined(THUMB)
+  __asm volatile ("bl     _port_lock_thumb" : : : "r3", "lr", "memory");
+#else
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 1c4:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+
+  chDbgCheckClassI();
+
+  size = MEM_ALIGN_NEXT(size);
+  /*lint -save -e9033 [10.8] The cast is safe.*/
+  if ((size_t)(endmem - nextmem) < size) {
+ 1c8:	e59f102c 	ldr	r1, [pc, #44]	; 1fc <chCoreAlloc+0x3c>
+ 1cc:	e59f202c 	ldr	r2, [pc, #44]	; 200 <chCoreAlloc+0x40>
+ 1d0:	e5910000 	ldr	r0, [r1]
+ 1d4:	e5922000 	ldr	r2, [r2]
+  size = MEM_ALIGN_NEXT(size);
+ 1d8:	e2833007 	add	r3, r3, #7
+ 1dc:	e3c33007 	bic	r3, r3, #7
+  if ((size_t)(endmem - nextmem) < size) {
+ 1e0:	e0422000 	sub	r2, r2, r0
+ 1e4:	e1530002 	cmp	r3, r2
+  /*lint -restore*/
+    return NULL;
+  }
+  p = nextmem;
+  nextmem += size;
+ 1e8:	90803003 	addls	r3, r0, r3
+ 1ec:	95813000 	strls	r3, [r1]
+    return NULL;
+ 1f0:	83a00000 	movhi	r0, #0
+static inline void port_unlock(void) {
+
+#if defined(THUMB)
+  __asm volatile ("bl     _port_unlock_thumb" : : : "r3", "lr", "memory");
+#else
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 1f4:	e321f01f 	msr	CPSR_c, #31
+}
+ 1f8:	e12fff1e 	bx	lr
+ 1fc:	40000bbc 	.word	0x40000bbc
+ 200:	40000bb8 	.word	0x40000bb8
+	...
+
+00000210 <wakeup>:
+ */
+static void wakeup(void *p) {
+  thread_t *tp = (thread_t *)p;
+
+  chSysLockFromISR();
+  switch (tp->p_state) {
+ 210:	e5d0301c 	ldrb	r3, [r0, #28]
+ 214:	e3530007 	cmp	r3, #7
+ 218:	979ff103 	ldrls	pc, [pc, r3, lsl #2]
+ 21c:	ea00000f 	b	260 <wakeup+0x50>
+ 220:	0000029c 	.word	0x0000029c
+ 224:	00000260 	.word	0x00000260
+ 228:	00000260 	.word	0x00000260
+ 22c:	000002a0 	.word	0x000002a0
+ 230:	00000250 	.word	0x00000250
+ 234:	00000240 	.word	0x00000240
+ 238:	00000260 	.word	0x00000260
+ 23c:	00000250 	.word	0x00000250
+  case CH_STATE_SUSPENDED:
+    *tp->p_u.wttrp = NULL;
+    break;
+#if CH_CFG_USE_SEMAPHORES == TRUE
+  case CH_STATE_WTSEM:
+    chSemFastSignalI(tp->p_u.wtsemp);
+ 240:	e5902020 	ldr	r2, [r0, #32]
+ */
+static inline void chSemFastSignalI(semaphore_t *sp) {
+
+  chDbgCheckClassI();
+
+  sp->s_cnt++;
+ 244:	e5923008 	ldr	r3, [r2, #8]
+ 248:	e2833001 	add	r3, r3, #1
+ 24c:	e5823008 	str	r3, [r2, #8]
+  return tp;
+}
+
+static inline thread_t *queue_dequeue(thread_t *tp) {
+
+  tp->p_prev->p_next = tp->p_next;
+ 250:	e890000c 	ldm	r0, {r2, r3}
+ 254:	e5832000 	str	r2, [r3]
+  tp->p_next->p_prev = tp->p_prev;
+ 258:	e5902000 	ldr	r2, [r0]
+ 25c:	e5823004 	str	r3, [r2, #4]
+  tp->p_state = CH_STATE_READY;
+ 260:	e3a03000 	mov	r3, #0
+    break;
+  default:
+    /* Any other state, nothing to do.*/
+    break;
+  }
+  tp->p_u.rdymsg = MSG_TIMEOUT;
+ 264:	e3e02000 	mvn	r2, #0
+  tp->p_state = CH_STATE_READY;
+ 268:	e5c0301c 	strb	r3, [r0, #28]
+  tp->p_u.rdymsg = MSG_TIMEOUT;
+ 26c:	e5802020 	str	r2, [r0, #32]
+  } while (cp->p_prio >= tp->p_prio);
+ 270:	e5901008 	ldr	r1, [r0, #8]
+  cp = (thread_t *)&ch.rlist.r_queue;
+ 274:	e59f3034 	ldr	r3, [pc, #52]	; 2b0 <wakeup+0xa0>
+    cp = cp->p_next;
+ 278:	e5933000 	ldr	r3, [r3]
+  } while (cp->p_prio >= tp->p_prio);
+ 27c:	e5932008 	ldr	r2, [r3, #8]
+ 280:	e1520001 	cmp	r2, r1
+ 284:	2afffffb 	bcs	278 <wakeup+0x68>
+  tp->p_prev = cp->p_prev;
+ 288:	e5932004 	ldr	r2, [r3, #4]
+  tp->p_next = cp;
+ 28c:	e5803000 	str	r3, [r0]
+  tp->p_prev = cp->p_prev;
+ 290:	e5802004 	str	r2, [r0, #4]
+  tp->p_prev->p_next = tp;
+ 294:	e5820000 	str	r0, [r2]
+  cp->p_prev = tp;
+ 298:	e5830004 	str	r0, [r3, #4]
+  (void) chSchReadyI(tp);
+  chSysUnlockFromISR();
+}
+ 29c:	e12fff1e 	bx	lr
+    *tp->p_u.wttrp = NULL;
+ 2a0:	e3a02000 	mov	r2, #0
+ 2a4:	e5903020 	ldr	r3, [r0, #32]
+ 2a8:	e5832000 	str	r2, [r3]
+ 2ac:	eaffffeb 	b	260 <wakeup+0x50>
+ 2b0:	40000a58 	.word	0x40000a58
+	...
+
+000002c0 <chSchWakeupS.constprop.6>:
+ * @param[in] ntp       the thread to be made ready
+ * @param[in] msg       the wakeup message
+ *
+ * @sclass
+ */
+void chSchWakeupS(thread_t *ntp, msg_t msg) {
+ 2c0:	e92d4010 	push	{r4, lr}
+ 2c4:	e1a0c000 	mov	ip, r0
+
+  chDbgCheckClassS();
+
+  /* Storing the message to be retrieved by the target thread when it will
+     restart execution.*/
+  ntp->p_u.rdymsg = msg;
+ 2c8:	e3a04000 	mov	r4, #0
+
+  /* If the waken thread has a not-greater priority than the current
+     one then it is just inserted in the ready list else it made
+     running immediately and the invoking thread goes in the ready
+     list instead.*/
+  if (ntp->p_prio <= currp->p_prio) {
+ 2cc:	e59f3084 	ldr	r3, [pc, #132]	; 358 <chSchWakeupS.constprop.6+0x98>
+ 2d0:	e5931018 	ldr	r1, [r3, #24]
+ 2d4:	e5900008 	ldr	r0, [r0, #8]
+ 2d8:	e591e008 	ldr	lr, [r1, #8]
+ 2dc:	e150000e 	cmp	r0, lr
+  ntp->p_u.rdymsg = msg;
+ 2e0:	e58c4020 	str	r4, [ip, #32]
+  if (ntp->p_prio <= currp->p_prio) {
+ 2e4:	8a00000a 	bhi	314 <chSchWakeupS.constprop.6+0x54>
+  tp->p_state = CH_STATE_READY;
+ 2e8:	e5cc401c 	strb	r4, [ip, #28]
+    cp = cp->p_next;
+ 2ec:	e5933000 	ldr	r3, [r3]
+  } while (cp->p_prio >= tp->p_prio);
+ 2f0:	e5932008 	ldr	r2, [r3, #8]
+ 2f4:	e1500002 	cmp	r0, r2
+ 2f8:	9afffffb 	bls	2ec <chSchWakeupS.constprop.6+0x2c>
+  tp->p_prev = cp->p_prev;
+ 2fc:	e5932004 	ldr	r2, [r3, #4]
+  tp->p_next = cp;
+ 300:	e58c3000 	str	r3, [ip]
+  tp->p_prev = cp->p_prev;
+ 304:	e58c2004 	str	r2, [ip, #4]
+  tp->p_prev->p_next = tp;
+ 308:	e582c000 	str	ip, [r2]
+  cp->p_prev = tp;
+ 30c:	e583c004 	str	ip, [r3, #4]
+    }
+#endif
+    ntp->p_state = CH_STATE_CURRENT;
+    chSysSwitch(ntp, otp);
+  }
+}
+ 310:	e8bd8010 	pop	{r4, pc}
+  cp = (thread_t *)&ch.rlist.r_queue;
+ 314:	e1a02003 	mov	r2, r3
+  tp->p_state = CH_STATE_READY;
+ 318:	e5c1401c 	strb	r4, [r1, #28]
+    cp = cp->p_next;
+ 31c:	e5922000 	ldr	r2, [r2]
+  } while (cp->p_prio >= tp->p_prio);
+ 320:	e5920008 	ldr	r0, [r2, #8]
+ 324:	e15e0000 	cmp	lr, r0
+ 328:	9afffffb 	bls	31c <chSchWakeupS.constprop.6+0x5c>
+    ntp->p_state = CH_STATE_CURRENT;
+ 32c:	e3a0e001 	mov	lr, #1
+  tp->p_prev = cp->p_prev;
+ 330:	e5920004 	ldr	r0, [r2, #4]
+  tp->p_next = cp;
+ 334:	e5812000 	str	r2, [r1]
+  tp->p_prev = cp->p_prev;
+ 338:	e5810004 	str	r0, [r1, #4]
+  tp->p_prev->p_next = tp;
+ 33c:	e5801000 	str	r1, [r0]
+  cp->p_prev = tp;
+ 340:	e5821004 	str	r1, [r2, #4]
+    ntp->p_state = CH_STATE_CURRENT;
+ 344:	e5cce01c 	strb	lr, [ip, #28]
+    chSysSwitch(ntp, otp);
+ 348:	e1a0000c 	mov	r0, ip
+}
+ 34c:	e8bd4010 	pop	{r4, lr}
+    setcurrp(ntp);
+ 350:	e583c018 	str	ip, [r3, #24]
+    chSysSwitch(ntp, otp);
+ 354:	eaffff6d 	b	110 <_port_switch_arm>
+ 358:	40000a58 	.word	0x40000a58
+ 35c:	00000000 	.word	0x00000000
+
+00000360 <chSchGoSleepS>:
+void chSchGoSleepS(tstate_t newstate) {
+ 360:	e52de004 	push	{lr}		; (str lr, [sp, #-4]!)
+  currp->p_state = CH_STATE_CURRENT;
+ 364:	e3a0e001 	mov	lr, #1
+  otp = currp;
+ 368:	e59f3028 	ldr	r3, [pc, #40]	; 398 <chSchGoSleepS+0x38>
+ 36c:	e5931018 	ldr	r1, [r3, #24]
+  thread_t *tp = tqp->p_next;
+ 370:	e5932000 	ldr	r2, [r3]
+  otp->p_state = newstate;
+ 374:	e5c1001c 	strb	r0, [r1, #28]
+  tqp->p_next = tp->p_next;
+ 378:	e592c000 	ldr	ip, [r2]
+  tqp->p_next->p_prev = (thread_t *)tqp;
+ 37c:	e58c3004 	str	r3, [ip, #4]
+  currp->p_state = CH_STATE_CURRENT;
+ 380:	e5c2e01c 	strb	lr, [r2, #28]
+  chSysSwitch(currp, otp);
+ 384:	e1a00002 	mov	r0, r2
+  tqp->p_next = tp->p_next;
+ 388:	e583c000 	str	ip, [r3]
+}
+ 38c:	e49de004 	pop	{lr}		; (ldr lr, [sp], #4)
+  setcurrp(queue_fifo_remove(&ch.rlist.r_queue));
+ 390:	e5832018 	str	r2, [r3, #24]
+  chSysSwitch(currp, otp);
+ 394:	eaffff5d 	b	110 <_port_switch_arm>
+ 398:	40000a58 	.word	0x40000a58
+ 39c:	00000000 	.word	0x00000000
+
+000003a0 <chSchGoSleepTimeoutS.constprop.1>:
+msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
+ 3a0:	e92d4030 	push	{r4, r5, lr}
+    chVTDoSetI(&vt, time, wakeup, currp);
+ 3a4:	e59f40b4 	ldr	r4, [pc, #180]	; 460 <__irq_stack_size__+0x60>
+  delta = delay;
+#endif /* CH_CFG_ST_TIMEDELTA == 0 */
+
+  /* The delta list is scanned in order to find the correct position for
+     this timer. */
+  p = ch.vtlist.vt_next;
+ 3a8:	e594301c 	ldr	r3, [r4, #28]
+  while (p->vt_delta < delta) {
+ 3ac:	e5931008 	ldr	r1, [r3, #8]
+  vtp->vt_func = vtfunc;
+ 3b0:	e59f20ac 	ldr	r2, [pc, #172]	; 464 <__irq_stack_size__+0x64>
+  vtp->vt_par = par;
+ 3b4:	e5940018 	ldr	r0, [r4, #24]
+msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
+ 3b8:	e24dd01c 	sub	sp, sp, #28
+  while (p->vt_delta < delta) {
+ 3bc:	e3510ffa 	cmp	r1, #1000	; 0x3e8
+  vtp->vt_func = vtfunc;
+ 3c0:	e58d2010 	str	r2, [sp, #16]
+  vtp->vt_par = par;
+ 3c4:	e58d0014 	str	r0, [sp, #20]
+  delta = delay;
+ 3c8:	e3a02ffa 	mov	r2, #1000	; 0x3e8
+  while (p->vt_delta < delta) {
+ 3cc:	2a000004 	bcs	3e4 <chSchGoSleepTimeoutS.constprop.1+0x44>
+    delta -= p->vt_delta;
+    p = p->vt_next;
+ 3d0:	e5933000 	ldr	r3, [r3]
+    delta -= p->vt_delta;
+ 3d4:	e0422001 	sub	r2, r2, r1
+  while (p->vt_delta < delta) {
+ 3d8:	e5931008 	ldr	r1, [r3, #8]
+ 3dc:	e1510002 	cmp	r1, r2
+ 3e0:	3afffffa 	bcc	3d0 <chSchGoSleepTimeoutS.constprop.1+0x30>
+  vtp->vt_delta = delta
+
+  /* Special case when the timer is in last position in the list, the
+     value in the header must be restored.*/;
+  p->vt_delta -= delta;
+  ch.vtlist.vt_delta = (systime_t)-1;
+ 3e4:	e3e05000 	mvn	r5, #0
+  vtp->vt_prev = vtp->vt_next->vt_prev;
+ 3e8:	e5930004 	ldr	r0, [r3, #4]
+  vtp->vt_prev->vt_next = vtp;
+ 3ec:	e28d1004 	add	r1, sp, #4
+  vtp->vt_prev = vtp->vt_next->vt_prev;
+ 3f0:	e58d0008 	str	r0, [sp, #8]
+  vtp->vt_next = p;
+ 3f4:	e58d3004 	str	r3, [sp, #4]
+  vtp->vt_prev->vt_next = vtp;
+ 3f8:	e5801000 	str	r1, [r0]
+  p->vt_prev = vtp;
+ 3fc:	e5831004 	str	r1, [r3, #4]
+  vtp->vt_delta = delta
+ 400:	e58d200c 	str	r2, [sp, #12]
+  p->vt_delta -= delta;
+ 404:	e5931008 	ldr	r1, [r3, #8]
+ 408:	e0412002 	sub	r2, r1, r2
+ 40c:	e5832008 	str	r2, [r3, #8]
+    chSchGoSleepS(newstate);
+ 410:	e3a00008 	mov	r0, #8
+  ch.vtlist.vt_delta = (systime_t)-1;
+ 414:	e5845024 	str	r5, [r4, #36]	; 0x24
+ 418:	ebffffd0 	bl	360 <chSchGoSleepS>
+    if (chVTIsArmedI(&vt)) {
+ 41c:	e59d3010 	ldr	r3, [sp, #16]
+ 420:	e3530000 	cmp	r3, #0
+ 424:	0a000009 	beq	450 <__irq_stack_size__+0x50>
+  chDbgAssert(vtp->vt_func != NULL, "timer not set or already triggered");
+
+#if CH_CFG_ST_TIMEDELTA == 0
+
+  /* The delta of the timer is added to the next timer.*/
+  vtp->vt_next->vt_delta += vtp->vt_delta;
+ 428:	e59d3004 	ldr	r3, [sp, #4]
+ 42c:	e59d000c 	ldr	r0, [sp, #12]
+ 430:	e5932008 	ldr	r2, [r3, #8]
+
+ /* Removing the element from the delta list.*/
+  vtp->vt_prev->vt_next = vtp->vt_next;
+ 434:	e59d1008 	ldr	r1, [sp, #8]
+  vtp->vt_next->vt_delta += vtp->vt_delta;
+ 438:	e0822000 	add	r2, r2, r0
+ 43c:	e5832008 	str	r2, [r3, #8]
+  vtp->vt_prev->vt_next = vtp->vt_next;
+ 440:	e5813000 	str	r3, [r1]
+  vtp->vt_next->vt_prev = vtp->vt_prev;
+ 444:	e59d3004 	ldr	r3, [sp, #4]
+ 448:	e5831004 	str	r1, [r3, #4]
+  vtp->vt_func = NULL;
+
+  /* The above code changes the value in the header when the removed element
+     is the last of the list, restoring it.*/
+  ch.vtlist.vt_delta = (systime_t)-1;
+ 44c:	e5845024 	str	r5, [r4, #36]	; 0x24
+  return currp->p_u.rdymsg;
+ 450:	e5943018 	ldr	r3, [r4, #24]
+}
+ 454:	e5930020 	ldr	r0, [r3, #32]
+ 458:	e28dd01c 	add	sp, sp, #28
+ 45c:	e8bd8030 	pop	{r4, r5, pc}
+ 460:	40000a58 	.word	0x40000a58
+ 464:	00000210 	.word	0x00000210
+	...
+
+00000470 <Thread1>:
+ * @api
+ */
+static inline void chRegSetThreadName(const char *name) {
+
+#if CH_CFG_USE_REGISTRY == TRUE
+  ch.rlist.r_current->p_name = name;
+ 470:	e59f301c 	ldr	r3, [pc, #28]	; 494 <Thread1+0x24>
+ 474:	e59f201c 	ldr	r2, [pc, #28]	; 498 <Thread1+0x28>
+ 478:	e5933018 	ldr	r3, [r3, #24]
+
+/*
+ * This is a periodic thread that does absolutely nothing except sleeping.
+ */
+static THD_WORKING_AREA(waThread1, 128);
+static THD_FUNCTION(Thread1, arg) {
+ 47c:	e92d4010 	push	{r4, lr}
+ 480:	e5832018 	str	r2, [r3, #24]
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 484:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ */
+static inline void chThdSleepS(systime_t time) {
+
+  chDbgCheck(time != TIME_IMMEDIATE);
+
+  (void) chSchGoSleepTimeoutS(CH_STATE_SLEEPING, time);
+ 488:	ebffffc4 	bl	3a0 <chSchGoSleepTimeoutS.constprop.1>
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 48c:	e321f01f 	msr	CPSR_c, #31
+ 490:	eafffffb 	b	484 <Thread1+0x14>
+ 494:	40000a58 	.word	0x40000a58
+ 498:	000007f0 	.word	0x000007f0
+ 49c:	00000000 	.word	0x00000000
+
+000004a0 <main>:
+  ch.vtlist.vt_delta = (systime_t)-1;
+ 4a0:	e3e00000 	mvn	r0, #0
+}
+
+/*
+ * Application entry point.
+ */
+int main(void) {
+ 4a4:	e92d4080 	push	{r7, lr}
+  ch.rlist.r_prio = NOPRIO;
+ 4a8:	e3a05000 	mov	r5, #0
+ *
+ * @notapi
+ */
+thread_t *_thread_init(thread_t *tp, tprio_t prio) {
+
+  tp->p_prio = prio;
+ 4ac:	e3a07040 	mov	r7, #64	; 0x40
+#endif
+#if CH_CFG_USE_DYNAMIC == TRUE
+  tp->p_refs = (trefs_t)1;
+#endif
+#if CH_CFG_USE_REGISTRY == TRUE
+  tp->p_name = NULL;
+ 4b0:	e3a06001 	mov	r6, #1
+  tqp->p_next = (thread_t *)tqp;
+ 4b4:	e59f41b8 	ldr	r4, [pc, #440]	; 674 <main+0x1d4>
+ 4b8:	e5840024 	str	r0, [r4, #36]	; 0x24
+  tlp->p_next = (thread_t *)tlp;
+ 4bc:	e2840054 	add	r0, r4, #84	; 0x54
+ 4c0:	e5840054 	str	r0, [r4, #84]	; 0x54
+  ch.vtlist.vt_next = (virtual_timer_t *)&ch.vtlist;
+ 4c4:	e284001c 	add	r0, r4, #28
+ 4c8:	e584001c 	str	r0, [r4, #28]
+  ch.vtlist.vt_prev = (virtual_timer_t *)&ch.vtlist;
+ 4cc:	e5840020 	str	r0, [r4, #32]
+  nextmem = (uint8_t *)MEM_ALIGN_NEXT(__heap_base__);
+ 4d0:	e59f11a0 	ldr	r1, [pc, #416]	; 678 <main+0x1d8>
+  REG_INSERT(tp);
+ 4d4:	e2840030 	add	r0, r4, #48	; 0x30
+ *
+ * @notapi
+ */
+void _heap_init(void) {
+
+  default_heap.h_provider = chCoreAlloc;
+ 4d8:	e59f319c 	ldr	r3, [pc, #412]	; 67c <main+0x1dc>
+ 4dc:	e59fe19c 	ldr	lr, [pc, #412]	; 680 <main+0x1e0>
+ 4e0:	e5840010 	str	r0, [r4, #16]
+ 4e4:	e5840014 	str	r0, [r4, #20]
+  _dbg_trace_init();
+#endif
+
+#if CH_CFG_NO_IDLE_THREAD == FALSE
+  /* Now this instructions flow becomes the main thread.*/
+  setcurrp(_thread_init(&ch.mainthread, NORMALPRIO));
+ 4e8:	e5840018 	str	r0, [r4, #24]
+  endmem = (uint8_t *)MEM_ALIGN_PREV(__heap_end__);
+ 4ec:	e59f2190 	ldr	r2, [pc, #400]	; 684 <main+0x1e4>
+  tqp->p_next = (thread_t *)tqp;
+ 4f0:	e2840058 	add	r0, r4, #88	; 0x58
+  nextmem = (uint8_t *)MEM_ALIGN_NEXT(__heap_base__);
+ 4f4:	e3c11007 	bic	r1, r1, #7
+ 4f8:	e5840058 	str	r0, [r4, #88]	; 0x58
+  tqp->p_prev = (thread_t *)tqp;
+ 4fc:	e584005c 	str	r0, [r4, #92]	; 0x5c
+  endmem = (uint8_t *)MEM_ALIGN_PREV(__heap_end__);
+ 500:	e59fc180 	ldr	ip, [pc, #384]	; 688 <main+0x1e8>
+ 504:	e59f0180 	ldr	r0, [pc, #384]	; 68c <main+0x1ec>
+ 508:	e3c22007 	bic	r2, r2, #7
+  nextmem = (uint8_t *)MEM_ALIGN_NEXT(__heap_base__);
+ 50c:	e58e1000 	str	r1, [lr]
+  tqp->p_next = (thread_t *)tqp;
+ 510:	e2831010 	add	r1, r3, #16
+ 514:	e5844000 	str	r4, [r4]
+  tqp->p_prev = (thread_t *)tqp;
+ 518:	e5844004 	str	r4, [r4, #4]
+ 51c:	e5844040 	str	r4, [r4, #64]	; 0x40
+ 520:	e5844044 	str	r4, [r4, #68]	; 0x44
+  endmem = (uint8_t *)MEM_ALIGN_PREV(__heap_end__);
+ 524:	e58c2000 	str	r2, [ip]
+ 528:	e5830000 	str	r0, [r3]
+  tqp->p_next = (thread_t *)tqp;
+ 52c:	e5831010 	str	r1, [r3, #16]
+  tqp->p_prev = (thread_t *)tqp;
+ 530:	e5831014 	str	r1, [r3, #20]
+ 534:	e5845008 	str	r5, [r4, #8]
+  ch.vtlist.vt_systime = (systime_t)0;
+ 538:	e5845028 	str	r5, [r4, #40]	; 0x28
+  default_heap.h_free.h.u.next = NULL;
+ 53c:	e5835008 	str	r5, [r3, #8]
+  default_heap.h_free.h.size = 0;
+ 540:	e583500c 	str	r5, [r3, #12]
+void chMtxObjectInit(mutex_t *mp) {
+
+  chDbgCheck(mp != NULL);
+
+  queue_init(&mp->m_queue);
+  mp->m_owner = NULL;
+ 544:	e5835018 	str	r5, [r3, #24]
+  tp->p_mtxlist = NULL;
+ 548:	e5845068 	str	r5, [r4, #104]	; 0x68
+  tp->p_epending = (eventmask_t)0;
+ 54c:	e5845064 	str	r5, [r4, #100]	; 0x64
+  tp->p_name = NULL;
+ 550:	e5845048 	str	r5, [r4, #72]	; 0x48
+  tp->p_prio = prio;
+ 554:	e5847038 	str	r7, [r4, #56]	; 0x38
+  tp->p_realprio = prio;
+ 558:	e584706c 	str	r7, [r4, #108]	; 0x6c
+  tp->p_name = NULL;
+ 55c:	e1c464bc 	strh	r6, [r4, #76]	; 0x4c
+  tp->p_flags = CH_FLAG_MODE_STATIC;
+ 560:	e5c4604e 	strb	r6, [r4, #78]	; 0x4e
+static inline void port_enable(void) {
+
+#if defined(THUMB)
+  __asm volatile ("bl     _port_enable_thumb" : : : "r3", "lr", "memory");
+#else
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 564:	e321f01f 	msr	CPSR_c, #31
+ 568:	e59f2120 	ldr	r2, [pc, #288]	; 690 <main+0x1f0>
+ 56c:	e5943018 	ldr	r3, [r4, #24]
+ 570:	e5832018 	str	r2, [r3, #24]
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 574:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+  tp->p_name = NULL;
+ 578:	e3a08002 	mov	r8, #2
+  REG_INSERT(tp);
+ 57c:	e5942014 	ldr	r2, [r4, #20]
+
+  chDbgCheckClassI();
+  chDbgCheck((wsp != NULL) && (size >= THD_WORKING_AREA_SIZE(0)) &&
+             (prio <= HIGHPRIO) && (pf != NULL));
+
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 580:	e59f110c 	ldr	r1, [pc, #268]	; 694 <main+0x1f4>
+ 584:	e2843f47 	add	r3, r4, #284	; 0x11c
+ 588:	e59f9108 	ldr	r9, [pc, #264]	; 698 <main+0x1f8>
+ 58c:	e5843084 	str	r3, [r4, #132]	; 0x84
+  REG_INSERT(tp);
+ 590:	e2843078 	add	r3, r4, #120	; 0x78
+ 594:	e584208c 	str	r2, [r4, #140]	; 0x8c
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 598:	e5845120 	str	r5, [r4, #288]	; 0x120
+  tp->p_prio = prio;
+ 59c:	e5846080 	str	r6, [r4, #128]	; 0x80
+  tp->p_realprio = prio;
+ 5a0:	e58460b4 	str	r6, [r4, #180]	; 0xb4
+  tp->p_mtxlist = NULL;
+ 5a4:	e58450b0 	str	r5, [r4, #176]	; 0xb0
+  tp->p_epending = (eventmask_t)0;
+ 5a8:	e58450ac 	str	r5, [r4, #172]	; 0xac
+  tp->p_name = NULL;
+ 5ac:	e5845090 	str	r5, [r4, #144]	; 0x90
+  tp->p_flags = CH_FLAG_MODE_STATIC;
+ 5b0:	e5c46096 	strb	r6, [r4, #150]	; 0x96
+  REG_INSERT(tp);
+ 5b4:	e5844088 	str	r4, [r4, #136]	; 0x88
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 5b8:	e584111c 	str	r1, [r4, #284]	; 0x11c
+ 5bc:	e584913c 	str	r9, [r4, #316]	; 0x13c
+  tp->p_name = NULL;
+ 5c0:	e1c489b4 	strh	r8, [r4, #148]	; 0x94
+                  CH_DBG_STACK_FILL_VALUE);
+#endif
+
+  chSysLock();
+  tp = chThdCreateI(wsp, size, prio, pf, arg);
+  chSchWakeupS(tp, MSG_OK);
+ 5c4:	e1a00003 	mov	r0, r3
+  REG_INSERT(tp);
+ 5c8:	e5823010 	str	r3, [r2, #16]
+  tlp->p_next = (thread_t *)tlp;
+ 5cc:	e284209c 	add	r2, r4, #156	; 0x9c
+ 5d0:	e5843014 	str	r3, [r4, #20]
+  tqp->p_next = (thread_t *)tqp;
+ 5d4:	e28430a0 	add	r3, r4, #160	; 0xa0
+  tlp->p_next = (thread_t *)tlp;
+ 5d8:	e584209c 	str	r2, [r4, #156]	; 0x9c
+  tqp->p_next = (thread_t *)tqp;
+ 5dc:	e58430a0 	str	r3, [r4, #160]	; 0xa0
+  tqp->p_prev = (thread_t *)tqp;
+ 5e0:	e58430a4 	str	r3, [r4, #164]	; 0xa4
+  chSchWakeupS(tp, MSG_OK);
+ 5e4:	ebffff35 	bl	2c0 <chSchWakeupS.constprop.6>
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 5e8:	e321f01f 	msr	CPSR_c, #31
+ * @xclass
+ */
+static inline void chRegSetThreadNameX(thread_t *tp, const char *name) {
+
+#if CH_CFG_USE_REGISTRY == TRUE
+  tp->p_name = name;
+ 5ec:	e59f30a8 	ldr	r3, [pc, #168]	; 69c <main+0x1fc>
+ 5f0:	e5843090 	str	r3, [r4, #144]	; 0x90
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 5f4:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 5f8:	e59f30a0 	ldr	r3, [pc, #160]	; 6a0 <main+0x200>
+  REG_INSERT(tp);
+ 5fc:	e5942014 	ldr	r2, [r4, #20]
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 600:	e59f109c 	ldr	r1, [pc, #156]	; 6a4 <main+0x204>
+  REG_INSERT(tp);
+ 604:	e5832014 	str	r2, [r3, #20]
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 608:	e5831104 	str	r1, [r3, #260]	; 0x104
+ 60c:	e5839124 	str	r9, [r3, #292]	; 0x124
+ 610:	e5835108 	str	r5, [r3, #264]	; 0x108
+  tp->p_realprio = prio;
+ 614:	e583703c 	str	r7, [r3, #60]	; 0x3c
+  tp->p_mtxlist = NULL;
+ 618:	e5835038 	str	r5, [r3, #56]	; 0x38
+  tp->p_epending = (eventmask_t)0;
+ 61c:	e5835034 	str	r5, [r3, #52]	; 0x34
+  tp->p_name = NULL;
+ 620:	e5835018 	str	r5, [r3, #24]
+ 624:	e1c381bc 	strh	r8, [r3, #28]
+  tp->p_flags = CH_FLAG_MODE_STATIC;
+ 628:	e5c3601e 	strb	r6, [r3, #30]
+  REG_INSERT(tp);
+ 62c:	e5834010 	str	r4, [r3, #16]
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 630:	e283cf41 	add	ip, r3, #260	; 0x104
+  REG_INSERT(tp);
+ 634:	e5823010 	str	r3, [r2, #16]
+  tlp->p_next = (thread_t *)tlp;
+ 638:	e2831024 	add	r1, r3, #36	; 0x24
+  tqp->p_next = (thread_t *)tqp;
+ 63c:	e2832028 	add	r2, r3, #40	; 0x28
+  chSchWakeupS(tp, MSG_OK);
+ 640:	e1a00003 	mov	r0, r3
+  tp->p_prio = prio;
+ 644:	e5837008 	str	r7, [r3, #8]
+  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+ 648:	e583c00c 	str	ip, [r3, #12]
+  tlp->p_next = (thread_t *)tlp;
+ 64c:	e5831024 	str	r1, [r3, #36]	; 0x24
+  tqp->p_next = (thread_t *)tqp;
+ 650:	e5832028 	str	r2, [r3, #40]	; 0x28
+  tqp->p_prev = (thread_t *)tqp;
+ 654:	e583202c 	str	r2, [r3, #44]	; 0x2c
+  REG_INSERT(tp);
+ 658:	e5843014 	str	r3, [r4, #20]
+  chSchWakeupS(tp, MSG_OK);
+ 65c:	ebffff17 	bl	2c0 <chSchWakeupS.constprop.6>
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 660:	e321f01f 	msr	CPSR_c, #31
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 664:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ 668:	ebffff4c 	bl	3a0 <chSchGoSleepTimeoutS.constprop.1>
+  __asm volatile ("msr     CPSR_c, #0x1F" : : : "memory");
+ 66c:	e321f01f 	msr	CPSR_c, #31
+ 670:	eafffffb 	b	664 <main+0x1c4>
+ 674:	40000a58 	.word	0x40000a58
+ 678:	40000cef 	.word	0x40000cef
+ 67c:	40000b98 	.word	0x40000b98
+ 680:	40000bbc 	.word	0x40000bbc
+ 684:	40007ee0 	.word	0x40007ee0
+ 688:	40000bb8 	.word	0x40000bb8
+ 68c:	000001c0 	.word	0x000001c0
+ 690:	00000800 	.word	0x00000800
+ 694:	000001b0 	.word	0x000001b0
+ 698:	00000180 	.word	0x00000180
+ 69c:	00000820 	.word	0x00000820
+ 6a0:	40000bc0 	.word	0x40000bc0
+ 6a4:	00000470 	.word	0x00000470
+	...
+
+000006b0 <chThdExit>:
+ *
+ * @param[in] msg       thread exit code
+ *
+ * @api
+ */
+void chThdExit(msg_t msg) {
+ 6b0:	e92d4010 	push	{r4, lr}
+  __asm volatile ("msr     CPSR_c, #0x9F" : : : "memory");
+ 6b4:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+ * @param[in] msg       thread exit code
+ *
+ * @sclass
+ */
+void chThdExitS(msg_t msg) {
+  thread_t *tp = currp;
+ 6b8:	e59f3084 	ldr	r3, [pc, #132]	; 744 <chThdExit+0x94>
+ 6bc:	e593c018 	ldr	ip, [r3, #24]
+  return (bool)(tlp->p_next != (thread_t *)tlp);
+ 6c0:	e59c1024 	ldr	r1, [ip, #36]	; 0x24
+  tp->p_u.exitcode = msg;
+#if defined(CH_CFG_THREAD_EXIT_HOOK)
+  CH_CFG_THREAD_EXIT_HOOK(tp);
+#endif
+#if CH_CFG_USE_WAITEXIT == TRUE
+  while (list_notempty(&tp->p_waiting)) {
+ 6c4:	e28ce024 	add	lr, ip, #36	; 0x24
+ 6c8:	e15e0001 	cmp	lr, r1
+  tp->p_u.exitcode = msg;
+ 6cc:	e58c0020 	str	r0, [ip, #32]
+  while (list_notempty(&tp->p_waiting)) {
+ 6d0:	0a000011 	beq	71c <chThdExit+0x6c>
+  tp->p_state = CH_STATE_READY;
+ 6d4:	e3a04000 	mov	r4, #0
+  tlp->p_next = tp->p_next;
+ 6d8:	e5913000 	ldr	r3, [r1]
+  } while (cp->p_prio >= tp->p_prio);
+ 6dc:	e5910008 	ldr	r0, [r1, #8]
+ 6e0:	e58c3024 	str	r3, [ip, #36]	; 0x24
+  cp = (thread_t *)&ch.rlist.r_queue;
+ 6e4:	e59f3058 	ldr	r3, [pc, #88]	; 744 <chThdExit+0x94>
+  tp->p_state = CH_STATE_READY;
+ 6e8:	e5c1401c 	strb	r4, [r1, #28]
+    cp = cp->p_next;
+ 6ec:	e5933000 	ldr	r3, [r3]
+  } while (cp->p_prio >= tp->p_prio);
+ 6f0:	e5932008 	ldr	r2, [r3, #8]
+ 6f4:	e1520000 	cmp	r2, r0
+ 6f8:	2afffffb 	bcs	6ec <chThdExit+0x3c>
+  tp->p_prev = cp->p_prev;
+ 6fc:	e5932004 	ldr	r2, [r3, #4]
+  tp->p_next = cp;
+ 700:	e5813000 	str	r3, [r1]
+  tp->p_prev = cp->p_prev;
+ 704:	e5812004 	str	r2, [r1, #4]
+  tp->p_prev->p_next = tp;
+ 708:	e5821000 	str	r1, [r2]
+  cp->p_prev = tp;
+ 70c:	e5831004 	str	r1, [r3, #4]
+  return (bool)(tlp->p_next != (thread_t *)tlp);
+ 710:	e59c1024 	ldr	r1, [ip, #36]	; 0x24
+ 714:	e151000e 	cmp	r1, lr
+ 718:	1affffee 	bne	6d8 <chThdExit+0x28>
+  }
+#endif
+#if CH_CFG_USE_REGISTRY == TRUE
+  /* Static threads are immediately removed from the registry because
+     there is no memory to recover.*/
+  if ((tp->p_flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC) {
+ 71c:	e5dc301d 	ldrb	r3, [ip, #29]
+ 720:	e3130003 	tst	r3, #3
+    REG_REMOVE(tp);
+ 724:	028c2010 	addeq	r2, ip, #16
+ 728:	0892000c 	ldmeq	r2, {r2, r3}
+ 72c:	05832010 	streq	r2, [r3, #16]
+ 730:	059c2010 	ldreq	r2, [ip, #16]
+  }
+#endif
+  chSchGoSleepS(CH_STATE_FINAL);
+ 734:	e3a0000f 	mov	r0, #15
+    REG_REMOVE(tp);
+ 738:	05823014 	streq	r3, [r2, #20]
+}
+ 73c:	e8bd4010 	pop	{r4, lr}
+  chSchGoSleepS(CH_STATE_FINAL);
+ 740:	eaffff06 	b	360 <chSchGoSleepS>
+ 744:	40000a58 	.word	0x40000a58
+	...
+
+00000750 <chSchDoReschedule>:
+ * @note    Not a user function, it is meant to be invoked by the scheduler
+ *          itself or from within the port layer.
+ *
+ * @special
+ */
+void chSchDoReschedule(void) {
+ 750:	e92d4010 	push	{r4, lr}
+  currp->p_state = CH_STATE_CURRENT;
+ 754:	e3a04001 	mov	r4, #1
+  otp->p_state = CH_STATE_READY;
+ 758:	e3a0e000 	mov	lr, #0
+  otp = currp;
+ 75c:	e59f2054 	ldr	r2, [pc, #84]	; 7b8 <chSchDoReschedule+0x68>
+  thread_t *tp = tqp->p_next;
+ 760:	e5920000 	ldr	r0, [r2]
+ 764:	e592c018 	ldr	ip, [r2, #24]
+  tqp->p_next = tp->p_next;
+ 768:	e5903000 	ldr	r3, [r0]
+  if (otp->p_prio == IDLEPRIO) {
+ 76c:	e59c1008 	ldr	r1, [ip, #8]
+ 770:	e5823000 	str	r3, [r2]
+  tqp->p_next->p_prev = (thread_t *)tqp;
+ 774:	e5832004 	str	r2, [r3, #4]
+  currp->p_state = CH_STATE_CURRENT;
+ 778:	e5c0401c 	strb	r4, [r0, #28]
+  setcurrp(queue_fifo_remove(&ch.rlist.r_queue));
+ 77c:	e5820018 	str	r0, [r2, #24]
+  otp->p_state = CH_STATE_READY;
+ 780:	e5cce01c 	strb	lr, [ip, #28]
+ 784:	ea000000 	b	78c <chSchDoReschedule+0x3c>
+ 788:	e5933000 	ldr	r3, [r3]
+  } while (cp->p_prio > otp->p_prio);
+ 78c:	e5932008 	ldr	r2, [r3, #8]
+ 790:	e1510002 	cmp	r1, r2
+ 794:	3afffffb 	bcc	788 <chSchDoReschedule+0x38>
+  otp->p_prev = cp->p_prev;
+ 798:	e5932004 	ldr	r2, [r3, #4]
+  chSysSwitch(currp, otp);
+ 79c:	e1a0100c 	mov	r1, ip
+  otp->p_next = cp;
+ 7a0:	e58c3000 	str	r3, [ip]
+  otp->p_prev = cp->p_prev;
+ 7a4:	e58c2004 	str	r2, [ip, #4]
+#else /* !(CH_CFG_TIME_QUANTUM > 0) */
+  /* If the round-robin mechanism is disabled then the thread goes always
+     ahead of its peers.*/
+  chSchDoRescheduleAhead();
+#endif /* !(CH_CFG_TIME_QUANTUM > 0) */
+}
+ 7a8:	e8bd4010 	pop	{r4, lr}
+  otp->p_prev->p_next = otp;
+ 7ac:	e582c000 	str	ip, [r2]
+  cp->p_prev = otp;
+ 7b0:	e583c004 	str	ip, [r3, #4]
+  chSysSwitch(currp, otp);
+ 7b4:	eafffe55 	b	110 <_port_switch_arm>
+ 7b8:	40000a58 	.word	0x40000a58
+ 7bc:	00000000 	.word	0x00000000
+
+000007c0 <__default_exit>:
+ */
+#if !defined(__DOXYGEN__)
+__attribute__((noreturn, weak))
+#endif
+/*lint -save -e9075 [8.4] All symbols are invoked from asm context.*/
+void __default_exit(void) {
+ 7c0:	eafffffe 	b	7c0 <__default_exit>
+	...
+
+000007d0 <__late_init>:
+ 7d0:	e12fff1e 	bx	lr
+	...
+
+000007e0 <__early_init>:
+void __early_init(void) {}
+ 7e0:	e12fff1e 	bx	lr
+	...
+ 7f0:	65656c73 	.word	0x65656c73
+ 7f4:	00726570 	.word	0x00726570
+	...
+
+00000800 <ch_debug>:
+ 800:	6e69616d 18011600 08440404 1814100c     main......D.....
+ 810:	1e1d1c00 00000000 00000000 00000000     ................
+ 820:	656c6469 00000000                       idle....

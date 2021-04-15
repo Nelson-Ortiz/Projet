@@ -1,0 +1,114 @@
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccCjWKDp.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 2
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32_dma.c"
+  14              		.section	.gnu.lto_.profile.d61a929e12249db3,"",%progbits
+  15 0000 789C6363 		.ascii	"x\234cc```\004b\006\000\000D\000\010"
+  15      60606004 
+  15      62060000 
+  15      440008
+  16              		.text
+  17              		.section	.gnu.lto_.icf.d61a929e12249db3,"",%progbits
+  18 0000 789C6363 		.ascii	"x\234cc```b@\006\000\000\232\000\011"
+  18      60606062 
+  18      40060000 
+  18      9A0009
+  19              		.text
+  20              		.section	.gnu.lto_.inline.d61a929e12249db3,"",%progbits
+  21 0000 789C6363 		.ascii	"x\234cc```b@\006\000\000\232\000\011"
+  21      60606062 
+  21      40060000 
+  21      9A0009
+  22              		.text
+  23              		.section	.gnu.lto_.pureconst.d61a929e12249db3,"",%progbits
+  24 0000 789C6363 		.ascii	"x\234cc```\004b\006\000\000D\000\010"
+  24      60606004 
+  24      62060000 
+  24      440008
+  25              		.text
+  26              		.section	.gnu.lto_.symbol_nodes.d61a929e12249db3,"",%progbits
+  27 0000 789C6363 		.ascii	"x\234cc```b\000\001\000\000R\000\011"
+  27      60606062 
+  27      00010000 
+  27      520009
+  28              		.text
+  29              		.section	.gnu.lto_.refs.d61a929e12249db3,"",%progbits
+  30 0000 789C6363 		.ascii	"x\234cc```\004b\006\000\000D\000\010"
+  30      60606004 
+  30      62060000 
+  30      440008
+  31              		.text
+  32              		.section	.gnu.lto_.decls.d61a929e12249db3,"",%progbits
+  33 0000 789C6363 		.ascii	"x\234cc\200\000F V\001\342\377@\000b\037d \000\000\276"
+  33      80004620 
+  33      5601E2FF 
+  33      4000621F 
+  33      64200000 
+  34 0015 7C04EA   		.ascii	"|\004\352"
+  35              		.text
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccCjWKDp.s 			page 2
+
+
+  36              		.section	.gnu.lto_.symtab.d61a929e12249db3,"",%progbits
+  37              		.text
+  38              		.section	.gnu.lto_.opts,"",%progbits
+  39 0000 272D666D 		.ascii	"'-fmath-errno' '-fsigned-zeros' '-ftrapping-math' '"
+  39      6174682D 
+  39      6572726E 
+  39      6F272027 
+  39      2D667369 
+  40 0033 2D666E6F 		.ascii	"-fno-trapv' '-fno-openmp' '-fno-openacc' '-mcpu=cor"
+  40      2D747261 
+  40      70762720 
+  40      272D666E 
+  40      6F2D6F70 
+  41 0066 7465782D 		.ascii	"tex-m4' '-mfloat-abi=hard' '-mfpu=fpv4-sp-d16' '-mn"
+  41      6D342720 
+  41      272D6D66 
+  41      6C6F6174 
+  41      2D616269 
+  42 0099 6F2D7468 		.ascii	"o-thumb-interwork' '-mthumb' '-O2' '-fomit-frame-po"
+  42      756D622D 
+  42      696E7465 
+  42      72776F72 
+  42      6B272027 
+  43 00cc 696E7465 		.ascii	"inter' '-falign-functions=16' '-ffunction-sections'"
+  43      72272027 
+  43      2D66616C 
+  43      69676E2D 
+  43      66756E63 
+  44 00ff 20272D66 		.ascii	" '-fdata-sections' '-fno-common' '-flto' '-fsingle-"
+  44      64617461 
+  44      2D736563 
+  44      74696F6E 
+  44      73272027 
+  45 0132 70726563 		.ascii	"precision-constant'\000"
+  45      6973696F 
+  45      6E2D636F 
+  45      6E737461 
+  45      6E742700 
+  46              		.text
+  47              		.comm	__gnu_lto_v1,1,1
+  48              		.comm	__gnu_lto_slim,1,1
+  49              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2017-q4-major) 7.2.1 20170904 (release) [ARM
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//ccCjWKDp.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32_dma.c
+                            *COM*:0000000000000001 __gnu_lto_v1
+                            *COM*:0000000000000001 __gnu_lto_slim
+
+NO UNDEFINED SYMBOLS

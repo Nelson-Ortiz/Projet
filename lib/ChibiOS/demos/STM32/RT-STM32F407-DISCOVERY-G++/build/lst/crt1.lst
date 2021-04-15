@@ -1,0 +1,329 @@
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 2
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"crt1.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.__early_init,"ax",%progbits
+  16              		.align	1
+  17              		.p2align 4,,15
+  18              		.weak	__early_init
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  23              		.type	__early_init, %function
+  24              	__early_init:
+  25              	.LFB0:
+  26              		.file 1 "../../../os/common/ports/ARMCMx/compilers/GCC/crt1.c"
+  27              		.loc 1 41 0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              		.loc 1 41 0
+  33 0000 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE0:
+  36              		.size	__early_init, .-__early_init
+  37 0002 00BF     		.section	.text.__late_init,"ax",%progbits
+  38              		.align	1
+  39              		.p2align 4,,15
+  40              		.weak	__late_init
+  41              		.syntax unified
+  42              		.thumb
+  43              		.thumb_func
+  44              		.fpu softvfp
+  45              		.type	__late_init, %function
+  46              	__late_init:
+  47              	.LFB4:
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 0
+  50              		@ frame_needed = 0, uses_anonymous_args = 0
+  51              		@ link register save eliminated.
+  52 0000 7047     		bx	lr
+  53              		.cfi_endproc
+  54              	.LFE4:
+  55              		.size	__late_init, .-__late_init
+  56 0002 00BF     		.section	.text.__default_exit,"ax",%progbits
+  57              		.align	1
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 2
+
+
+  58              		.p2align 4,,15
+  59              		.weak	__default_exit
+  60              		.syntax unified
+  61              		.thumb
+  62              		.thumb_func
+  63              		.fpu softvfp
+  64              		.type	__default_exit, %function
+  65              	__default_exit:
+  66              	.LFB2:
+  67              		.loc 1 68 0
+  68              		.cfi_startproc
+  69              		@ Volatile: function does not return.
+  70              		@ args = 0, pretend = 0, frame = 0
+  71              		@ frame_needed = 0, uses_anonymous_args = 0
+  72              		@ link register save eliminated.
+  73              	.L5:
+  74 0000 FEE7     		b	.L5
+  75              		.cfi_endproc
+  76              	.LFE2:
+  77              		.size	__default_exit, .-__default_exit
+  78 0002 00BF     		.text
+  79              	.Letext0:
+  80              		.section	.debug_info,"",%progbits
+  81              	.Ldebug_info0:
+  82 0000 51000000 		.4byte	0x51
+  83 0004 0400     		.2byte	0x4
+  84 0006 00000000 		.4byte	.Ldebug_abbrev0
+  85 000a 04       		.byte	0x4
+  86 000b 01       		.uleb128 0x1
+  87 000c 99000000 		.4byte	.LASF0
+  88 0010 0C       		.byte	0xc
+  89 0011 57000000 		.4byte	.LASF1
+  90 0015 00000000 		.4byte	.LASF2
+  91 0019 00000000 		.4byte	.Ldebug_ranges0+0
+  92 001d 00000000 		.4byte	0
+  93 0021 00000000 		.4byte	.Ldebug_line0
+  94 0025 02       		.uleb128 0x2
+  95 0026 7F010000 		.4byte	.LASF3
+  96 002a 01       		.byte	0x1
+  97 002b 44       		.byte	0x44
+  98 002c 00000000 		.4byte	.LFB2
+  99 0030 02000000 		.4byte	.LFE2-.LFB2
+ 100 0034 01       		.uleb128 0x1
+ 101 0035 9C       		.byte	0x9c
+ 102 0036 03       		.uleb128 0x3
+ 103 0037 73010000 		.4byte	.LASF4
+ 104 003b 01       		.byte	0x1
+ 105 003c 37       		.byte	0x37
+ 106 003d 04       		.uleb128 0x4
+ 107 003e 8C000000 		.4byte	.LASF5
+ 108 0042 01       		.byte	0x1
+ 109 0043 29       		.byte	0x29
+ 110 0044 01       		.byte	0x1
+ 111 0045 05       		.uleb128 0x5
+ 112 0046 3D000000 		.4byte	0x3d
+ 113 004a 00000000 		.4byte	.LFB0
+ 114 004e 02000000 		.4byte	.LFE0-.LFB0
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 3
+
+
+ 115 0052 01       		.uleb128 0x1
+ 116 0053 9C       		.byte	0x9c
+ 117 0054 00       		.byte	0
+ 118              		.section	.debug_abbrev,"",%progbits
+ 119              	.Ldebug_abbrev0:
+ 120 0000 01       		.uleb128 0x1
+ 121 0001 11       		.uleb128 0x11
+ 122 0002 01       		.byte	0x1
+ 123 0003 25       		.uleb128 0x25
+ 124 0004 0E       		.uleb128 0xe
+ 125 0005 13       		.uleb128 0x13
+ 126 0006 0B       		.uleb128 0xb
+ 127 0007 03       		.uleb128 0x3
+ 128 0008 0E       		.uleb128 0xe
+ 129 0009 1B       		.uleb128 0x1b
+ 130 000a 0E       		.uleb128 0xe
+ 131 000b 55       		.uleb128 0x55
+ 132 000c 17       		.uleb128 0x17
+ 133 000d 11       		.uleb128 0x11
+ 134 000e 01       		.uleb128 0x1
+ 135 000f 10       		.uleb128 0x10
+ 136 0010 17       		.uleb128 0x17
+ 137 0011 00       		.byte	0
+ 138 0012 00       		.byte	0
+ 139 0013 02       		.uleb128 0x2
+ 140 0014 2E       		.uleb128 0x2e
+ 141 0015 00       		.byte	0
+ 142 0016 3F       		.uleb128 0x3f
+ 143 0017 19       		.uleb128 0x19
+ 144 0018 03       		.uleb128 0x3
+ 145 0019 0E       		.uleb128 0xe
+ 146 001a 3A       		.uleb128 0x3a
+ 147 001b 0B       		.uleb128 0xb
+ 148 001c 3B       		.uleb128 0x3b
+ 149 001d 0B       		.uleb128 0xb
+ 150 001e 27       		.uleb128 0x27
+ 151 001f 19       		.uleb128 0x19
+ 152 0020 8701     		.uleb128 0x87
+ 153 0022 19       		.uleb128 0x19
+ 154 0023 11       		.uleb128 0x11
+ 155 0024 01       		.uleb128 0x1
+ 156 0025 12       		.uleb128 0x12
+ 157 0026 06       		.uleb128 0x6
+ 158 0027 40       		.uleb128 0x40
+ 159 0028 18       		.uleb128 0x18
+ 160 0029 9742     		.uleb128 0x2117
+ 161 002b 19       		.uleb128 0x19
+ 162 002c 00       		.byte	0
+ 163 002d 00       		.byte	0
+ 164 002e 03       		.uleb128 0x3
+ 165 002f 2E       		.uleb128 0x2e
+ 166 0030 00       		.byte	0
+ 167 0031 3F       		.uleb128 0x3f
+ 168 0032 19       		.uleb128 0x19
+ 169 0033 03       		.uleb128 0x3
+ 170 0034 0E       		.uleb128 0xe
+ 171 0035 3A       		.uleb128 0x3a
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 4
+
+
+ 172 0036 0B       		.uleb128 0xb
+ 173 0037 3B       		.uleb128 0x3b
+ 174 0038 0B       		.uleb128 0xb
+ 175 0039 27       		.uleb128 0x27
+ 176 003a 19       		.uleb128 0x19
+ 177 003b 00       		.byte	0
+ 178 003c 00       		.byte	0
+ 179 003d 04       		.uleb128 0x4
+ 180 003e 2E       		.uleb128 0x2e
+ 181 003f 00       		.byte	0
+ 182 0040 3F       		.uleb128 0x3f
+ 183 0041 19       		.uleb128 0x19
+ 184 0042 03       		.uleb128 0x3
+ 185 0043 0E       		.uleb128 0xe
+ 186 0044 3A       		.uleb128 0x3a
+ 187 0045 0B       		.uleb128 0xb
+ 188 0046 3B       		.uleb128 0x3b
+ 189 0047 0B       		.uleb128 0xb
+ 190 0048 27       		.uleb128 0x27
+ 191 0049 19       		.uleb128 0x19
+ 192 004a 20       		.uleb128 0x20
+ 193 004b 0B       		.uleb128 0xb
+ 194 004c 00       		.byte	0
+ 195 004d 00       		.byte	0
+ 196 004e 05       		.uleb128 0x5
+ 197 004f 2E       		.uleb128 0x2e
+ 198 0050 00       		.byte	0
+ 199 0051 31       		.uleb128 0x31
+ 200 0052 13       		.uleb128 0x13
+ 201 0053 11       		.uleb128 0x11
+ 202 0054 01       		.uleb128 0x1
+ 203 0055 12       		.uleb128 0x12
+ 204 0056 06       		.uleb128 0x6
+ 205 0057 40       		.uleb128 0x40
+ 206 0058 18       		.uleb128 0x18
+ 207 0059 9742     		.uleb128 0x2117
+ 208 005b 19       		.uleb128 0x19
+ 209 005c 00       		.byte	0
+ 210 005d 00       		.byte	0
+ 211 005e 00       		.byte	0
+ 212              		.section	.debug_aranges,"",%progbits
+ 213 0000 24000000 		.4byte	0x24
+ 214 0004 0200     		.2byte	0x2
+ 215 0006 00000000 		.4byte	.Ldebug_info0
+ 216 000a 04       		.byte	0x4
+ 217 000b 00       		.byte	0
+ 218 000c 0000     		.2byte	0
+ 219 000e 0000     		.2byte	0
+ 220 0010 00000000 		.4byte	.LFB0
+ 221 0014 02000000 		.4byte	.LFE0-.LFB0
+ 222 0018 00000000 		.4byte	.LFB2
+ 223 001c 02000000 		.4byte	.LFE2-.LFB2
+ 224 0020 00000000 		.4byte	0
+ 225 0024 00000000 		.4byte	0
+ 226              		.section	.debug_ranges,"",%progbits
+ 227              	.Ldebug_ranges0:
+ 228 0000 00000000 		.4byte	.LFB0
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 5
+
+
+ 229 0004 02000000 		.4byte	.LFE0
+ 230 0008 00000000 		.4byte	.LFB2
+ 231 000c 02000000 		.4byte	.LFE2
+ 232 0010 00000000 		.4byte	0
+ 233 0014 00000000 		.4byte	0
+ 234              		.section	.debug_line,"",%progbits
+ 235              	.Ldebug_line0:
+ 236 0000 71000000 		.section	.debug_str,"MS",%progbits,1
+ 236      02004B00 
+ 236      00000201 
+ 236      FB0E0D00 
+ 236      01010101 
+ 237              	.LASF2:
+ 238 0000 2F557365 		.ascii	"/Users/nelsonortiz/TPRobotique_git/lib/ChibiOS/demo"
+ 238      72732F6E 
+ 238      656C736F 
+ 238      6E6F7274 
+ 238      697A2F54 
+ 239 0033 732F5354 		.ascii	"s/STM32/RT-STM32F407-DISCOVERY-G++/\000"
+ 239      4D33322F 
+ 239      52542D53 
+ 239      544D3332 
+ 239      46343037 
+ 240              	.LASF1:
+ 241 0057 2E2E2F2E 		.ascii	"../../../os/common/ports/ARMCMx/compilers/GCC/crt1."
+ 241      2E2F2E2E 
+ 241      2F6F732F 
+ 241      636F6D6D 
+ 241      6F6E2F70 
+ 242 008a 6300     		.ascii	"c\000"
+ 243              	.LASF5:
+ 244 008c 5F5F6561 		.ascii	"__early_init\000"
+ 244      726C795F 
+ 244      696E6974 
+ 244      00
+ 245              	.LASF0:
+ 246 0099 474E5520 		.ascii	"GNU C11 7.2.1 20170904 (release) [ARM/embedded-7-br"
+ 246      43313120 
+ 246      372E322E 
+ 246      31203230 
+ 246      31373039 
+ 247 00cc 616E6368 		.ascii	"anch revision 255204] -mcpu=cortex-m4 -mno-thumb-in"
+ 247      20726576 
+ 247      6973696F 
+ 247      6E203235 
+ 247      35323034 
+ 248 00ff 74657277 		.ascii	"terwork -mthumb -ggdb -O2 -fomit-frame-pointer -fal"
+ 248      6F726B20 
+ 248      2D6D7468 
+ 248      756D6220 
+ 248      2D676764 
+ 249 0132 69676E2D 		.ascii	"ign-functions=16 -ffunction-sections -fdata-section"
+ 249      66756E63 
+ 249      74696F6E 
+ 249      733D3136 
+ 249      202D6666 
+ 250 0165 73202D66 		.ascii	"s -fno-common\000"
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 6
+
+
+ 250      6E6F2D63 
+ 250      6F6D6D6F 
+ 250      6E00
+ 251              	.LASF4:
+ 252 0173 5F5F6C61 		.ascii	"__late_init\000"
+ 252      74655F69 
+ 252      6E697400 
+ 253              	.LASF3:
+ 254 017f 5F5F6465 		.ascii	"__default_exit\000"
+ 254      6661756C 
+ 254      745F6578 
+ 254      697400
+ 255              		.ident	"GCC: (GNU Tools for Arm Embedded Processors 7-2017-q4-major) 7.2.1 20170904 (release) [ARM
+ARM GAS  /var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 crt1.c
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:16     .text.__early_init:0000000000000000 $t
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:24     .text.__early_init:0000000000000000 __early_init
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:38     .text.__late_init:0000000000000000 $t
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:46     .text.__late_init:0000000000000000 __late_init
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:57     .text.__default_exit:0000000000000000 $t
+/var/folders/0d/gwzvz0b94t58_d5v6cmr4zpw0000gn/T//cchhEtRB.s:65     .text.__default_exit:0000000000000000 __default_exit
+
+NO UNDEFINED SYMBOLS

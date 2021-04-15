@@ -1,0 +1,495 @@
+
+build/ch.elf:     file format elf32-littlearm
+build/ch.elf
+architecture: armv4t, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00000040
+
+Program Header:
+    LOAD off    0x00010000 vaddr 0x00000000 paddr 0x00000000 align 2**16
+         filesz 0x00008d64 memsz 0x00008d68 flags rwx
+    LOAD off    0x00020a58 vaddr 0x40000a58 paddr 0x00008d68 align 2**16
+         filesz 0x000000b8 memsz 0x00000c88 flags rw-
+    LOAD off    0x00030200 vaddr 0x40000200 paddr 0x40000200 align 2**16
+         filesz 0x00000000 memsz 0x00000858 flags rw-
+private flags = 5000200: [Version5 EABI] [soft-float ABI]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 startup       00000040  00000000  00000000  00010000  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .text         00008d24  00000040  00000040  00010040  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .textalign    00000004  00008d64  00008d64  00018d64  2**0
+                  ALLOC
+  3 .stacks       00000858  40000200  40000200  00030200  2**0
+                  ALLOC
+  4 .data         000000b8  40000a58  00008d68  00020a58  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  5 .bss          00000bd0  40000b10  00008e20  00020b10  2**3
+                  ALLOC
+  6 .ram0         00000000  400016e0  400016e0  00020b10  2**2
+                  CONTENTS
+  7 .ram1         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+  8 .ram2         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+  9 .ram3         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+ 10 .ram4         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+ 11 .ram5         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+ 12 .ram6         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+ 13 .ram7         00000000  00000000  00000000  00020b10  2**2
+                  CONTENTS
+ 14 .ARM.attributes 0000002a  00000000  00000000  00020b10  2**0
+                  CONTENTS, READONLY
+ 15 .comment      0000007e  00000000  00000000  00020b3a  2**0
+                  CONTENTS, READONLY
+ 16 .debug_info   0001201c  00000000  00000000  00020bb8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_abbrev 0000084d  00000000  00000000  00032bd4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_loc    00005c52  00000000  00000000  00033421  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .debug_aranges 00000650  00000000  00000000  00039073  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 20 .debug_ranges 00001d28  00000000  00000000  000396c3  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 21 .debug_line   00003fbf  00000000  00000000  0003b3eb  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 22 .debug_str    00002336  00000000  00000000  0003f3aa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 23 .debug_frame  00001630  00000000  00000000  000416e0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+00000000 l    d  startup	00000000 startup
+00000040 l    d  .text	00000000 .text
+00008d64 l    d  .textalign	00000000 .textalign
+40000200 l    d  .stacks	00000000 .stacks
+40000a58 l    d  .data	00000000 .data
+40000b10 l    d  .bss	00000000 .bss
+400016e0 l    d  .ram0	00000000 .ram0
+00000000 l    d  .ram1	00000000 .ram1
+00000000 l    d  .ram2	00000000 .ram2
+00000000 l    d  .ram3	00000000 .ram3
+00000000 l    d  .ram4	00000000 .ram4
+00000000 l    d  .ram5	00000000 .ram5
+00000000 l    d  .ram6	00000000 .ram6
+00000000 l    d  .ram7	00000000 .ram7
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_loc	00000000 .debug_loc
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    df *ABS*	00000000 build/obj/vectors.o
+00000020 l       startup	00000000 _reset
+00000024 l       startup	00000000 _undefined
+00000028 l       startup	00000000 _swi
+0000002c l       startup	00000000 _prefetch
+00000030 l       startup	00000000 _abort
+00000038 l       startup	00000000 _irq
+00000034 l       startup	00000000 _fiq
+00000000 l    df *ABS*	00000000 build/obj/crt0.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+000000ac l       .text	00000000 dataloop
+000000c8 l       .text	00000000 bssloop
+00000000 l    df *ABS*	00000000 build/obj/chcoreasm.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+00000134 l       .text	00000000 _irq_ret_arm
+00000198 l       .text	00000000 _zombies
+00000000 l    df *ABS*	00000000 
+000001b0 l     F .text	00000024 chEvtGetAndClearEvents.constprop.32
+000001e0 l     F .text	00000088 sdObjectInit.constprop.6
+00000270 l     F .text	00000014 tmr
+00000290 l     F .text	00000004 _idle_thread
+000002a0 l     F .text	00000044 chCoreAlloc
+000002f0 l     F .text	0000001c bmk12_setup
+00000310 l     F .text	0000001c bmk11_setup
+00000330 l     F .text	00000004 notify
+00000340 l     F .text	00000004 tmo
+00000350 l     F .text	0000001c bmk7_setup
+00000370 l     F .text	00000024 sys2_execute
+000003a0 l     F .text	00000050 queues2_setup
+000003f0 l     F .text	00000048 queues1_setup
+00000440 l     F .text	0000001c dyn2_setup
+00000460 l     F .text	00000040 dyn1_setup
+000004a0 l     F .text	00000004 dyn3_setup
+000004b0 l     F .text	00000008 null_provider
+000004c0 l     F .text	0000001c pools1_setup
+000004e0 l     F .text	00000040 heap1_setup
+00000520 l     F .text	00000004 evt1_setup
+00000530 l     F .text	00000004 evt3_setup
+00000540 l     F .text	00000004 evt2_setup
+00000550 l     F .text	00000054 mbox1_setup
+000005b0 l     F .text	00000040 mtx8_setup
+000005f0 l     F .text	0000002c mtx6_setup
+00000620 l     F .text	00000004 mtx7_setup
+00000630 l     F .text	00000030 mtx3_setup
+00000660 l     F .text	00000004 mtx4_setup
+00000670 l     F .text	0000001c mtx1_setup
+00000690 l     F .text	00000004 mtx5_setup
+000006a0 l     F .text	00000004 mtx2_setup
+000006b0 l     F .text	0000001c sem1_setup
+000006d0 l     F .text	00000004 sem3_setup
+000006e0 l     F .text	00000004 sem2_setup
+000006f0 l     F .text	0000008c test_printn.part.1
+00000780 l     F .text	00000028 test_printn
+000007b0 l     F .text	00000050 print_line
+00000800 l     F .text	00000080 test_cpu_pulse
+00000880 l     F .text	00000038 test_terminate_threads
+000008c0 l     F .text	00000054 _test_assert_time_window
+00000920 l     F .text	00000080 _test_assert_sequence
+000009a0 l     F .text	00000038 _test_assert
+000009e0 l     F .text	00000024 test_emit_token
+00000a10 l     F .text	00000008 h3
+00000a20 l     F .text	00000008 h2
+00000a30 l     F .text	00000008 h1
+00000a40 l     F .text	00000008 thread.lto_priv.53
+00000a50 l     F .text	00000004 thread.lto_priv.55
+00000a60 l     F .text	00000060 test_println
+00000ac0 l     F .text	00000040 test_print
+00000b00 l     F .text	00000048 chPoolAlloc
+00000b50 l     F .text	0000013c pools1_execute
+00000c90 l     F .text	0000003c chEvtUnregister
+00000cd0 l     F .text	00000150 evt1_execute
+00000e20 l     F .text	00000028 chSchIsPreemptionRequired
+00000e50 l     F .text	000000a0 T0IrqHandler
+00000ef0 l     F .text	00000010 irq_handler
+00000f00 l     F .text	000000a4 wakeup
+00000fb0 l     F .text	00000044 chSchReadyI
+00001000 l     F .text	00000030 chCondSignalI.constprop.39
+00001030 l     F .text	0000009c chIQPutI
+000010d0 l     F .text	00000084 chOQGetI
+00001160 l     F .text	0000005c chEvtSignalI
+000011c0 l     F .text	00000050 chEvtBroadcastFlagsI
+00001210 l     F .text	00000060 preload
+00001270 l     F .text	0000000c notify1
+00001280 l     F .text	0000000c notify2
+00001290 l     F .text	0000012c serve_interrupt
+000013c0 l     F .text	00000024 UART0IrqHandler
+000013f0 l     F .text	00000024 UART1IrqHandler
+00001420 l     F .text	00000090 chMtxUnlockS
+000014b0 l     F .text	00000038 chSemSignalI
+000014f0 l     F .text	0000005c chMBPostI.constprop.15
+00001550 l     F .text	00000060 chMBPostAheadI.constprop.13
+000015b0 l     F .text	00000060 chMBFetchI.constprop.11
+00001610 l     F .text	00000048 chSemResetI
+00001660 l     F .text	00000044 chVTDoResetI
+000016b0 l     F .text	00000068 chVTDoSetI
+00001720 l     F .text	0000004c test_start_timer.constprop.1
+00001770 l     F .text	00000024 chSysGetStatusAndLockX
+000017a0 l     F .text	00000130 chSysIntegrityCheckI
+000018d0 l     F .text	000000a0 sys3_execute
+00001970 l     F .text	00000128 bmk13_execute
+00001aa0 l     F .text	00000088 chThdYield
+00001b30 l     F .text	00000040 thread8
+00001b70 l     F .text	0000006c chSchDoRescheduleAhead
+00001be0 l     F .text	00000024 chSchRescheduleS
+00001c10 l     F .text	00000028 thread4.lto_priv.67
+00001c40 l     F .text	00000084 chMtxUnlockAll
+00001cd0 l     F .text	00000050 chThdSetPriority
+00001d20 l     F .text	000001e0 thd3_execute
+00001f00 l     F .text	00000020 chSysRestoreStatusX.part.2
+00001f20 l     F .text	00000018 vtcb
+00001f40 l     F .text	000000a4 chSchWakeupS
+00001ff0 l     F .text	000000cc chThdCreateFromMemoryPool.constprop.48
+000020c0 l     F .text	00000040 chCondSignal.constprop.40
+00002100 l     F .text	000000a0 chMtxUnlock
+000021a0 l     F .text	00000048 chSemSignal
+000021f0 l     F .text	000000a0 chThdCreateStatic
+00002290 l     F .text	0000003c chSchGoSleepS
+000022d0 l     F .text	000000a0 chSemSignalWait.constprop.44
+00002370 l     F .text	000000d8 sem3_execute
+00005050 l     F .text	00000020 thread3.lto_priv.60
+00002450 l     F .text	0000004c chEvtWaitOne.constprop.28
+000024a0 l     F .text	00000044 chEvtWaitAny.constprop.27
+000024f0 l     F .text	00000030 thread4.lto_priv.68
+00002520 l     F .text	00000070 chSchGoSleepTimeoutS
+00002590 l     F .text	00000074 chSemWaitTimeout.constprop.46
+00002610 l     F .text	000001f4 evt3_execute
+00002810 l     F .text	0000004c chSemWaitTimeoutS
+00002860 l     F .text	0000005c chMBPost.constprop.16
+000028c0 l     F .text	00000064 chMBPostAhead.constprop.14
+00002930 l     F .text	00000064 chMBFetch.constprop.12
+000029a0 l     F .text	00000784 mbox1_execute
+00003130 l     F .text	0000003c chThdEnqueueTimeoutS
+00003170 l     F .text	000000b4 chOQWriteTimeout
+00003230 l     F .text	00000008 writet
+00003240 l     F .text	0000000c write
+00003250 l     F .text	0000008c chOQPutTimeout
+000032e0 l     F .text	00000014 thread2.lto_priv.71
+00003300 l     F .text	00000008 putt
+00003310 l     F .text	0000000c put
+00003320 l     F .text	000000ac chIQReadTimeout
+000033d0 l     F .text	00000008 readt
+000033e0 l     F .text	0000000c read
+000033f0 l     F .text	00000078 chIQGetTimeout
+00003470 l     F .text	00000010 thread1.lto_priv.65
+00003480 l     F .text	00000008 gett
+00003490 l     F .text	0000000c get
+000034a0 l     F .text	0000001c chThdSleep
+000034c0 l     F .text	00000064 Thread1
+00003530 l     F .text	00000048 Thread2
+00003580 l     F .text	000000d8 sys1_execute
+00003660 l     F .text	0000002c thread1.lto_priv.64
+00003690 l     F .text	00000048 thread2.lto_priv.70
+000036e0 l     F .text	00000020 thread3H
+00003700 l     F .text	00000020 thread2M
+00003720 l     F .text	00000028 thread2.lto_priv.69
+00003750 l     F .text	00000024 test_wait_tick
+00003780 l     F .text	000000a8 bmk10_execute
+00003830 l     F .text	000000ec bmk9_execute
+00003920 l     F .text	00000094 bmk6_execute
+00007fb0 l     F .text	00000004 thread1.lto_priv.66
+000039c0 l     F .text	000000d0 thd4_execute
+00003a90 l     F .text	00000058 chMsgWait
+00003af0 l     F .text	00000028 thread2.lto_priv.72
+00003b20 l     F .text	000000bc msg1_execute
+00003c90 l     F .text	0000002c thread.lto_priv.54
+00003be0 l     F .text	0000005c chMsgSend
+00003c40 l     F .text	0000004c msg_loop_test
+00003cc0 l     F .text	0000019c chMtxLockS
+00003e60 l     F .text	00000014 chMtxLock
+00003e80 l     F .text	00000094 bmk12_execute
+00003f20 l     F .text	000000c4 thread11
+00003ff0 l     F .text	000000a0 thread10
+00004090 l     F .text	0000002c thread12
+000040c0 l     F .text	00000144 mtx5_execute
+00004210 l     F .text	00000028 thread4a
+00004240 l     F .text	00000028 thread4b
+00004270 l     F .text	00000030 thread3LL
+000042a0 l     F .text	00000060 thread3L
+00004300 l     F .text	00000038 thread3M
+00004340 l     F .text	00000038 thread3HH
+00004380 l     F .text	00000038 thread2H
+000043c0 l     F .text	00000038 thread2L
+00004400 l     F .text	0000002c thread1.lto_priv.63
+00004430 l     F .text	00000070 chHeapStatus
+000044a0 l     F .text	000000c4 chHeapFree
+00004570 l     F .text	00000090 chThdRelease
+00004600 l     F .text	00000094 regfind
+000046a0 l     F .text	000000d4 chHeapAlloc
+00004780 l     F .text	000000bc chThdCreateFromHeap.constprop.49
+00004840 l     F .text	000001b4 dyn3_execute
+00004a00 l     F .text	00000350 heap1_execute
+00004d50 l     F .text	00000068 chSemWait
+00004dc0 l     F .text	00000094 bmk11_execute
+00004e60 l     F .text	00000040 thread3.lto_priv.61
+00004ea0 l     F .text	000001b0 sem4_execute
+00005070 l     F .text	00000020 thread1.lto_priv.62
+00005090 l     F .text	00000050 chThdWait
+000050e0 l     F .text	00000098 bmk5_execute
+00005180 l     F .text	00000034 test_wait_threads
+000051c0 l     F .text	00000124 bmk8_execute
+000052f0 l     F .text	00000188 bmk7_execute
+00005480 l     F .text	000000e4 bmk4_execute
+00005570 l     F .text	00000130 bmk3_execute
+000056a0 l     F .text	00000090 bmk2_execute
+00005730 l     F .text	00000090 bmk1_execute
+000057c0 l     F .text	00000344 queues2_execute
+00005b10 l     F .text	00000394 queues1_execute
+00005eb0 l     F .text	00000174 dyn2_execute
+00006030 l     F .text	00000150 dyn1_execute
+00006180 l     F .text	000003b4 evt2_execute
+00006540 l     F .text	000000c4 mtx8_execute
+00006610 l     F .text	00000150 mtx7_execute
+00006760 l     F .text	00000120 mtx6_execute
+00006880 l     F .text	00000354 mtx4_execute
+00006be0 l     F .text	00000144 mtx3_execute
+00006d30 l     F .text	000000ec mtx2_execute
+00006e20 l     F .text	00000148 mtx1_execute
+00006f70 l     F .text	000001dc sem2_execute
+00007150 l     F .text	00000204 sem1_execute
+00007360 l     F .text	0000019c thd2_execute
+00007500 l     F .text	00000120 thd1_execute
+40000b10 l     O .bss	00000078 SD1
+40000b88 l     O .bss	00000078 SD2
+40000c00 l     O .bss	00000148 ch
+40000d48 l     O .bss	00000004 chp
+40000d50 l     O .bss	00000020 default_heap
+40000d70 l     O .bss	00000004 endmem
+40000d74 l     O .bss	00000004 failpoint
+40000d78 l     O .bss	00000020 heap1
+40000d98 l     O .bss	00000010 ib.5264
+40000da8 l     O .bss	00000024 iq.5265
+40000dcc l     O .bss	00000001 local_fail
+40000dd0 l     O .bss	0000000c mp1.lto_priv.57
+40000ddc l     O .bss	00000010 mtx1
+40000dec l     O .bss	00000004 nextmem
+40000df0 l     O .bss	0000000c sem1.lto_priv.59
+40000e00 l     O .bss	000005f0 test
+400013f0 l     O .bss	00000001 test_global_fail
+400013f8 l     O .bss	00000020 test_heap
+40001418 l     O .bss	00000001 test_timer_done
+4000141c l     O .bss	00000014 threads
+40001430 l     O .bss	00000010 tokens_buffer
+40001440 l     O .bss	00000004 tokp
+40001444 l     O .bss	00000014 vt
+40001458 l     O .bss	00000014 vt1.5275
+4000146c l     O .bss	00000014 vt2.5276
+40001480 l     O .bss	00000130 waThread1
+400015b0 l     O .bss	00000130 waThread2
+40000a58 l     O .data	00000008 c1
+40000a60 l     O .data	00000004 es1
+40000a64 l     O .data	00000004 es2
+40000a68 l     O .data	00000024 iq
+40000a8c l     O .data	00000010 m1
+40000a9c l     O .data	00000010 m2
+40000aac l     O .data	00000028 mb1
+40000ad4 l     O .data	0000000c mp1.lto_priv.56
+40000ae0 l     O .data	00000024 oq
+40000b04 l     O .data	0000000c sem1.lto_priv.58
+00008160 l     O .text	00000016 ch_debug
+000081b0 l     O .text	0000000c evhndl
+000083c0 l     O .text	00000038 patternbmk
+00008a70 l     O .text	00000010 testbmk1
+00008ac0 l     O .text	00000010 testbmk2
+00008ad0 l     O .text	00000010 testbmk3
+00008ae0 l     O .text	00000010 testbmk4
+00008af0 l     O .text	00000010 testbmk5
+00008b00 l     O .text	00000010 testbmk6
+00008b10 l     O .text	00000010 testbmk7
+00008b20 l     O .text	00000010 testbmk8
+00008b30 l     O .text	00000010 testbmk9
+00008a80 l     O .text	00000010 testbmk10
+00008a90 l     O .text	00000010 testbmk11
+00008aa0 l     O .text	00000010 testbmk12
+00008ab0 l     O .text	00000010 testbmk13
+00008400 l     O .text	00000010 patterndyn
+00008b40 l     O .text	00000010 testdyn1
+00008b50 l     O .text	00000010 testdyn2
+00008b60 l     O .text	00000010 testdyn3
+00008410 l     O .text	00000010 patternevt
+00008b70 l     O .text	00000010 testevt1
+00008b80 l     O .text	00000010 testevt2
+00008b90 l     O .text	00000010 testevt3
+00008420 l     O .text	00000008 patternheap
+00008ba0 l     O .text	00000010 testheap1
+00008430 l     O .text	00000008 patternmbox
+00008bb0 l     O .text	00000010 testmbox1
+00008440 l     O .text	00000008 patternmsg
+00008bc0 l     O .text	00000010 testmsg1
+00008450 l     O .text	00000024 patternmtx
+00008bd0 l     O .text	00000010 testmtx1
+00008be0 l     O .text	00000010 testmtx2
+00008bf0 l     O .text	00000010 testmtx3
+00008c00 l     O .text	00000010 testmtx4
+00008c10 l     O .text	00000010 testmtx5
+00008c20 l     O .text	00000010 testmtx6
+00008c30 l     O .text	00000010 testmtx7
+00008c40 l     O .text	00000010 testmtx8
+00008480 l     O .text	00000008 patternpools
+00008c50 l     O .text	00000010 testpools1
+00008490 l     O .text	0000000c patternqueues
+00008c60 l     O .text	00000010 testqueues1
+00008c70 l     O .text	00000010 testqueues2
+000084a0 l     O .text	00000034 patterns
+00008500 l     O .text	00000010 patternsys
+00008510 l     O .text	00000014 patternthd
+000084e0 l     O .text	00000014 patternsem
+00008c80 l     O .text	00000010 testsem1
+00008c90 l     O .text	00000010 testsem2
+00008ca0 l     O .text	00000010 testsem3
+00008cb0 l     O .text	00000010 testsem4
+00008cc0 l     O .text	00000010 testsys1
+00008cd0 l     O .text	00000010 testsys2
+00008ce0 l     O .text	00000010 testsys3
+00008cf0 l     O .text	00000010 testthd1
+00008d00 l     O .text	00000010 testthd2
+00008d10 l     O .text	00000010 testthd3
+00008d20 l     O .text	00000010 testthd4
+00008d30 l     O .text	00000020 vmt
+00008d50 l     O .text	00000014 wa
+00007f40 g     F .text	0000006c chThdExit
+00000000 g       startup	00000000 __ram4_start__
+00000000 g       .ram1	00000000 __ram1_free__
+00000000 g       startup	00000000 __ram6_start__
+400016e0 g       .ram0	00000000 __ram0_free__
+400016e0 g       .ram0	00000000 __heap_base__
+00008d68 g       .stacks	00000000 _etext
+00000858 g       *ABS*	00000000 __stacks_total_size__
+00000000 g       *ABS*	00000000 __ram5_end__
+00000000 g       *ABS*	00000000 __ram5_size__
+00000120 g       .text	00000000 Irq_Handler
+40000b10 g       .bss	00000000 _bss_start
+0000003c  w      startup	00000000 Abort_Handler
+40007ee0 g       *ABS*	00000000 __heap_end__
+00000000 g       *ABS*	00000000 __ram1_size__
+00000008 g       *ABS*	00000000 __abt_stack_size__
+00000000 g       .ram7	00000000 __ram7_free__
+00000000 g       *ABS*	00000000 __ram4_size__
+00000000 g       *ABS*	00000000 __ram1_end__
+00000000 g       *ABS*	00000000 __ram4_end__
+00007ce0 g       *ABS*	00000000 __ram0_size__
+400016e0 g       .bss	00000000 _bss_end
+00000040 g       .text	00000000 Reset_Handler
+0000003c  w      startup	00000000 Swi_Handler
+00000000 g       .ram5	00000000 __ram5_free__
+00007fd0 g     F .text	00000004 __default_exit
+00000000 g       *ABS*	00000000 __ram6_end__
+00007fc0 g     F .text	00000004 chSchDoReschedule
+00000000 g       .ram6	00000000 __ram6_free__
+00000000 g       startup	00000000 _start
+00000000 g       *ABS*	00000000 __ram7_size__
+00000400 g       *ABS*	00000000 __irq_stack_size__
+0000003c  w      startup	00000000 Fiq_Handler
+00000110 g       .text	00000000 _port_switch_arm
+00000400 g       *ABS*	00000000 __sys_stack_size__
+00007fe0 g     F .text	00000004 __late_init
+0000003c  w      startup	00000000 Prefetch_Handler
+00000000 g       startup	00000000 __ram7_start__
+00000000 g       *ABS*	00000000 __ram3_size__
+00008d68 g       *ABS*	00000000 _textdata
+00000000 g       startup	00000000 _text
+00000000 g       *ABS*	00000000 __ram3_end__
+00000000 g       *ABS*	00000000 __ram2_size__
+00000000 g       startup	00000000 __ram1_start__
+00007620 g     F .text	00000894 main
+00000000 g       *ABS*	00000000 __ram6_size__
+00000000 g       .ram3	00000000 __ram3_free__
+00000180 g       .text	00000000 _port_thread_start
+40000a58 g       .stacks	00000000 __stacks_end__
+00000000 g       *ABS*	00000000 __ram2_end__
+40000a58 g       .data	00000000 _data
+00000000 g       startup	00000000 __ram2_start__
+00000000 g       *ABS*	00000000 __ram7_end__
+40000b10 g       .data	00000000 _edata
+0000003c  w      startup	00000000 _unhandled_exception
+40000200 g       startup	00000000 __ram0_start__
+00000000 g       startup	00000000 __ram5_start__
+00000040 g       *ABS*	00000000 __fiq_stack_size__
+00000000 g       .ram2	00000000 __ram2_free__
+00000008 g       *ABS*	00000000 __svc_stack_size__
+00000000 g       .ram4	00000000 __ram4_free__
+40007ee0 g       *ABS*	00000000 __ram0_end__
+00000008 g       *ABS*	00000000 __und_stack_size__
+40000200 g       .stacks	00000000 __stacks_base__
+0000003c  w      startup	00000000 Und_Handler
+00007ec0 g     F .text	0000007c __early_init
+00000000 g       startup	00000000 __ram3_start__
+
+

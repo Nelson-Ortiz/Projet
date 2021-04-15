@@ -1,0 +1,247 @@
+
+build/ch.elf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+080001a0 <Reset_Handler>:
+ 80001a0:	b672      	cpsid	i
+ 80001a2:	4821      	ldr	r0, [pc, #132]	; (8000228 <endfiniloop+0x6>)
+ 80001a4:	f380 8809 	msr	PSP, r0
+ 80001a8:	2002      	movs	r0, #2
+ 80001aa:	f380 8814 	msr	CONTROL, r0
+ 80001ae:	f3bf 8f6f 	isb	sy
+ 80001b2:	f000 f91d 	bl	80003f0 <__early_init>
+ 80001b6:	f04f 3055 	mov.w	r0, #1431655765	; 0x55555555
+ 80001ba:	491c      	ldr	r1, [pc, #112]	; (800022c <endfiniloop+0xa>)
+ 80001bc:	4a1c      	ldr	r2, [pc, #112]	; (8000230 <endfiniloop+0xe>)
+
+080001be <msloop>:
+ 80001be:	4291      	cmp	r1, r2
+ 80001c0:	bf3c      	itt	cc
+ 80001c2:	f841 0b04 	strcc.w	r0, [r1], #4
+ 80001c6:	e7fa      	bcc.n	80001be <msloop>
+ 80001c8:	491a      	ldr	r1, [pc, #104]	; (8000234 <endfiniloop+0x12>)
+ 80001ca:	4a17      	ldr	r2, [pc, #92]	; (8000228 <endfiniloop+0x6>)
+
+080001cc <psloop>:
+ 80001cc:	4291      	cmp	r1, r2
+ 80001ce:	bf3c      	itt	cc
+ 80001d0:	f841 0b04 	strcc.w	r0, [r1], #4
+ 80001d4:	e7fa      	bcc.n	80001cc <psloop>
+ 80001d6:	4918      	ldr	r1, [pc, #96]	; (8000238 <endfiniloop+0x16>)
+ 80001d8:	4a18      	ldr	r2, [pc, #96]	; (800023c <endfiniloop+0x1a>)
+ 80001da:	4b19      	ldr	r3, [pc, #100]	; (8000240 <endfiniloop+0x1e>)
+
+080001dc <dloop>:
+ 80001dc:	429a      	cmp	r2, r3
+ 80001de:	bf3e      	ittt	cc
+ 80001e0:	f851 0b04 	ldrcc.w	r0, [r1], #4
+ 80001e4:	f842 0b04 	strcc.w	r0, [r2], #4
+ 80001e8:	e7f8      	bcc.n	80001dc <dloop>
+ 80001ea:	2000      	movs	r0, #0
+ 80001ec:	4915      	ldr	r1, [pc, #84]	; (8000244 <endfiniloop+0x22>)
+ 80001ee:	4a16      	ldr	r2, [pc, #88]	; (8000248 <endfiniloop+0x26>)
+
+080001f0 <bloop>:
+ 80001f0:	4291      	cmp	r1, r2
+ 80001f2:	bf3c      	itt	cc
+ 80001f4:	f841 0b04 	strcc.w	r0, [r1], #4
+ 80001f8:	e7fa      	bcc.n	80001f0 <bloop>
+ 80001fa:	f000 f8f1 	bl	80003e0 <__late_init>
+ 80001fe:	4c13      	ldr	r4, [pc, #76]	; (800024c <endfiniloop+0x2a>)
+ 8000200:	4d13      	ldr	r5, [pc, #76]	; (8000250 <endfiniloop+0x2e>)
+
+08000202 <initloop>:
+ 8000202:	42ac      	cmp	r4, r5
+ 8000204:	da03      	bge.n	800020e <endinitloop>
+ 8000206:	f854 1b04 	ldr.w	r1, [r4], #4
+ 800020a:	4788      	blx	r1
+ 800020c:	e7f9      	b.n	8000202 <initloop>
+
+0800020e <endinitloop>:
+ 800020e:	f000 f87f 	bl	8000310 <main>
+ 8000212:	4c10      	ldr	r4, [pc, #64]	; (8000254 <endfiniloop+0x32>)
+ 8000214:	4d10      	ldr	r5, [pc, #64]	; (8000258 <endfiniloop+0x36>)
+
+08000216 <finiloop>:
+ 8000216:	42ac      	cmp	r4, r5
+ 8000218:	da03      	bge.n	8000222 <endfiniloop>
+ 800021a:	f854 1b04 	ldr.w	r1, [r4], #4
+ 800021e:	4788      	blx	r1
+ 8000220:	e7f9      	b.n	8000216 <finiloop>
+
+08000222 <endfiniloop>:
+ 8000222:	f000 b8d5 	b.w	80003d0 <__default_exit>
+ 8000226:	0000      	.short	0x0000
+ 8000228:	20000500 	.word	0x20000500
+ 800022c:	20000000 	.word	0x20000000
+ 8000230:	20000400 	.word	0x20000400
+ 8000234:	20000400 	.word	0x20000400
+ 8000238:	080003f8 	.word	0x080003f8
+ 800023c:	20000500 	.word	0x20000500
+ 8000240:	20000500 	.word	0x20000500
+ 8000244:	20000500 	.word	0x20000500
+ 8000248:	20000620 	.word	0x20000620
+ 800024c:	080001a0 	.word	0x080001a0
+ 8000250:	080001a0 	.word	0x080001a0
+ 8000254:	080001a0 	.word	0x080001a0
+ 8000258:	080001a0 	.word	0x080001a0
+ 800025c:	00000000 	.word	0x00000000
+
+08000260 <_port_switch>:
+ 8000260:	e92d 4ff0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, lr}
+ 8000264:	f8c1 d000 	str.w	sp, [r1]
+ 8000268:	f8d0 d000 	ldr.w	sp, [r0]
+ 800026c:	e8bd 8ff0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, r9, sl, fp, pc}
+
+08000270 <_port_thread_start>:
+ 8000270:	2300      	movs	r3, #0
+ 8000272:	f383 8811 	msr	BASEPRI, r3
+ 8000276:	4628      	mov	r0, r5
+ 8000278:	47a0      	blx	r4
+ 800027a:	f04f 0300 	mov.w	r3, #0
+ 800027e:	f000 f89f 	bl	80003c0 <chSysHalt>
+
+08000282 <_port_switch_from_isr>:
+ 8000282:	f000 f88d 	bl	80003a0 <chSchRescheduleS>
+
+08000286 <_port_exit_from_isr>:
+ 8000286:	df00      	svc	0
+ 8000288:	e7fe      	b.n	8000288 <_port_exit_from_isr+0x2>
+ 800028a:	0000      	movs	r0, r0
+ 800028c:	0000      	movs	r0, r0
+	...
+
+08000290 <SVC_Handler>:
+ 8000290:	b480      	push	{r7}
+ 8000292:	af00      	add	r7, sp, #0
+ 8000294:	f3ef 8309 	mrs	r3, PSP
+ 8000298:	3320      	adds	r3, #32
+ 800029a:	f383 8809 	msr	PSP, r3
+ 800029e:	2300      	movs	r3, #0
+ 80002a0:	f383 8811 	msr	BASEPRI, r3
+ 80002a4:	46bd      	mov	sp, r7
+ 80002a6:	bc80      	pop	{r7}
+ 80002a8:	4770      	bx	lr
+ 80002aa:	bf00      	nop
+ 80002ac:	0000      	movs	r0, r0
+	...
+
+080002b0 <BusFault_Handler>:
+ 80002b0:	b672      	cpsid	i
+ 80002b2:	e7fe      	b.n	80002b2 <BusFault_Handler+0x2>
+	...
+
+080002c0 <Thread1>:
+ 80002c0:	4c0e      	ldr	r4, [pc, #56]	; (80002fc <Thread1+0x3c>)
+ 80002c2:	b580      	push	{r7, lr}
+ 80002c4:	2601      	movs	r6, #1
+ 80002c6:	2720      	movs	r7, #32
+ 80002c8:	f44f 757a 	mov.w	r5, #1000	; 0x3e8
+ 80002cc:	f387 8811 	msr	BASEPRI, r7
+ 80002d0:	6821      	ldr	r1, [r4, #0]
+ 80002d2:	710e      	strb	r6, [r1, #4]
+ 80002d4:	60cd      	str	r5, [r1, #12]
+ 80002d6:	7c23      	ldrb	r3, [r4, #16]
+ 80002d8:	b16b      	cbz	r3, 80002f6 <Thread1+0x36>
+ 80002da:	4b09      	ldr	r3, [pc, #36]	; (8000300 <Thread1+0x40>)
+ 80002dc:	7e1a      	ldrb	r2, [r3, #24]
+ 80002de:	3314      	adds	r3, #20
+ 80002e0:	2a00      	cmp	r2, #0
+ 80002e2:	d1fb      	bne.n	80002dc <Thread1+0x1c>
+ 80002e4:	4618      	mov	r0, r3
+ 80002e6:	6063      	str	r3, [r4, #4]
+ 80002e8:	6023      	str	r3, [r4, #0]
+ 80002ea:	f7ff ffb9 	bl	8000260 <_port_switch>
+ 80002ee:	2300      	movs	r3, #0
+ 80002f0:	f383 8811 	msr	BASEPRI, r3
+ 80002f4:	e7ea      	b.n	80002cc <Thread1+0xc>
+ 80002f6:	4b02      	ldr	r3, [pc, #8]	; (8000300 <Thread1+0x40>)
+ 80002f8:	e7f4      	b.n	80002e4 <Thread1+0x24>
+ 80002fa:	bf00      	nop
+ 80002fc:	20000500 	.word	0x20000500
+ 8000300:	2000050c 	.word	0x2000050c
+	...
+
+08000310 <main>:
+ 8000310:	4a19      	ldr	r2, [pc, #100]	; (8000378 <main+0x68>)
+ 8000312:	481a      	ldr	r0, [pc, #104]	; (800037c <main+0x6c>)
+ 8000314:	4e1a      	ldr	r6, [pc, #104]	; (8000380 <main+0x70>)
+ 8000316:	2500      	movs	r5, #0
+ 8000318:	b508      	push	{r3, lr}
+ 800031a:	6095      	str	r5, [r2, #8]
+ 800031c:	68d1      	ldr	r1, [r2, #12]
+ 800031e:	4b19      	ldr	r3, [pc, #100]	; (8000384 <main+0x74>)
+ 8000320:	f64f 04ff 	movw	r4, #63743	; 0xf8ff
+ 8000324:	4021      	ands	r1, r4
+ 8000326:	430b      	orrs	r3, r1
+ 8000328:	60d3      	str	r3, [r2, #12]
+ 800032a:	68c3      	ldr	r3, [r0, #12]
+ 800032c:	4916      	ldr	r1, [pc, #88]	; (8000388 <main+0x78>)
+ 800032e:	4c17      	ldr	r4, [pc, #92]	; (800038c <main+0x7c>)
+ 8000330:	f043 7380 	orr.w	r3, r3, #16777216	; 0x1000000
+ 8000334:	60c3      	str	r3, [r0, #12]
+ 8000336:	680b      	ldr	r3, [r1, #0]
+ 8000338:	f043 0301 	orr.w	r3, r3, #1
+ 800033c:	600b      	str	r3, [r1, #0]
+ 800033e:	2110      	movs	r1, #16
+ 8000340:	77d1      	strb	r1, [r2, #31]
+ 8000342:	4633      	mov	r3, r6
+ 8000344:	2120      	movs	r1, #32
+ 8000346:	f882 1022 	strb.w	r1, [r2, #34]	; 0x22
+ 800034a:	f104 02c4 	add.w	r2, r4, #196	; 0xc4
+ 800034e:	f843 2f0c 	str.w	r2, [r3, #12]!
+ 8000352:	4631      	mov	r1, r6
+ 8000354:	4618      	mov	r0, r3
+ 8000356:	f841 3b20 	str.w	r3, [r1], #32
+ 800035a:	6073      	str	r3, [r6, #4]
+ 800035c:	4a0c      	ldr	r2, [pc, #48]	; (8000390 <main+0x80>)
+ 800035e:	4b0d      	ldr	r3, [pc, #52]	; (8000394 <main+0x84>)
+ 8000360:	f8c4 50c8 	str.w	r5, [r4, #200]	; 0xc8
+ 8000364:	f8c4 20c4 	str.w	r2, [r4, #196]	; 0xc4
+ 8000368:	f8c4 30e4 	str.w	r3, [r4, #228]	; 0xe4
+ 800036c:	f7ff ff78 	bl	8000260 <_port_switch>
+ 8000370:	f385 8811 	msr	BASEPRI, r5
+ 8000374:	b662      	cpsie	i
+ 8000376:	e7fe      	b.n	8000376 <main+0x66>
+ 8000378:	e000ed00 	.word	0xe000ed00
+ 800037c:	e000edf0 	.word	0xe000edf0
+ 8000380:	20000500 	.word	0x20000500
+ 8000384:	05fa0300 	.word	0x05fa0300
+ 8000388:	e0001000 	.word	0xe0001000
+ 800038c:	20000538 	.word	0x20000538
+ 8000390:	080002c1 	.word	0x080002c1
+ 8000394:	08000271 	.word	0x08000271
+	...
+
+080003a0 <chSchRescheduleS>:
+ 80003a0:	4b04      	ldr	r3, [pc, #16]	; (80003b4 <chSchRescheduleS+0x14>)
+ 80003a2:	e9d3 1200 	ldrd	r1, r2, [r3]
+ 80003a6:	4291      	cmp	r1, r2
+ 80003a8:	d003      	beq.n	80003b2 <chSchRescheduleS+0x12>
+ 80003aa:	4610      	mov	r0, r2
+ 80003ac:	601a      	str	r2, [r3, #0]
+ 80003ae:	f7ff bf57 	b.w	8000260 <_port_switch>
+ 80003b2:	4770      	bx	lr
+ 80003b4:	20000500 	.word	0x20000500
+	...
+
+080003c0 <chSysHalt>:
+ 80003c0:	b672      	cpsid	i
+ 80003c2:	e7fe      	b.n	80003c2 <chSysHalt+0x2>
+	...
+
+080003d0 <__default_exit>:
+ 80003d0:	e7fe      	b.n	80003d0 <__default_exit>
+ 80003d2:	bf00      	nop
+	...
+
+080003e0 <__late_init>:
+ 80003e0:	4770      	bx	lr
+ 80003e2:	bf00      	nop
+	...
+
+080003f0 <__early_init>:
+ 80003f0:	4770      	bx	lr
+ 80003f2:	bf00      	nop
