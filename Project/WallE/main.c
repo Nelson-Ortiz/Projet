@@ -89,6 +89,7 @@ int main(void)
     proximity_start();
 
     calibrate_ir();
+    threads_init();
    
     int dist=0;
 
@@ -114,4 +115,21 @@ uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
 void __stack_chk_fail(void)
 {
     chSysHalt("Stack smashing detected");
+}
+
+
+void threads_init(void){
+    chThdCreateStatic(waObstacleDetection, sizeof(waObstacleDetection), NORMALPRIO, ObstacleDetection, NULL);
+    chThdCreateStatic(waMoveDirections, sizeof(waMoveDirections), NORMALPRIO, MoveDirections, NULL);
+    
+}
+
+static THD_WORKING_AREA(waMoveDirections, 1024);
+static THD_FUNCTION(MoveDirections, arg) {
+
+}
+
+static THD_WORKING_AREA(waObstacleDetection, 1024);
+static THD_FUNCTION(ObstacleDetection, arg) {
+
 }
