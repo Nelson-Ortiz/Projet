@@ -64,22 +64,28 @@ static void serial_start(void)
 int main(void)
 {
 
+    /*System initialisation*/
     halInit();
     chSysInit();
     mpu_init();
 
-    /** Inits the Inter Process Communication bus. */
-    messagebus_init(&bus, &bus_lock, &bus_condvar);
-    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
-    proximity_msg_t prox_values;
-
+    //starts and calibrates the proximity sensors
+    proximity_start();
 
     //starts the serial communication
     serial_start();
+
+    /** Inits the Inter Process Communication bus. */
+    messagebus_init(&bus, &bus_lock, &bus_condvar);
+    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
+    proximity_msg_t prox_values;//attention à l'ordre de déclaration avec proximity_start
+
+
+
     //starts the USB communication
-    usb_start();
-    //starts and calibrates the proximity sensors
-    proximity_start();
+    //usb_start(); //On l'utilise avec SDU1
+    
+
 
     calibrate_ir();
    
@@ -92,8 +98,12 @@ int main(void)
     while (1) {
 
     	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
-
+        //print("==boot==");
+        /*
         
+            
+
+        */
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
 
