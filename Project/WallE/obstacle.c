@@ -5,3 +5,7 @@ static THD_WORKING_AREA(waObstacleDetection, 1024);
 static THD_FUNCTION(ObstacleDetection, arg) {
 
 }
+
+void init_obstacledetection(void){
+    chThdCreateStatic(waObstacleDetection, sizeof(waObstacleDetection), NORMALPRIO, ObstacleDetection, NULL);
+}

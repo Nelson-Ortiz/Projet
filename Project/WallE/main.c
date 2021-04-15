@@ -41,6 +41,9 @@
 #include "communication.h"
 #include "uc_usage.h"
 
+#include "move.h"
+#include "obstacle.h"
+
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
 messagebus_t bus;
@@ -59,6 +62,8 @@ static void serial_start(void)
 
     sdStart(&SD3, &ser_cfg); // UART3.
 }
+
+
 
 
 int main(void)
@@ -82,7 +87,9 @@ int main(void)
     proximity_start();
 
     calibrate_ir();
-    threads_init();
+    
+    init_movedirections();
+    init_obstacledetection();
    
     int dist=0;
 
@@ -111,18 +118,4 @@ void __stack_chk_fail(void)
 }
 
 
-void threads_init(void){
-    chThdCreateStatic(waObstacleDetection, sizeof(waObstacleDetection), NORMALPRIO, ObstacleDetection, NULL);
-    chThdCreateStatic(waMoveDirections, sizeof(waMoveDirections), NORMALPRIO, MoveDirections, NULL);
-    
-}
 
-static THD_WORKING_AREA(waMoveDirections, 1024);
-static THD_FUNCTION(MoveDirections, arg) {
-
-}
-
-static THD_WORKING_AREA(waObstacleDetection, 1024);
-static THD_FUNCTION(ObstacleDetection, arg) {
-
-}
