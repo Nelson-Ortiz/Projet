@@ -48,13 +48,6 @@ MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
 
-static bool load_config(void)
-{
-    extern uint32_t _config_start;
-
-    return config_load(&parameter_root, &_config_start);
-}
-
 static void serial_start(void)
 {
     static SerialConfig ser_cfg = {
