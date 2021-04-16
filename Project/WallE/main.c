@@ -77,7 +77,6 @@ int main(void)
     serial_start();
     //starts and calibrates the proximity sensors
     proximity_start();
-    calibrate_ir();
     //starts the motors
     motors_init();
 
@@ -85,6 +84,9 @@ int main(void)
     messagebus_init(&bus, &bus_lock, &bus_condvar);
     messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
     proximity_msg_t prox_values;
+
+    //important to have this after the bus init
+    calibrate_ir();
 
 
 

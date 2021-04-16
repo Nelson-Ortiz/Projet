@@ -1670,16 +1670,16 @@ Disassembly of section .text:
  8001508:	4814      	ldr	r0, [pc, #80]	; (800155c <main+0x6c>)
  800150a:	f004 fab1 	bl	8005a70 <sdStart>
  800150e:	f000 fde7 	bl	80020e0 <proximity_start>
- 8001512:	f000 fe35 	bl	8002180 <calibrate_ir>
- 8001516:	f000 fbf3 	bl	8001d00 <motors_init>
- 800151a:	4a11      	ldr	r2, [pc, #68]	; (8001560 <main+0x70>)
- 800151c:	4911      	ldr	r1, [pc, #68]	; (8001564 <main+0x74>)
- 800151e:	4812      	ldr	r0, [pc, #72]	; (8001568 <main+0x78>)
- 8001520:	f000 ff0e 	bl	8002340 <messagebus_init>
- 8001524:	4911      	ldr	r1, [pc, #68]	; (800156c <main+0x7c>)
- 8001526:	4810      	ldr	r0, [pc, #64]	; (8001568 <main+0x78>)
- 8001528:	f000 ff7a 	bl	8002420 <messagebus_find_topic_blocking>
- 800152c:	4604      	mov	r4, r0
+ 8001512:	f000 fbf5 	bl	8001d00 <motors_init>
+ 8001516:	4a12      	ldr	r2, [pc, #72]	; (8001560 <main+0x70>)
+ 8001518:	4912      	ldr	r1, [pc, #72]	; (8001564 <main+0x74>)
+ 800151a:	4813      	ldr	r0, [pc, #76]	; (8001568 <main+0x78>)
+ 800151c:	f000 ff10 	bl	8002340 <messagebus_init>
+ 8001520:	4912      	ldr	r1, [pc, #72]	; (800156c <main+0x7c>)
+ 8001522:	4811      	ldr	r0, [pc, #68]	; (8001568 <main+0x78>)
+ 8001524:	f000 ff7c 	bl	8002420 <messagebus_find_topic_blocking>
+ 8001528:	4604      	mov	r4, r0
+ 800152a:	f000 fe29 	bl	8002180 <calibrate_ir>
  800152e:	f44f 60fa 	mov.w	r0, #2000	; 0x7d0
  8001532:	f001 fe75 	bl	8003220 <chThdSleep>
  8001536:	2280      	movs	r2, #128	; 0x80
