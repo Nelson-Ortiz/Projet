@@ -43,6 +43,7 @@
 
 #include "move.h"
 #include "obstacle.h"
+#include "motor.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
@@ -72,6 +73,13 @@ int main(void)
     halInit();
     chSysInit();
     mpu_init();
+    //starts the serial communication
+    serial_start();
+    //starts and calibrates the proximity sensors
+    proximity_start();
+    calibrate_ir();
+    //starts the motors
+    motors_init();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
@@ -79,33 +87,31 @@ int main(void)
     proximity_msg_t prox_values;
 
 
-    //starts the serial communication
-    serial_start();
-    //starts the USB communication
-    usb_start();
-    //starts and calibrates the proximity sensors
-    proximity_start();
 
-    calibrate_ir();
     
-    init_movedirections();
-    init_obstacledetection();
+    //init_movedirections();
+    //init_obstacledetection();
    
     int dist=0;
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
 
+    
+    //instruction_motor(0);
     /* Infinite loop. */
     while (1) {
 
-    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
-
+        messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+        right_motor_set_speed(800);
+        left_motor_set_speed(400);
         
+        /*
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
 
         chThdSleepMilliseconds(100);
+        */
     }
 }
 
