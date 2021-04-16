@@ -42,6 +42,8 @@
 #include "uc_usage.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
+#define PROX_SENS 7 // sensors 0,1,2,...,7
+#define LIM_PROX 100
 
 messagebus_t bus;
 MUTEX_DECL(bus_lock);
@@ -100,14 +102,29 @@ int main(void)
 
     	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
-        /*
-        
-            
+    
 
-        */
-        chprintf((BaseSequentialStream *)&SD3, "Ambient3%4d,", prox_values.ambient[3]);
+
+        for (int i = 0; i < PROX_SENS; ++i)
+        {
+            //chprintf((BaseSequentialStream *)&SD3, "value3%4d, \r\n", prox_values.delta[3]);
+            if (prox_values.delta[i]>LIM_PROX)
+            {
+                dist++;
+            }
+        }
+        if (dist>0)
+        {
+            set_body_led(1);
+            dist=0;
+        }
+        else{
+            set_body_led(0);
+            dist=0;
+        }
+        //chprintf((BaseSequentialStream *)&SD3, "Ambient3%4d,", prox_values.ambient[3]);
         //chprintf((BaseSequentialStream *)&SD3, "REflected3%4d,", prox_values.reflected[3]);
-        chprintf((BaseSequentialStream *)&SD3, "value3%4d,", get_prox(3));
+        
         chThdSleepMilliseconds(100);
     }
 }
