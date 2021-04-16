@@ -68,12 +68,13 @@ int main(void)
     halInit();
     chSysInit();
     mpu_init();
+    //starts the serial communication
+    serial_start();
 
     //starts and calibrates the proximity sensors
     proximity_start();
 
-    //starts the serial communication
-    serial_start();
+
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
@@ -104,9 +105,9 @@ int main(void)
             
 
         */
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
-
+        chprintf((BaseSequentialStream *)&SD3, "Ambient3%4d,", prox_values.ambient[3]);
+        //chprintf((BaseSequentialStream *)&SD3, "REflected3%4d,", prox_values.reflected[3]);
+        chprintf((BaseSequentialStream *)&SD3, "value3%4d,", get_prox(3));
         chThdSleepMilliseconds(100);
     }
 }
