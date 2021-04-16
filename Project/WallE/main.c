@@ -99,15 +99,25 @@ int main(void)
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
 
+    //turn 90deg to the left
+        right_motor_set_speed(550);
+        left_motor_set_speed(-550);
+    //wait 2 sec to be sure the e-puck is in a stable position
+    chThdSleepMilliseconds(900);
+        //then go fordward
+        right_motor_set_speed(-600);
+        left_motor_set_speed(-600);
     
     //instruction_motor(0);
     /* Infinite loop. */
     while (1) {
 
-        messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
-        right_motor_set_speed(800);
-        left_motor_set_speed(400);
         
+        messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+        //right_motor_set_speed(800);
+        //left_motor_set_speed(400);
+
+
         /*
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);

@@ -51,13 +51,14 @@ void instruction_motor(uint8_t direction){
 			
 		//counter is in steps. 1000 steps for 1 turn of the wheel
 			
-		//turn 90deg to the left
-		right_motor_set_pos(500);
-		left_motor_set_pos(-500);
-
-		//then go fordward
-		right_motor_set_speed(LOW_SPEED);
-		left_motor_set_speed(LOW_SPEED);
+    //turn 90deg to the left
+        right_motor_set_speed(550);
+        left_motor_set_speed(-550);
+    //wait 900ms
+    chThdSleepMilliseconds(900);
+        //then go fordward
+        right_motor_set_speed(-LOW_SPEED);
+        left_motor_set_speed(-LOW_SPEED);
 
 		break;
 	case RIGHT:
