@@ -31,7 +31,7 @@
 #include "i2c_bus.h"
 #include "ir_remote.h"
 #include "leds.h"
-#include <main.h>
+#include "main.h"
 #include "memory_protection.h"
 #include "motors.h"
 #include "sdio.h"
@@ -73,28 +73,34 @@ int main(void)
     halInit();
     chSysInit();
     mpu_init();
-
-    /** Inits the Inter Process Communication bus. */
-    messagebus_init(&bus, &bus_lock, &bus_condvar);
-    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
-    proximity_msg_t prox_values;
-
-
+    
     //starts the serial communication
     serial_start();
-    //starts the USB communication
-    usb_start();
+   
     //starts and calibrates the proximity sensors
     //proximity_start();
 
+    /** Inits the Inter Process Communication bus. */
+    //messagebus_init(&bus, &bus_lock, &bus_condvar);
+    //messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
+    //proximity_msg_t prox_values;
+
+
+    
+    //starts the USB communication
+    usb_start();
+ 
+
     //calibrate_ir();
     
-    init_movedirections();
-    init_obstacledetection();
+    //init_movedirections();
+    //init_obstacledetection();
 
     init_LongRangeSensor();
    
     int dist=0;
+
+
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
@@ -102,7 +108,7 @@ int main(void)
     /* Infinite loop. */
     while (1) {
 
-    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+    	//messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
 
         
         //chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);

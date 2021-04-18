@@ -7,8 +7,7 @@
 
 
 #define DIST_THRESHOLD 100
-#define ON  1
-#define OFF 0
+
 
 
 
@@ -23,9 +22,9 @@ static THD_FUNCTION(LRSensorAnalysis, arg) {
         dist_mm = VL53L0X_get_dist_mm();
         chprintf((BaseSequentialStream *)&SD3, "dist_mm = %d \n", dist_mm);
         if(dist_mm<DIST_THRESHOLD){
-            set_front_led(ON);
+            set_front_led(LED_ON);
         }else{
-            set_front_led(OFF);
+            set_front_led(LED_OFF);
         }
 
     	chThdSleepMilliseconds(100);
