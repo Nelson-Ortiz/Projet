@@ -43,6 +43,7 @@
 
 #include "move.h"
 #include "obstacle.h"
+#include "long_range.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
@@ -84,12 +85,14 @@ int main(void)
     //starts the USB communication
     usb_start();
     //starts and calibrates the proximity sensors
-    proximity_start();
+    //proximity_start();
 
-    calibrate_ir();
+    //calibrate_ir();
     
     init_movedirections();
     init_obstacledetection();
+
+    init_LongRangeSensor();
    
     int dist=0;
 
@@ -102,8 +105,8 @@ int main(void)
     	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
 
         
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
+        //chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
+        //chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
 
         chThdSleepMilliseconds(100);
     }

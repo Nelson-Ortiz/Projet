@@ -12,6 +12,7 @@ GLOBAL_PATH = ../../lib/e-puck2_main-processor
 CSRC += ./main.c \
 		./move.c \
 		./obstacle.c \
+		./long_range.c \
 		#./fft.c \
 
 #Header folders to include
