@@ -73,25 +73,21 @@ int main(void)
     chSysInit();
     mpu_init();
 
-    /** Inits the Inter Process Communication bus. */
-    messagebus_init(&bus, &bus_lock, &bus_condvar);
-    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
-    proximity_msg_t prox_values;
-
-
     //starts the serial communication
     serial_start();
     //starts the USB communication
     usb_start();
+    
     //starts and calibrates the proximity sensors
     proximity_start();
-
     calibrate_ir();
-    
+
+    //init the message bus of proximity sensors
     init_movedirections();
-    init_obstacledetection();
+
+    init
+    //init_obstacledetection();
    
-    int dist=0;
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
@@ -99,11 +95,6 @@ int main(void)
     /* Infinite loop. */
     while (1) {
 
-    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
-
-        
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
 
         chThdSleepMilliseconds(100);
     }
