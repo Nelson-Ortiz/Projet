@@ -46,9 +46,9 @@
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
-messagebus_t bus;
-MUTEX_DECL(bus_lock);
-CONDVAR_DECL(bus_condvar);
+// messagebus_t bus;
+// MUTEX_DECL(bus_lock);
+// CONDVAR_DECL(bus_condvar);
 
 
 static void serial_start(void)
@@ -82,16 +82,17 @@ int main(void)
     proximity_start();
     calibrate_ir();
 
+    //init thread movedirections
     //init the message bus of proximity sensors
-    init_movedirections();
+    //init_movedirections();
 
-    init
+
     //init_obstacledetection();
    
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-
+    set_body_led(LED_ON);
     /* Infinite loop. */
     while (1) {
 

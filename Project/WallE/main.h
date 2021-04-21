@@ -6,6 +6,10 @@
 extern "C" {
 #endif
 
+#define LED_ON  1
+#define LED_OFF 0
+#define LED_TOGGLE 3
+
 #include "camera/dcmi_camera.h"
 #include "msgbus/messagebus.h"
 #include "parameter/parameter.h"
