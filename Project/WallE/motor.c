@@ -25,6 +25,10 @@
 #define HIGH_SPEED 825 // 75% of the max speed 1100 steps/s
 #define LOW_SPEED 275 // 25% of the max speed 
 
+#define PI 3.14159f
+#define K 45.0f*PI*2.0f/26.0f // constant for the transformation of  instruction to steps . Depends on the wheels's distance and wheel perimeter
+
+
 static uint8_t instruction = 0;
 static int32_t steps2do [NUM_MOTORS];
 static uint8_t direction = DEFAULT_DIR ; 
@@ -43,7 +47,9 @@ static THD_FUNCTION(MotorControl, arg) {
     	if (instruction == DEFAULT_INS )
     	{
     		
-    		//go fordward
+    		left_motor_set_speed(HIGH_SPEED);
+            right_motor_set_speed(HIGH_SPEED);
+
 
     		direction = DEFAULT_DIR;
     	}
@@ -51,8 +57,7 @@ static THD_FUNCTION(MotorControl, arg) {
     	else if (instruction >= MIN_ANGLE && instruction <= MAX_ANGLE)
     	{
     		
-    		//we translate the number given into an angle and then into motor steps 
-    		angle2steps(instruction);
+    		
     		
     		//we check if we are  still turning from a previous iteration or if we already finished 
     		if (direction==ANGLE_DIR)
@@ -73,11 +78,14 @@ static THD_FUNCTION(MotorControl, arg) {
 
     		else
     		{
+
+                //we translate the number given into an angle and then into motor steps 
+                angle2steps(instruction);
     			//if we are not turning from a previous iteration we start the turning process 
     			left_motor_set_pos(steps2do[LEFT]);
     			right_motor_set_pos(steps2do[RIGHT]);
 
-    			if (instruction<=LIMIT_LEFT_QUADRANT)
+    			if (instruction<=LIMIT_RIGHT_QUADRANT)
     			{
     				left_motor_set_speed(LOW_SPEED);
     				right_motor_set_speed(-LOW_SPEED);
@@ -87,9 +95,10 @@ static THD_FUNCTION(MotorControl, arg) {
     				left_motor_set_speed(-LOW_SPEED);
     				right_motor_set_speed(LOW_SPEED);
     			}
+                direction=ANGLE_DIR;
     		}
     	}
-    	else if (instruction=SPIRAL_INS)
+    	else if (instruction==SPIRAL_INS)
     	{
     		left_motor_set_speed(LOW_SPEED);
     		right_motor_set_speed(HIGH_SPEED);
@@ -113,6 +122,29 @@ void set_direction_motors(uint8_t direction2follow){
 
 void inti_th_motor(void){
      chThdCreateStatic(waMotorControl, sizeof(waMotorControl), NORMALPRIO, MotorControl, NULL);
+}
+
+void angle2steps(uint8_t ins){
+
+
+    //first we compute the number of steps a motor should do
+
+    float steps_ = K * ins;
+
+    //the motor speed's sign changes in fucntion of the angle. When the speed is negative the counter decreases and viceversa with a postive speed
+    //in order to take this into account the number of steps' sign should change as weel
+    if (ins<=LIMIT_RIGHT_QUADRANT)
+    {
+    	steps2do[LEFT]=(int32_t) -steps_;
+    	steps2do[RIGHT]=(int32_t) steps_;
+    }
+    else
+    {
+    	steps2do[LEFT]=(int32_t) steps_;
+    	steps2do[RIGHT]=(int32_t) -steps_;
+    }
+
+
 }
 
 

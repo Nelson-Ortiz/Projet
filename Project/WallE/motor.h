@@ -18,6 +18,14 @@ void set_direction_motors(uint8_t direction2follow);
  *
  */
 void inti_th_motor(void);
+ /*
+ * @brief   Computes the number of motors steps in function of the angle and then puts them on the motor counters
+ * 
+ * @param angle     number from 1-120 that is equivalent to an angle from 0-360 deg
+ *
+ */
+void angle2steps(uint8_t ins);
+
 
 
 #endif
@@ -26,7 +34,7 @@ void inti_th_motor(void);
 
 
 //template 
- /**
+ /*
  * @brief   Configures some parameters of the camera
  * 
  * @param fmt           format of the image. See format_t

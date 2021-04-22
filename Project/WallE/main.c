@@ -80,6 +80,8 @@ int main(void)
     //starts the motors
     motors_init();
 
+    inti_th_motor();
+
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
     messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
@@ -98,7 +100,7 @@ int main(void)
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-
+    /*
     //turn 90deg to the left
         right_motor_set_speed(550);
         left_motor_set_speed(-550);
@@ -108,8 +110,10 @@ int main(void)
         right_motor_set_speed(-600);
         left_motor_set_speed(-600);
     
-    //instruction_motor(0);
+    //instruction_motor(0);*/
     /* Infinite loop. */
+    
+
     while (1) {
 
         
@@ -117,13 +121,16 @@ int main(void)
         //right_motor_set_speed(800);
         //left_motor_set_speed(400);
 
-
+        //chprintf((BaseSequentialStream *)&SD3, "POS:%4d,", left_motor_get_pos());
+        set_direction_motors(40);
+        
         /*
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
-
-        chThdSleepMilliseconds(100);
         */
+
+        chThdSleepMilliseconds(4000);
+        
     }
 }
 
