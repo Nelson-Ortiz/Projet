@@ -1,7 +1,9 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-
+#define DEFAULT_INS 0 // the robot goes fordward 
+#define SPIRAL_INS 121 
+#define STOP_INS 122
  /**
  * @brief  Set the robot to go to the direction indicated
  * 

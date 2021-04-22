@@ -133,11 +133,11 @@ int main(void)
         }
         if (dist>0)
         {
-            set_direction_motors(122);
+            set_direction_motors(STOP_INS);
             dist=0;
         }
         else{
-            set_direction_motors(121);
+            set_direction_motors(SPIRAL_INS);
             dist=0;
         }
         //chprintf((BaseSequentialStream *)&SD3, "POS:%4d,", left_motor_get_pos());

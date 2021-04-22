@@ -6,9 +6,7 @@
 #define SPIRAL_DIR 1 
 #define ANGLE_DIR 2
 
-#define DEFAULT_INS 0 // the robot goes fordward 
-#define SPIRAL_INS 121 
-#define STOP_INS 122
+
 
 
 
