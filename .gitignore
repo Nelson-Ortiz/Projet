@@ -1,6 +1,17 @@
-#solen
+#test 
+#Compiler and memory codes 
+*.list
+*.mem
+*size
+*.i
+
+#mac 
+build
+.DS_store
+
+#Solene 
+*.launch
 *.xml
-*.lst
 
 # Prerequisites
 *.d

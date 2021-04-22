@@ -80,7 +80,7 @@ static THD_FUNCTION(ProcessImage, arg) {
         img_buff_ptr = dcmi_get_last_image_ptr();
         // average is done over 
         if(im_ready_counter == 0){
-            SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+            //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL);

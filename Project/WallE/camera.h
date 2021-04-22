@@ -10,6 +10,9 @@
  *
  */
 void init_th_camera(void);
+uint8_t get_distance_cm(void);
+uint8_t get_green_pixel(uint8_t *img_pixel_ptr);
+void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line );
 
 
 
