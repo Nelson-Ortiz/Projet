@@ -42,13 +42,17 @@
 #include "uc_usage.h"
 
 #include "move.h"
+#include "obstacle.h"
+#include "motor.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
+
+#define PROX_SENS 7
+#define LIM_PROX 100
 
 messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
-
 
 
 static void serial_start(void)
@@ -73,29 +77,45 @@ int main(void)
     mpu_init();
     //starts the serial communication
     serial_start();
-
     //starts and calibrates the proximity sensors
     proximity_start();
+    //starts the motors
+    motors_init();
 
-
+    inti_th_motor();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
     init_movedirections();
 
 
+    //important to have this after the bus init
+    calibrate_ir();
 
     //starts the USB communication
     //usb_start(); //On l'utilise avec SDU1
     
 
 
-    calibrate_ir();
+
+    
+    //init_movedirections();
+    //init_obstacledetection();
    
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-
+    /*
+    //turn 90deg to the left
+        right_motor_set_speed(550);
+        left_motor_set_speed(-550);
+    //wait 2 sec to be sure the e-puck is in a stable position
+    chThdSleepMilliseconds(900);
+        //then go fordward
+        right_motor_set_speed(-600);
+        left_motor_set_speed(-600);
+    
+    //instruction_motor(0);*/
     /* Infinite loop. */
     while (1) {
         chThdSleepMilliseconds(100);
@@ -109,3 +129,6 @@ void __stack_chk_fail(void)
 {
     chSysHalt("Stack smashing detected");
 }
+
+
+
