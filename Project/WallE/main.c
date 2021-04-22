@@ -95,11 +95,6 @@ int main(void)
     //starts the USB communication
     //usb_start(); //On l'utilise avec SDU1
     
-
-
-
-    
-    //init_movedirections();
     //init_obstacledetection();
    
 
