@@ -6,20 +6,9 @@
 #include "sensors/VL53L0X/VL53L0X.h"
 #include "communication.h"
 
-#define PROX_SENS 8 // 8 sensors au total sensors 0,1,2,...,7
-#define LIM_PROX 100
-#define DIST_THRESHOLD 100
 
-//Proximity sensors
-#define IR1      0
-#define IR2     1
-#define IR3        2
-#define IR4       3
-#define IR5       4 
-#define IR6         5 
-#define IR7     6 
-#define IR8      7
 
+messagebus_t bus;
 
 static THD_WORKING_AREA(waMoveDirections, 1024);
 static THD_FUNCTION(MoveDirections, arg) {
@@ -93,7 +82,7 @@ static THD_FUNCTION(MoveDirections, arg) {
          
         
         //envoyer la valeur uint8 de commande 
-        chThdSleepMilliseconds(500);
+        //chThdSleepMilliseconds(500);
     }
 }
 
