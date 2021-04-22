@@ -43,8 +43,12 @@
 
 #include "move.h"
 #include "obstacle.h"
+#include "motor.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
+
+#define PROX_SENS 7
+#define LIM_PROX 100
 
 messagebus_t bus;
 MUTEX_DECL(bus_lock);
@@ -64,47 +68,51 @@ static void serial_start(void)
 }
 
 
-
-
 int main(void)
 {
 
+    /*System initialisation*/
     halInit();
     chSysInit();
     mpu_init();
+    //starts the serial communication
+    serial_start();
+    //starts and calibrates the proximity sensors
+    proximity_start();
+    //starts the motors
+    motors_init();
+
+    inti_th_motor();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
-    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
-    proximity_msg_t prox_values;
-
-
-    //starts the serial communication
-    serial_start();
-    //starts the USB communication
-    usb_start();
-    //starts and calibrates the proximity sensors
-    proximity_start();
-
-    calibrate_ir();
-    
     init_movedirections();
-    init_obstacledetection();
+
+
+    //important to have this after the bus init
+    calibrate_ir();
+
+    //starts the USB communication
+    //usb_start(); //On l'utilise avec SDU1
+    
+    //init_obstacledetection();
    
-    int dist=0;
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-
+    /*
+    //turn 90deg to the left
+        right_motor_set_speed(550);
+        left_motor_set_speed(-550);
+    //wait 2 sec to be sure the e-puck is in a stable position
+    chThdSleepMilliseconds(900);
+        //then go fordward
+        right_motor_set_speed(-600);
+        left_motor_set_speed(-600);
+    
+    //instruction_motor(0);*/
     /* Infinite loop. */
     while (1) {
-
-    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
-
-        
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
-        chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
-
         chThdSleepMilliseconds(100);
     }
 }
