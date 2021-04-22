@@ -77,12 +77,16 @@ int main(void)
     mpu_init();
     //starts the serial communication
     serial_start();
-    //starts and calibrates the proximity sensors
+    //starts proximity sensors 
     proximity_start();
     //starts the motors
     motors_init();
+    //starts the camera
+    dcmi_start();
+    po8030_start();
 
     inti_th_motor();
+    init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
@@ -100,17 +104,7 @@ int main(void)
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-    /*
-    //turn 90deg to the left
-        right_motor_set_speed(550);
-        left_motor_set_speed(-550);
-    //wait 2 sec to be sure the e-puck is in a stable position
-    chThdSleepMilliseconds(900);
-        //then go fordward
-        right_motor_set_speed(-600);
-        left_motor_set_speed(-600);
-    
-    //instruction_motor(0);*/
+
     /* Infinite loop. */
     while (1) {
         chThdSleepMilliseconds(100);
