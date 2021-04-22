@@ -19,15 +19,18 @@
 #define TAILLE_PIXEL 2 //en byte
 #define AVERAGE_NBR_IMAGE 5
 #define BLACK_PIXEL_VALUE 5 
-#define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
 
-/*#define FIT_A 0.0013f
-#define FIT_B -0.4531f
-#define FIT_C 46.465f
-*/
+#define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
+#define WIDTH 0
+#define LINE_START_PIXEL 1 //no used
+
+#define NO_OBSTACLE = 400;
+
+
 #define PIX2CM 1
 
 static uint8_t distance_cm = 0;
+static int16_t obstacle_status=0;
 
 //semaphore
 static BSEMAPHORE_DECL(image_ready_sem, TRUE);
@@ -43,11 +46,11 @@ static THD_FUNCTION(CaptureImage, arg) {
     dcmi_enable_double_buffering();
     dcmi_set_capture_mode(CAPTURE_ONE_SHOT);
     dcmi_prepare();
-    systime_t time;
+    //systime_t time;
 
     while(1){
         //starts a capture
-        time = chVTGetSystemTime();
+        //time = chVTGetSystemTime();
         
         dcmi_capture_start();
         //waits for the capture to be done
@@ -56,7 +59,7 @@ static THD_FUNCTION(CaptureImage, arg) {
         //signals an image has been captured
         chBSemSignal(&image_ready_sem);     
         
-        time = chVTGetSystemTime() - time;
+        //time = chVTGetSystemTime() - time;
         // chprintf((BaseSequentialStream *)&SD3, "time = %d \n", time);    
     }
 }
@@ -81,13 +84,14 @@ static THD_FUNCTION(ProcessImage, arg) {
         // average is done over 
         if(im_ready_counter == 0){
             //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
             get_width(image, IMAGE_BUFFER_SIZE, black_line);
             
-            distance_cm=DISTANCE(black_line[0]);
+            distance_cm=DISTANCE(black_line[WIDTH]);
             
             // chprintf((BaseSequentialStream *)&SD3, "width = %d \n", black_line[0]);
             // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
@@ -173,6 +177,17 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
 
 }
 
+void update_obstacle_status(void){
+    if (black_line[WIDTH]== 0)
+    {
+        obstacle_status=NO_OBSTACLE;
+    }
+    else{
+
+
+    }
+
+}
 
 
 
