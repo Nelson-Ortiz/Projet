@@ -44,6 +44,7 @@
 #include "move.h"
 #include "obstacle.h"
 #include "motor.h"
+#include "camera.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 

@@ -1,6 +1,6 @@
 #include "main.h"
 #include "camera.h"
-#include "dcmi_camera.h"
+#include "camera/dcmi_camera.h"
 
 
 
@@ -12,7 +12,7 @@
 #include <main.h>
 #include <camera/po8030.h>
 
-#include <process_image.h>
+
 
 #define GREEN_MSB_PIXEL_MASK 0b00000111
 #define GREEN_LSB_PIXEL_MASK 0b11100000

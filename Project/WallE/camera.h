@@ -1,7 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-
+//constants for the differents parts of the project
+#define IMAGE_BUFFER_SIZE		640  // number of pixels for 1 line
+ 
  /**
  * @brief   initialize the motor control thread and other parameters
  * 
