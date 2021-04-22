@@ -47,6 +47,9 @@
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
+#define PROX_SENS 7
+#define LIM_PROX 100
+
 messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
@@ -120,16 +123,32 @@ int main(void)
         messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //right_motor_set_speed(800);
         //left_motor_set_speed(400);
-
+        for (int i = 0; i < PROX_SENS; ++i)
+        {
+            //chprintf((BaseSequentialStream *)&SD3, "value3%4d, \r\n", prox_values.delta[3]);
+            if (prox_values.delta[i]>LIM_PROX)
+            {
+                dist++;
+            }
+        }
+        if (dist>0)
+        {
+            set_direction_motors(122);
+            dist=0;
+        }
+        else{
+            set_direction_motors(121);
+            dist=0;
+        }
         //chprintf((BaseSequentialStream *)&SD3, "POS:%4d,", left_motor_get_pos());
-        set_direction_motors(40);
+        
         
         /*
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.ambient[3]);
         chprintf((BaseSequentialStream *)&SD3, "%4d,", prox_values.reflected[3]);
         */
 
-        chThdSleepMilliseconds(4000);
+       // chThdSleepMilliseconds(4000);
         
     }
 }

@@ -8,6 +8,7 @@
 
 #define DEFAULT_INS 0 // the robot goes fordward 
 #define SPIRAL_INS 121 
+#define STOP_INS 122
 
 
 
@@ -104,6 +105,11 @@ static THD_FUNCTION(MotorControl, arg) {
     		right_motor_set_speed(HIGH_SPEED);
     		direction=SPIRAL_DIR;
     	}
+        else if(instruction==STOP_INS){
+            left_motor_set_speed(0);
+            right_motor_set_speed(0);
+            
+        }
 		else
 		{
 			left_motor_set_speed(0);
