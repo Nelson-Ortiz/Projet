@@ -50,6 +50,8 @@ MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
 
+void init_movedirections(void);
+
 static void serial_start(void)
 {
     static SerialConfig ser_cfg = {
@@ -80,8 +82,7 @@ int main(void)
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
-    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
-    proximity_msg_t prox_values;//attention à l'ordre de déclaration avec proximity_start
+    init_movedirections();
 
 
 
@@ -99,8 +100,35 @@ int main(void)
 
     /* Infinite loop. */
     while (1) {
+        chThdSleepMilliseconds(100);
+    }
+}
 
-    	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+#define STACK_CHK_GUARD 0xe2dee396
+uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
+
+void __stack_chk_fail(void)
+{
+    chSysHalt("Stack smashing detected");
+}
+
+
+static THD_WORKING_AREA(waMoveDirections, 1024);
+static THD_FUNCTION(MoveDirections, arg) {
+	(void) arg;
+    chRegSetThreadName(__FUNCTION__);
+
+    /** Inits the Inter Process Communication bus. */
+    messagebus_topic_t *proximity_topic = messagebus_find_topic_blocking(&bus, "/proximity");
+    proximity_msg_t prox_values;//attention à l'ordre de déclaration avec proximity_start
+
+    
+    int dist=0;
+
+    //wait 2 sec to be sure the e-puck is in a stable position
+    chThdSleepMilliseconds(2000);
+    while(1){
+          	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
     
 
@@ -122,17 +150,12 @@ int main(void)
             set_body_led(0);
             dist=0;
         }
-        //chprintf((BaseSequentialStream *)&SD3, "Ambient3%4d,", prox_values.ambient[3]);
-        //chprintf((BaseSequentialStream *)&SD3, "REflected3%4d,", prox_values.reflected[3]);
+
         
-        chThdSleepMilliseconds(100);
+        chThdSleepMilliseconds(500);
     }
 }
 
-#define STACK_CHK_GUARD 0xe2dee396
-uintptr_t __stack_chk_guard = STACK_CHK_GUARD;
-
-void __stack_chk_fail(void)
-{
-    chSysHalt("Stack smashing detected");
+void init_movedirections(void){
+     chThdCreateStatic(waMoveDirections, sizeof(waMoveDirections), NORMALPRIO, MoveDirections, NULL);
 }
