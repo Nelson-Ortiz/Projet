@@ -84,24 +84,26 @@ int main(void)
     mpu_init();
     //starts the serial communication
     serial_start();
-    //starts proximity sensors 
-    //proximity_start();
-    //starts the motors
-    motors_init();
     //starts the camera
     dcmi_start();
     po8030_start();
+    //starts the motors
+    motors_init();
+    //starts proximity sensors 
+    proximity_start();
+    
+
 
     //inti_th_motor();
     init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
-    //init_movedirections();
+    init_movedirections();
 
 
     //important to have this after the bus init
-    //calibrate_ir();
+    calibrate_ir();
 
     //starts the USB communication
     //usb_start(); //On l'utilise avec SDU1
