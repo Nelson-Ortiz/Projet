@@ -40,7 +40,7 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
  * 
  */
 
-void update_obstacle_status(void);
+void update_obstacle_status( uint16_t* properties);
 /*
  * @brief   return the obstacle situation
  * 
@@ -50,7 +50,7 @@ void update_obstacle_status(void);
  *
  */
 
-uint16_t get_obstacle_situation(void);
+int16_t get_obstacle_situation(void);
 
 
 

@@ -24,7 +24,8 @@
 #define WIDTH 0
 #define LINE_START_PIXEL 1 //no used
 
-#define NO_OBSTACLE = 400;
+#define NO_OBSTACLE 400 // this number is used as an error code as pure convention 
+#define OFFSET 320 // we put the zero in the midel of the image 
 
 
 #define PIX2CM 1
@@ -83,7 +84,7 @@ static THD_FUNCTION(ProcessImage, arg) {
         img_buff_ptr = dcmi_get_last_image_ptr();
         // average is done over 
         if(im_ready_counter == 0){
-            //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+            SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
 
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
@@ -91,9 +92,11 @@ static THD_FUNCTION(ProcessImage, arg) {
             }
             get_width(image, IMAGE_BUFFER_SIZE, black_line);
             
-            distance_cm=DISTANCE(black_line[WIDTH]);
+            update_obstacle_status(black_line);
             
-            // chprintf((BaseSequentialStream *)&SD3, "width = %d \n", black_line[0]);
+            //distance_cm=DISTANCE(black_line[WIDTH]);
+            
+             chprintf((BaseSequentialStream *)&SD3, "width = %d \n", obstacle_status);
             // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
             // chprintf((BaseSequentialStream *)&SD3, "distance = %d \n", distance_cm);
             
@@ -130,8 +133,7 @@ uint8_t get_green_pixel(uint8_t *img_pixel_ptr){
 }
 
 void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line ){
-    //vector containing line width (0) and line_start (1)
-    //uint8_t line[2] = {0}; 
+
     uint16_t line_width=0; 
     uint16_t line_start = 0;
     uint16_t pixel_counter=0; 
@@ -144,7 +146,8 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
         pixel_value = *(image_array+i);
 
 
-        if (pixel_value <= BLACK_PIXEL_VALUE)
+
+        if (pixel_value <= BLACK_PIXEL_VALUE && i<=(line_size-1))
         {
             
             if (counting == FALSE){
@@ -153,7 +156,6 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
                 pixel_counter++;
             }
             else{ 
-                
                 pixel_counter++; 
             }
             
@@ -166,8 +168,9 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
             {
                 line_width =pixel_counter;
                 line_start = start_point;
+                pixel_counter=0;
             }
-            else { ; }
+            else { pixel_counter=0; }
         }
 
     }
@@ -177,16 +180,22 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
 
 }
 
-void update_obstacle_status(void){
-    if (black_line[WIDTH]== 0)
+void update_obstacle_status( uint16_t* properties){
+    int16_t width= *(properties+WIDTH);
+    int16_t pos = *(properties+LINE_START_PIXEL);
+    if (width== 0)
     {
         obstacle_status=NO_OBSTACLE;
     }
     else{
-
-
+        
+        obstacle_status= (width/2) +pos - OFFSET; 
     }
 
+}
+
+int16_t get_obstacle_situation(void){
+    return obstacle_status;
 }
 
 
