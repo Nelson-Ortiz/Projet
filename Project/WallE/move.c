@@ -128,40 +128,29 @@ void eviter_obstacle(proximity_msg_t *prox_values){
         if (prox_values->delta[IR1]<LIM_PROX){
             if(prox_values->delta[IR8]<LIM_PROX){
                 //droit
-                clear_leds();
-                set_led(LED1,LED_ON);
                 set_direction_motors(DEFAULT_INS);
             }
             else if(prox_values->delta[IR2]<LIM_PROX){
                 //droite
-                clear_leds();
-                set_led(LED2,LED_ON);
                 set_direction_motors(30); //mettre un angle de 45° vers la droite ?
             }
             else{
                 //demi-tour
-                clear_leds();
-                set_led(LED5,LED_ON);
                 set_direction_motors(60);
             }
         }
         else if(prox_values->delta[IR8]<LIM_PROX){
             if(prox_values->delta[IR7]<LIM_PROX){
                 //gauche
-                clear_leds();
-                set_led(LED2,LED_ON);
                 set_direction_motors(90); // angle de 45° vers la gauche ?
             }
             else{
                 //demi-tour
-                clear_leds();
-                set_led(LED5,LED_ON);
                 set_direction_motors(60);
             }
         }else{
             //demi-tour
-            clear_leds();
-            set_led(LED5,LED_ON);
             set_direction_motors(60);
         }
 }
+
