@@ -77,15 +77,9 @@ void testfunction_stop(proximity_msg_t *prox_values){
 
 //algos de control 
 
-#define FORWARD     clear_leds(); \
-                    set_led(LED1,LED_ON); \
-                    set_direction_motors(DEFAULT_INS);
-#define LEFT        clear_leds(); \
-                    set_led(LED2,LED_ON); \
-                    set_direction_motors(70); // quasi demi-tour vers la gauche
-#define RIGHT       clear_leds(); \
-                    set_led(LED2,LED_ON); \
-                    set_direction_motors(50); //mettre un angle vers la droite ?
+#define FORWARD    set_direction_motors(DEFAULT_INS);
+#define LEFT        set_direction_motors(70); // quasi demi-tour vers la gauche
+#define RIGHT       set_direction_motors(50); //mettre un angle vers la droite ?
 
 
 void simple_control(proximity_msg_t *prox_values){

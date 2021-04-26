@@ -94,7 +94,7 @@ int main(void)
     
 
 
-    //inti_th_motor();
+    inti_th_motor();
     init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
