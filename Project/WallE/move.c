@@ -24,8 +24,8 @@
 //Algos de choix de chemin
 void testfunction_stop(proximity_msg_t *prox_values);
 void eviter_obstacle(proximity_msg_t *prox_values);
-
-
+void simple_control(proximity_msg_t *prox_values);
+void less_simple_control(proximity_msg_t *prox_values);
 
 static THD_WORKING_AREA(waMoveDirections, 1024);
 static THD_FUNCTION(MoveDirections, arg) {
@@ -43,7 +43,7 @@ static THD_FUNCTION(MoveDirections, arg) {
           	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
     
-        eviter_obstacle(&prox_values); // comme ça on pourra changer facilement de fonctions :)
+        less_simple_control(&prox_values); // comme ça on pourra changer facilement de fonctions :)
     }
 }
 
@@ -73,6 +73,61 @@ void testfunction_stop(proximity_msg_t *prox_values){
             set_direction_motors(SPIRAL_INS);
             dist=0;
         }
+}
+
+//algos de control 
+
+#define FORWARD     clear_leds(); \
+                    set_led(LED1,LED_ON); \
+                    set_direction_motors(DEFAULT_INS);
+#define LEFT        clear_leds(); \
+                    set_led(LED2,LED_ON); \
+                    set_direction_motors(70); // quasi demi-tour vers la gauche
+#define RIGHT       clear_leds(); \
+                    set_led(LED2,LED_ON); \
+                    set_direction_motors(50); //mettre un angle vers la droite ?
+
+
+void simple_control(proximity_msg_t *prox_values){
+    if (prox_values->delta[IR7]<LIM_PROX && prox_values->delta[IR8]<LIM_PROX){
+        if (prox_values->delta[IR1]<LIM_PROX && prox_values->delta[IR1]<LIM_PROX){
+            FORWARD
+        }else{
+            LEFT
+        }
+    }else{
+        RIGHT
+    }
+}
+
+void less_simple_control(proximity_msg_t *prox_values){
+    if (prox_values->delta[IR8]<LIM_PROX){
+        if (prox_values->delta[IR1]<LIM_PROX){
+            if (prox_values->delta[IR7]<LIM_PROX){
+                if (prox_values->delta[IR2]<LIM_PROX){
+                    FORWARD
+                }else{
+                   LEFT
+                }
+            }else{
+                RIGHT
+            }
+        }else if(prox_values->delta[IR7]<LIM_PROX){
+            LEFT
+        }else{
+            RIGHT
+        }
+    }else if(prox_values->delta[IR1]<LIM_PROX){
+        if (prox_values->delta[IR2]<LIM_PROX){
+            RIGHT
+        }else{
+            LEFT
+        }
+    }else if (prox_values->delta[IR2]<LIM_PROX){
+        RIGHT
+    }else{
+        LEFT
+    }
 }
 
 void eviter_obstacle(proximity_msg_t *prox_values){
