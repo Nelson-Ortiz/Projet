@@ -44,6 +44,7 @@
 #include "move.h"
 #include "obstacle.h"
 #include "motor.h"
+#include "camera.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
@@ -54,6 +55,12 @@ messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
+void SendUint8ToComputer(uint8_t* data, uint16_t size) 
+{
+    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)"START", 5);
+    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)&size, sizeof(uint16_t));
+    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)data, size);
+}
 
 static void serial_start(void)
 {
@@ -77,12 +84,18 @@ int main(void)
     mpu_init();
     //starts the serial communication
     serial_start();
-    //starts and calibrates the proximity sensors
-    proximity_start();
+    //starts the camera
+    dcmi_start();
+    po8030_start();
     //starts the motors
     motors_init();
+    //starts proximity sensors 
+    proximity_start();
+    
 
-    inti_th_motor();
+
+    //inti_th_motor();
+    init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
@@ -100,19 +113,35 @@ int main(void)
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-    /*
-    //turn 90deg to the left
-        right_motor_set_speed(550);
-        left_motor_set_speed(-550);
-    //wait 2 sec to be sure the e-puck is in a stable position
-    chThdSleepMilliseconds(900);
-        //then go fordward
-        right_motor_set_speed(-600);
-        left_motor_set_speed(-600);
-    
-    //instruction_motor(0);*/
+
     /* Infinite loop. */
     while (1) {
+        //chprintf((BaseSequentialStream *)&SD3, "obstacle=%d\n", get_obstacle_situation());
+        if (get_obstacle_situation()< -20)
+        {
+            set_led(LED7,1);
+            set_led(LED3,0);
+            set_led(LED1,0);
+        }
+        else if (get_obstacle_situation()==400){
+            set_led(LED7,0);
+            set_led(LED3,0);
+            set_led(LED1,0);
+
+        }
+        else if (get_obstacle_situation()<30 && get_obstacle_situation()>-30){
+            set_led(LED1,1);
+            set_led(LED7,0);
+            set_led(LED3,0);
+
+        }
+        else{
+            set_led(LED1,0);
+            set_led(LED7,0);
+            set_led(LED3,1);
+
+
+        }
         chThdSleepMilliseconds(100);
     }
 }

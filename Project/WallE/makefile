@@ -13,6 +13,7 @@ CSRC += ./main.c \
 		./move.c \
 		./obstacle.c \
 		./motor.c \
+		./camera.c \
 		#./fft.c \
 
 #Header folders to include
