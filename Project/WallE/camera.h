@@ -3,6 +3,8 @@
 
 //constants for the differents parts of the project
 #define IMAGE_BUFFER_SIZE		640  // number of pixels for 1 line
+
+#define TARGET_NOT_FOUND 400 // this number is used as an error code as pure convention 
  
  /**
  * @brief   initialize the camera capture and precessing thread

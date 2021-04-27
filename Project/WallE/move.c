@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sensors/proximity.h"
 #include "sensors/VL53L0X/VL53L0X.h"
 #include "communication.h"
@@ -7,6 +9,7 @@
 
 #include "move.h"
 #include "motor.h"
+#include "camera.h"
 
 #define PROX_SENS 7 // sensors 0,1,2,...,7
 #define LIM_PROX 100
@@ -21,11 +24,23 @@
 #define IR7     6 
 #define IR8     7
 
+
+#define MIN_CAMERA_RANGE 150 //closer than this and the camera stops detecting accurately
+#define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
+
+
+
 //Algos de choix de chemin
 void testfunction_stop(proximity_msg_t *prox_values);
 void eviter_obstacle(proximity_msg_t *prox_values);
 void simple_control(proximity_msg_t *prox_values);
 void less_simple_control(proximity_msg_t *prox_values);
+
+//sensors checks
+uint8_t check_camera(void);
+uint8_t object_detection(void);
+
+
 
 static THD_WORKING_AREA(waMoveDirections, 1024);
 static THD_FUNCTION(MoveDirections, arg) {
@@ -42,7 +57,44 @@ static THD_FUNCTION(MoveDirections, arg) {
     while(1){
           	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
+
+
+        if (object_detection()==FALSE)
+        {
+            //fordward avoiding obstacles 
+            less_simple_control(&prox_values);
+        }
+        else
+        {   
+            //if we detected an object in the camera working proximity we check its nature
+            if (check_camera()==FALSE)
+            {
+                //if it is an obstacle we avoid it 
+
+                //randomly chose left or rigth 
+                if (random(10)<5)
+                {
+                    //turn left as long as the middle sensor doesn't detect something in the camera range
+                    //if the middle sensor detects something chekc the camera
+                }
+                else
+                {
+                    //turn right as long as the middle sensor doesn't detect something in the camera range
+                    //if the middle sensor detects something chekc the camera
+                }
+                
+            }
+            else
+            {
+                //if we detect the target we start the "target chase " algorithm
+
+            }
+            
+        }
     
+
+
+
         less_simple_control(&prox_values); // comme ça on pourra changer facilement de fonctions :)
     }
 }
@@ -154,3 +206,30 @@ void eviter_obstacle(proximity_msg_t *prox_values){
         }
 }
 
+uint8_t object_detection(void){
+    //chekc the long range sensor to see if an object entered the camera working range
+    if (VL53L0X_get_dist_mm()<=MIN_CAMERA_RANGE && VL53L0X_get_dist_mm()>=MAX_CAMERA_RANGE)
+    {
+        //out of range or too close
+        return FALSE; 
+    }
+    else
+    {
+        //an object entered the camera detection range 
+        return TRUE;
+    }
+
+}
+
+uint8_t check_camera(void){
+    //checks the camera to see if the obstacle is a target or an obstacle 
+    if (get_obstacle_situation()==TARGET_NOT_FOUND)
+    {
+        return FALSE;
+    }
+    else
+    {
+        return TRUE;
+    }
+
+}

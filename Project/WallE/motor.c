@@ -32,6 +32,25 @@ static uint8_t instruction = 0;
 static int32_t steps2do [NUM_MOTORS];
 static uint8_t direction = DEFAULT_DIR ; 
 
+void angle2steps(uint8_t ins){
+    //first we compute the number of steps a motor should do
+
+    float steps_ = K * ins;
+
+    //the motor speed's sign changes in fucntion of the angle. When the speed is negative the counter decreases and viceversa with a postive speed
+    //in order to take this into account the number of steps' sign should change as weel
+    if (ins<=LIMIT_RIGHT_QUADRANT)
+    {
+        steps2do[LEFT]=(int32_t) -steps_;
+        steps2do[RIGHT]=(int32_t) steps_;
+    }
+    else
+    {
+        steps2do[LEFT]=(int32_t) steps_;
+        steps2do[RIGHT]=(int32_t) -steps_;
+    }
+}
+
 
 static THD_WORKING_AREA(waMotorControl, 1024);
 static THD_FUNCTION(MotorControl, arg) {
@@ -128,28 +147,12 @@ void inti_th_motor(void){
      chThdCreateStatic(waMotorControl, sizeof(waMotorControl), NORMALPRIO, MotorControl, NULL);
 }
 
-void angle2steps(uint8_t ins){
 
 
-    //first we compute the number of steps a motor should do
 
-    float steps_ = K * ins;
 
-    //the motor speed's sign changes in fucntion of the angle. When the speed is negative the counter decreases and viceversa with a postive speed
-    //in order to take this into account the number of steps' sign should change as weel
-    if (ins<=LIMIT_RIGHT_QUADRANT)
-    {
-    	steps2do[LEFT]=(int32_t) -steps_;
-    	steps2do[RIGHT]=(int32_t) steps_;
-    }
-    else
-    {
-    	steps2do[LEFT]=(int32_t) steps_;
-    	steps2do[RIGHT]=(int32_t) -steps_;
-    }
 
 
-}
 
 
 
@@ -192,98 +195,3 @@ void angle2steps(uint8_t ins){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-#define DEFAULT 0 // can be spiral or stop
-#define FORWARD 1
-#define BACKWARD 2 
-#define LEFT 3
-#define RIGHT 4 
-#define SPIRAL 5 
-#define STOP 6
-#define NUM_DIRECTION 7 
-void instruction_motor(uint8_t direction){
-	switch(direction) {
-		
-	case DEFAULT: 
-		//here the default will be spiral to the left
-		right_motor_set_speed(HIGH_SPEED);
-		left_motor_set_speed(LOW_SPEED);
-		break;
-	case FORWARD:
-		right_motor_set_speed(LOW_SPEED);
-		left_motor_set_speed(LOW_SPEED);
-		break;
-	case BACKWARD:
-		right_motor_set_speed(-LOW_SPEED);
-		left_motor_set_speed(-LOW_SPEED);
-		break;
-	case LEFT:
-			
-		//counter is in steps. 1000 steps for 1 turn of the wheel
-			
-    //turn 90deg to the left
-        right_motor_set_speed(550);
-        left_motor_set_speed(-550);
-    //wait 900ms
-    chThdSleepMilliseconds(900);
-        //then go fordward
-        right_motor_set_speed(-LOW_SPEED);
-        left_motor_set_speed(-LOW_SPEED);
-
-		break;
-	case RIGHT:
-		//sam as left but inversing the instructions
-			
-		//turn 90deg to the right
-		right_motor_set_pos(-500);
-		left_motor_set_pos(500);
-
-		//then go fordward
-		right_motor_set_speed(LOW_SPEED);
-		left_motor_set_speed(LOW_SPEED);
-		break;
-	case SPIRAL:
-		right_motor_set_speed(HIGH_SPEED);
-		left_motor_set_speed(LOW_SPEED);
-		break;
-	case STOP:
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
-		break;
-	//if we don't have a matching direction the robot will stop
-	default:
-		right_motor_set_speed(0);
-		left_motor_set_speed(0);
-	}
-}
-*/

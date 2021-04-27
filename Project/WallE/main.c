@@ -91,6 +91,8 @@ int main(void)
     motors_init();
     //starts proximity sensors 
     proximity_start();
+    //starts the ToF sensor
+    VL53L0X_start();
     
 
 

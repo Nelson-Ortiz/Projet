@@ -24,7 +24,7 @@
 #define WIDTH 0
 #define LINE_START_PIXEL 1 //no used
 
-#define NO_OBSTACLE 400 // this number is used as an error code as pure convention 
+
 #define OFFSET 320 // we put the zero in the midel of the image 
 
 
@@ -185,7 +185,7 @@ void update_obstacle_status( uint16_t* properties){
     int16_t pos = *(properties+LINE_START_PIXEL);
     if (width== 0)
     {
-        obstacle_status=NO_OBSTACLE;
+        obstacle_status=TARGET_NOT_FOUND;
     }
     else{
         
