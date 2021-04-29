@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include "sensors/proximity.h"
 #include "sensors/VL53L0X/VL53L0X.h"
+#include "ch.h"
+#include "hal.h"
+#include <chprintf.h>
+#include <usbcfg.h>
 #include "communication.h"
 #include "leds.h"
 
@@ -65,32 +69,36 @@ static THD_FUNCTION(MoveDirections, arg) {
         //print("==boot==");
 
 
+        chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", object_detection());
+        chprintf((BaseSequentialStream *)&SD3, "Camera = %d \n", check_camera());
+        chprintf((BaseSequentialStream *)&SD3, "Prox= %d \n", prox_values.delta[0]);
+
         if (following==TRUE)
         {
             //do following algorithm
-            
-            if (rand()< RAND_MAX/2)
-                    {
-                        //turn left as long as the middle sensor doesn't detect something in the camera range
-                        following=FALSE;
-                        set_body_led(0);
-                    }
-                    else
-                    {
-                        //turn right as long as the middle sensor doesn't detect something in the camera range
-
-                        following=TRUE;
-                        set_body_led(1);
-                    } 
+            left_motor_set_speed(HIGH_SPEED);
+            right_motor_set_speed(HIGH_SPEED);     
+            if (prox_values.delta[0]>=150)
+            {
+                set_body_led(1);
+                left_motor_set_speed(0);
+                right_motor_set_speed(0);    
+                following=FALSE;
+            }
+            else
+            {
+                set_body_led(0);
+            }
         }                   
         else{
 
             if (object_detection()==FALSE)
             {
                 //fordward avoiding obstacles 
-                less_simple_control(&prox_values);
+                //less_simple_control(&prox_values);
                 following=FALSE;
-            }
+                left_motor_set_speed(LOW_SPEED);
+                right_motor_set_speed(LOW_SPEED);            }
             else
             {   
                 //if we detected an object in the camera working proximity we check its nature
@@ -122,7 +130,7 @@ static THD_FUNCTION(MoveDirections, arg) {
             }
         }
         //we let the other sensors do their measures
-        chThdSleepMilliseconds(1000);
+        chThdSleepMilliseconds(500);
     }
 }
 
@@ -235,15 +243,15 @@ void eviter_obstacle(proximity_msg_t *prox_values){
 
 uint8_t object_detection(void){
     //chekc the long range sensor to see if an object entered the camera working range
-    if (VL53L0X_get_dist_mm()<=MIN_CAMERA_RANGE && VL53L0X_get_dist_mm()>=MAX_CAMERA_RANGE)
+    if (VL53L0X_get_dist_mm()<=MIN_CAMERA_RANGE)
     {
         //out of range or too close
-        return FALSE; 
+        return TRUE; 
     }
     else
     {
         //an object entered the camera detection range 
-        return TRUE;
+        return FALSE;
     }
 
 }
