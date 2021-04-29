@@ -10,6 +10,7 @@
 #include "move.h"
 #include "motor.h"
 #include "camera.h"
+#include "motors.h"
 
 #define PROX_SENS 7 // sensors 0,1,2,...,7
 #define LIM_PROX 100
@@ -28,6 +29,9 @@
 #define MIN_CAMERA_RANGE 150 //closer than this and the camera stops detecting accurately
 #define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
 
+//for the moment the speeds available are defined and constant trough the project
+#define HIGH_SPEED 825 // 75% of the max speed 1100 steps/s
+#define LOW_SPEED 385 // 35% of the max speed 
 
 
 //Algos de choix de chemin
@@ -39,6 +43,8 @@ void less_simple_control(proximity_msg_t *prox_values);
 //sensors checks
 uint8_t check_camera(void);
 uint8_t object_detection(void);
+
+static uint8_t following=FALSE;
 
 
 
@@ -55,47 +61,68 @@ static THD_FUNCTION(MoveDirections, arg) {
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
     while(1){
-          	messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
+        messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
 
 
-        if (object_detection()==FALSE)
+        if (following==TRUE)
         {
-            //fordward avoiding obstacles 
-            less_simple_control(&prox_values);
-        }
-        else
-        {   
-            //if we detected an object in the camera working proximity we check its nature
-            if (check_camera()==FALSE)
-            {
-                //if it is an obstacle we avoid it 
+            //do following algorithm
+            
+            if (rand()< RAND_MAX/2)
+                    {
+                        //turn left as long as the middle sensor doesn't detect something in the camera range
+                        following=FALSE;
+                        set_body_led(0);
+                    }
+                    else
+                    {
+                        //turn right as long as the middle sensor doesn't detect something in the camera range
 
-                //randomly chose left or rigth 
-                if (random(10)<5)
-                {
-                    //turn left as long as the middle sensor doesn't detect something in the camera range
-                    //if the middle sensor detects something chekc the camera
-                }
-                else
-                {
-                    //turn right as long as the middle sensor doesn't detect something in the camera range
-                    //if the middle sensor detects something chekc the camera
-                }
-                
+                        following=TRUE;
+                        set_body_led(1);
+                    } 
+        }                   
+        else{
+
+            if (object_detection()==FALSE)
+            {
+                //fordward avoiding obstacles 
+                less_simple_control(&prox_values);
+                following=FALSE;
             }
             else
-            {
+            {   
+                //if we detected an object in the camera working proximity we check its nature
+                if (check_camera()==FALSE)
+                {
+                    //if it is an obstacle we avoid it 
+
+                    //randomly chose left or rigth 
+                    if (rand()< RAND_MAX/2)
+                    {
+                        //turn left as long as the middle sensor doesn't detect something in the camera range
+                        left_motor_set_speed(LOW_SPEED);
+                        right_motor_set_speed(HIGH_SPEED);
+                        following=FALSE;
+                    }
+                    else
+                    {
+                        //turn right as long as the middle sensor doesn't detect something in the camera range
+                        left_motor_set_speed(HIGH_SPEED);
+                        right_motor_set_speed(LOW_SPEED);
+                        following=FALSE;
+                    }
+                }
                 //if we detect the target we start the "target chase " algorithm
-
+                else
+                {
+                    following=TRUE;
+                }
             }
-            
         }
-    
-
-
-
-        less_simple_control(&prox_values); // comme ça on pourra changer facilement de fonctions :)
+        //we let the other sensors do their measures
+        chThdSleepMilliseconds(1000);
     }
 }
 

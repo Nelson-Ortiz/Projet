@@ -84,19 +84,21 @@ int main(void)
     mpu_init();
     //starts the serial communication
     serial_start();
+    //starts the ToF sensor
+    VL53L0X_start();
     //starts the camera
     dcmi_start();
     po8030_start();
     //starts the motors
     motors_init();
-    //starts proximity sensors 
+    //starts proximity sensors
     proximity_start();
-    //starts the ToF sensor
-    VL53L0X_start();
+
+
     
 
 
-    inti_th_motor();
+    //inti_th_motor();
     init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
@@ -119,7 +121,7 @@ int main(void)
     /* Infinite loop. */
     while (1) {
         //chprintf((BaseSequentialStream *)&SD3, "obstacle=%d\n", get_obstacle_situation());
-        if (get_obstacle_situation()< -20)
+        /*if (get_obstacle_situation()< -20)
         {
             set_led(LED7,1);
             set_led(LED3,0);
@@ -141,9 +143,8 @@ int main(void)
             set_led(LED1,0);
             set_led(LED7,0);
             set_led(LED3,1);
-
-
         }
+        */
         chThdSleepMilliseconds(100);
     }
 }
