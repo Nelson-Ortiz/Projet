@@ -17,7 +17,7 @@
 #define GREEN_MSB_PIXEL_MASK 0b00000111
 #define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 2 //en byte
-#define AVERAGE_NBR_IMAGE 10
+#define AVERAGE_NBR_IMAGE 5
 #define BLACK_PIXEL_VALUE 2 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
