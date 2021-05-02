@@ -138,64 +138,7 @@ static THD_FUNCTION(MoveDirections, arg) {
             case PROXIMITY:
                 break;
         }
-        /*
-        if (following==TRUE)
-        {
-            //do following algorithm
-            left_motor_set_speed(HIGH_SPEED);
-            right_motor_set_speed(HIGH_SPEED);     
-            if (prox_values.delta[0]>=150)
-            {
-                set_body_led(1);
-                left_motor_set_speed(0);
-                right_motor_set_speed(0);    
-                status=RANDOM;
-            }
-            else
-            {
-                set_body_led(0);
-            }
-        }                   
-        else{
-
-            if (object_detection()==FALSE)
-            {
-                //fordward avoiding obstacles 
-                //less_simple_control(&prox_values);
-                following=FALSE;
-                left_motor_set_speed(LOW_SPEED);
-                right_motor_set_speed(LOW_SPEED);          
-            }
-            else
-            {   
-                //if we detected an object in the camera working proximity we check its nature
-                if (check_camera()==FALSE)
-                {
-                    //if it is an obstacle we avoid it 
-
-                    //randomly chose left or rigth 
-                    if (rand()< RAND_MAX/2)
-                    {
-                        //turn left as long as the middle sensor doesn't detect something in the camera range
-                        left_motor_set_speed(-LOW_SPEED);
-                        right_motor_set_speed(HIGH_SPEED);
-                        following=FALSE;
-                    }
-                    else
-                    {
-                        //turn right as long as the middle sensor doesn't detect something in the camera range
-                        left_motor_set_speed(HIGH_SPEED);
-                        right_motor_set_speed(-LOW_SPEED);
-                        following=FALSE;
-                    }
-                }
-                //if we detect the target we start the "target chase " algorithm
-                else
-                {
-                    following=TRUE;
-                }
-            }
-        }*/
+        
         //we let the other sensors do their measures
         chThdSleepMilliseconds(500);
     }
@@ -371,15 +314,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+                else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -401,15 +336,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+                else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -431,15 +358,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+               else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -461,15 +380,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+               else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -491,15 +402,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+                else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -521,15 +424,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+                else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -551,15 +446,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+               else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
@@ -581,15 +468,7 @@ void check_prox(proximity_msg_t *prox_values){
                     right_motor_set_speed(-HIGH_SPEED);
                     loop_counter++;
                 }
-                else if (loop_counter==3)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter==4)
-                {
-                    loop_counter++;
-                }
-                else if (loop_counter>=5)
+                else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
