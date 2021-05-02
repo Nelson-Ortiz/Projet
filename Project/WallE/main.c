@@ -104,6 +104,7 @@ int main(void)
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
     init_movedirections();
+    //set_front_led(1);
 
 
     //important to have this after the bus init

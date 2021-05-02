@@ -18,7 +18,7 @@
 #define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 2 //en byte
 #define AVERAGE_NBR_IMAGE 5
-#define BLACK_PIXEL_VALUE 2 
+#define BLACK_PIXEL_VALUE 10 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
 #define WIDTH 0
@@ -97,7 +97,7 @@ static THD_FUNCTION(ProcessImage, arg) {
             
             //distance_cm=DISTANCE(black_line[WIDTH]);
             
-            // chprintf((BaseSequentialStream *)&SD3, "width = %d \n", obstacle_status);
+            chprintf((BaseSequentialStream *)&SD3, "width = %d \n", black_line[WIDTH]);
             // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
             // chprintf((BaseSequentialStream *)&SD3, "distance = %d \n", distance_cm);
             

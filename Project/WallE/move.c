@@ -34,7 +34,7 @@
 #define IR8     7
 
 
-#define MIN_CAMERA_RANGE 150 //closer than this and the camera stops detecting accurately
+#define MIN_CAMERA_RANGE 200 //closer than this and the camera stops detecting accurately
 #define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
 
 //for the moment the speeds available are defined and constant trough the project
@@ -82,9 +82,9 @@ static THD_FUNCTION(MoveDirections, arg) {
         check_prox(&prox_values);  
         switch(status){
             case FOLLOWING:
-                left_motor_set_speed(HIGH_SPEED);
-                right_motor_set_speed(HIGH_SPEED);     
-                if (prox_values.delta[0]>=150)
+                left_motor_set_speed(0);
+                right_motor_set_speed(0);     
+                /*if (prox_values.delta[0]>=150)
                 {
                     set_body_led(1);
                     left_motor_set_speed(0);
@@ -94,7 +94,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                 else
                 {
                     set_body_led(0);
-                }
+                }*/
                 break;
             case RANDOM:
                 if (object_detection()==FALSE)
@@ -274,7 +274,7 @@ uint8_t check_camera(void){
     }
     else
     {
-        return FALSE;
+        return TRUE;
     }
 
 }
