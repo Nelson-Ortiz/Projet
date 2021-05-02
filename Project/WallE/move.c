@@ -34,21 +34,24 @@
 #define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
 
 //for the moment the speeds available are defined and constant trough the project
-#define HIGH_SPEED 825 // 75% of the max speed 1100 steps/s
-#define LOW_SPEED 385 // 35% of the max speed 
+#define HIGH_SPEED 935 // 85% of the max speed 1100 steps/s
+#define LOW_SPEED 605 // 55% of the max speed 
 
+#define NO_PROX_DETECTED 10
 
 //Algos de choix de chemin
 void testfunction_stop(proximity_msg_t *prox_values);
 void eviter_obstacle(proximity_msg_t *prox_values);
 void simple_control(proximity_msg_t *prox_values);
 void less_simple_control(proximity_msg_t *prox_values);
+void check_prox(proximity_msg_t *prox_values);
 
 //sensors checks
 uint8_t check_camera(void);
 uint8_t object_detection(void);
 
 static uint8_t following=FALSE;
+static uint8_t loop_counter=0;
 
 
 
@@ -98,7 +101,8 @@ static THD_FUNCTION(MoveDirections, arg) {
                 //less_simple_control(&prox_values);
                 following=FALSE;
                 left_motor_set_speed(LOW_SPEED);
-                right_motor_set_speed(LOW_SPEED);            }
+                right_motor_set_speed(LOW_SPEED);          
+            }
             else
             {   
                 //if we detected an object in the camera working proximity we check its nature
@@ -110,7 +114,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                     if (rand()< RAND_MAX/2)
                     {
                         //turn left as long as the middle sensor doesn't detect something in the camera range
-                        left_motor_set_speed(LOW_SPEED);
+                        left_motor_set_speed(-LOW_SPEED);
                         right_motor_set_speed(HIGH_SPEED);
                         following=FALSE;
                     }
@@ -118,7 +122,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                     {
                         //turn right as long as the middle sensor doesn't detect something in the camera range
                         left_motor_set_speed(HIGH_SPEED);
-                        right_motor_set_speed(LOW_SPEED);
+                        right_motor_set_speed(-LOW_SPEED);
                         following=FALSE;
                     }
                 }
@@ -264,7 +268,68 @@ uint8_t check_camera(void){
     }
     else
     {
-        return TRUE;
+        return FALSE;
+    }
+
+}
+
+void check_prox(proximity_msg_t *prox_values){
+    
+    uint8_t sensor=NO_PROX_DETECTED;//arbitrary value that allow us to recognise if no sensor proximity was detected
+    for (int i = 0; i < PROX_SENS; ++i)
+    {
+        if (prox_values->delta[i]>LIM_PROX)
+        {
+            sensor=i;
+        }
+    }
+
+    if (senson==NO_PROX_DETECTED)
+    {
+        set_body_led(1);
+    }
+    else{
+        set_body_led(0);
+        switch(sensor){
+            case IR1:
+                //first we turn
+                if (loop_counter==0)
+                {
+                    loop_counter++;
+                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                    left_motor_set_speed(111);
+                    right_motor_set_speed(-111);
+                }
+                else if (loop_counter==1)
+                {
+                    left_motor_set_speed(-HIGH_SPEED);
+                    right_motor_set_speed(-HIGH_SPEED);
+                    loop_counter++;
+                }
+                else if (loop_counter>=2)
+                {
+                    loop_counter=0;
+                    
+                }
+                break;
+            case IR2:
+                break;
+            case IR3:
+                break;
+            case IR4:
+                break;
+            case IR5:
+                break;
+            case IR6:
+                break;
+            case IR7:
+                break;
+            case IR8:
+                break;    
+
+
+
+        }
     }
 
 }
