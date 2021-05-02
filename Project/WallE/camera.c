@@ -23,6 +23,7 @@
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
 #define WIDTH 0
 #define LINE_START_PIXEL 1 //no used
+#define MIN_LIN_VALUE 100 // in order to filter the noise 
 
 
 #define OFFSET 320 // we put the zero in the midel of the image 
@@ -164,7 +165,7 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
 
         else{
             counting = FALSE; 
-            if (pixel_counter >= line_width)
+            if (pixel_counter >= line_width && pixel_counter>=MIN_LIN_VALUE)
             {
                 line_width =pixel_counter;
                 line_start = start_point;
