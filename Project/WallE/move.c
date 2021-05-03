@@ -21,7 +21,7 @@
 #define RANDOM 2 
 
 #define PROX_SENS 7 // sensors 0,1,2,...,7
-#define LIM_PROX 100
+#define LIM_PROX 200
 
 //Proximity sensors
 #define IR1     0
@@ -83,20 +83,15 @@ static THD_FUNCTION(MoveDirections, arg) {
         switch(status){
             case FOLLOWING:
                 left_motor_set_speed(0);
-                right_motor_set_speed(0);     
-                /*if (prox_values.delta[0]>=150)
+                right_motor_set_speed(0);   
+                //it it doesn't sees the target anymore it comes back to a random mouvement  
+                if (check_camera()==FALSE)
                 {
-                    set_body_led(1);
-                    left_motor_set_speed(0);
-                    right_motor_set_speed(0);    
                     status=RANDOM;
                 }
-                else
-                {
-                    set_body_led(0);
-                }*/
                 break;
             case RANDOM:
+                
                 if (object_detection()==FALSE)
                 {
                     //fordward avoiding obstacles 
@@ -111,7 +106,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                     if (check_camera()==FALSE)
                     {
                         //if it is an obstacle we avoid it 
-
+                        set_front_led(0);
                         //randomly chose left or rigth 
                         if (rand()< RAND_MAX/2)
                         {
@@ -131,11 +126,13 @@ static THD_FUNCTION(MoveDirections, arg) {
                     //if we detect the target we start the "target chase " algorithm
                     else
                     {
+                        set_front_led(1);
                         status=FOLLOWING;
                     }
                 }
                 break;
             case PROXIMITY:
+                set_front_led(0);
                 break;
         }
         
@@ -255,12 +252,13 @@ uint8_t object_detection(void){
     //chekc the long range sensor to see if an object entered the camera working range
     if (VL53L0X_get_dist_mm()<=MIN_CAMERA_RANGE)
     {
-        //out of range or too close
+        
+        //an object entered the camera detection range 
         return TRUE; 
     }
     else
     {
-        //an object entered the camera detection range 
+        //out of range or too close
         return FALSE;
     }
 
@@ -289,11 +287,17 @@ void check_prox(proximity_msg_t *prox_values){
             sensor=i;
         }
     }
-
+    //chprintf((BaseSequentialStream *)&SD3, "sensor = %d \n", sensor);
     if (sensor==NO_PROX_DETECTED)
     {
         set_body_led(1);
-        status=RANDOM;
+        if (status==FOLLOWING)
+        {
+            status=FOLLOWING;
+        }
+        else{
+            status=RANDOM;
+        }
     }
     else{
         set_body_led(0);

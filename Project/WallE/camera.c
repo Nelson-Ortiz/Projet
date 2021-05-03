@@ -31,7 +31,7 @@
 
 #define PIX2CM 1
 
-static uint8_t distance_cm = 0;
+//static uint8_t distance_cm = 0;
 static int16_t obstacle_status=0;
 
 //semaphore
@@ -97,7 +97,7 @@ static THD_FUNCTION(ProcessImage, arg) {
             
             //distance_cm=DISTANCE(black_line[WIDTH]);
             
-            chprintf((BaseSequentialStream *)&SD3, "width = %d \n", black_line[WIDTH]);
+            chprintf((BaseSequentialStream *)&SD3, "obstacle = %d \n", obstacle_status);
             // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
             // chprintf((BaseSequentialStream *)&SD3, "distance = %d \n", distance_cm);
             
