@@ -86,14 +86,13 @@ static THD_FUNCTION(ProcessImage, arg) {
         // average is done over 
         if(im_ready_counter == 0){
             SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
-
+            get_width(image, IMAGE_BUFFER_SIZE, black_line);
+            update_obstacle_status(black_line);
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
-            get_width(image, IMAGE_BUFFER_SIZE, black_line);
-            
-            update_obstacle_status(black_line);
+
             
             //distance_cm=DISTANCE(black_line[WIDTH]);
             
