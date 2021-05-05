@@ -28,6 +28,7 @@ uint8_t get_distance_cm(void);
  *
  */
 uint8_t get_green_pixel(uint8_t *img_pixel_ptr);
+uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr);
 /*
  * @brief   compute the with in pixels of the obstacle seen from the camera
  * 

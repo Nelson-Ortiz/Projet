@@ -16,7 +16,8 @@
 
 #define GREEN_MSB_PIXEL_MASK 0b00000111
 #define GREEN_LSB_PIXEL_MASK 0b11100000
-#define TAILLE_PIXEL 2 //en byte
+#define TAILLE_PIXEL 2 /*en byte  [ 1 byte en mode FORMAT_YYYY
+                                    2 bytes en mode FORMAT_RBG565 ] */
 #define AVERAGE_NBR_IMAGE 5
 #define BLACK_PIXEL_VALUE 10 
 
@@ -127,9 +128,26 @@ uint8_t get_green_pixel(uint8_t *img_pixel_ptr){
     uint8_t pixel_LSB = *(img_pixel_ptr + 1);
     uint8_t green_pixel = 0;
     pixel_MSB = (pixel_MSB & GREEN_MSB_PIXEL_MASK ) <<3;
-    pixel_LSB = (pixel_MSB & GREEN_LSB_PIXEL_MASK) >> 5;
+    pixel_LSB = (pixel_LSB & GREEN_LSB_PIXEL_MASK) >> 5;
     green_pixel = pixel_MSB | pixel_LSB; 
     return green_pixel; 
+}
+
+// uint8_t get_ave_pixel(uint8_t *img_pixel_ptr){
+//     uint8_t pixel_MSB = *img_pixel_ptr;
+//     uint8_t pixel_LSB = *(img_pixel_ptr + 1);
+//     uint8_t green_pixel = 0;
+//     uint8_t blue_pixel = 0;
+//     uint8_t red_pixel = 0;
+//     blue_pixel = ()
+//     pixel_MSB = (pixel_MSB & GREEN_MSB_PIXEL_MASK ) <<3;
+//     pixel_LSB = (pixel_MSB & GREEN_LSB_PIXEL_MASK) >> 5;
+//     green_pixel = pixel_MSB | pixel_LSB; 
+//     return ave_pixel; 
+// }
+
+uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ //checker que c'est bien ca ? 
+    return *img_pixel_ptr;
 }
 
 void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line ){
