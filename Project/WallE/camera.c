@@ -86,6 +86,10 @@ static THD_FUNCTION(ProcessImage, arg) {
         img_buff_ptr = dcmi_get_last_image_ptr();
         // average is done over 
         if(im_ready_counter == 0){
+            //difference finie
+            for (int i = 0; i < IMAGE_BUFFER_SIZE-1; i++){
+                image[i]= (image[i+1]-image[i])/5;
+            }
             SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
             get_width(image, IMAGE_BUFFER_SIZE, black_line);
             update_obstacle_status(black_line);
@@ -149,6 +153,12 @@ uint8_t get_green_pixel(uint8_t *img_pixel_ptr){
 uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ //checker que c'est bien ca ? 
     return *img_pixel_ptr;
 }
+
+// void difference_finie(const uint8_t *image_array, uint16_t line_size){
+//     for(int i = 0; i<line_size-1; i++){
+//         *(image_array+i) = *(image_array+i+1)-*(image_array+i);
+//     }
+// }
 
 void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line ){
 
@@ -215,6 +225,7 @@ void update_obstacle_status( uint16_t* properties){
 int16_t get_obstacle_situation(void){
     return obstacle_status;
 }
+
 
 
 
