@@ -75,6 +75,10 @@ static THD_FUNCTION(MoveDirections, arg) {
         messagebus_topic_wait(proximity_topic, &prox_values, sizeof(prox_values));
         //print("==boot==");
 
+        //TEST ROBOT ARRET ==============================================================
+        left_motor_set_speed(0);
+        right_motor_set_speed(0);  
+        //===============================================================================
 
         //chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", object_detection());
         //chprintf((BaseSequentialStream *)&SD3, "Camera = %d \n", check_camera());
@@ -293,7 +297,7 @@ void check_prox(proximity_msg_t *prox_values){
         set_body_led(1);
         if (status==FOLLOWING)
         {
-            status=FOLLOWING;
+            status=FOLLOWING; // mettre un break à la place ?  
         }
         else{
             status=RANDOM;
