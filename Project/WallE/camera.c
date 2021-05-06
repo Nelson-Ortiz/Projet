@@ -86,7 +86,7 @@ static THD_FUNCTION(ProcessImage, arg) {
         img_buff_ptr = dcmi_get_last_image_ptr();
         // average is done over 
         if(im_ready_counter == 0){
-            SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+            //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
             get_width(image, IMAGE_BUFFER_SIZE, black_line);
             update_obstacle_status(black_line);
             im_ready_counter = AVERAGE_NBR_IMAGE;

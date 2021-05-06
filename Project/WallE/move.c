@@ -34,7 +34,7 @@
 #define IR8     7
 
 
-#define MIN_CAMERA_RANGE 200 //closer than this and the camera stops detecting accurately
+#define MIN_CAMERA_RANGE 100 //closer than this and the camera stops detecting accurately
 #define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
 
 //for the moment the speeds available are defined and constant trough the project
@@ -42,6 +42,9 @@
 #define LOW_SPEED 605 // 55% of the max speed 
 
 #define NO_PROX_DETECTED 10
+
+#define FIVE_SECONDS 10 //each thread iteration takes 5ms, so 5 sec = 10 iterations
+#define TEN_SECONDS 20
 
 //Algos de choix de chemin
 void testfunction_stop(proximity_msg_t *prox_values);
@@ -56,6 +59,7 @@ uint8_t object_detection(void);
 
 static uint8_t status=RANDOM;
 static uint8_t loop_counter=0;
+static uint8_t active_prox_sensor= NO_PROX_DETECTED; //arbitrary value that allow us to recognise if no sensor proximity was detected
 
 
 
@@ -76,13 +80,13 @@ static THD_FUNCTION(MoveDirections, arg) {
         //print("==boot==");
 
         //TEST ROBOT ARRET ==============================================================
-        left_motor_set_speed(0);
-        right_motor_set_speed(0);  
+        //left_motor_set_speed(0);
+        //right_motor_set_speed(0);  
         //===============================================================================
 
         //chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", object_detection());
-        //chprintf((BaseSequentialStream *)&SD3, "Camera = %d \n", check_camera());
-        //chprintf((BaseSequentialStream *)&SD3, "Prox= %d \n", prox_values.delta[0]);
+        chprintf((BaseSequentialStream *)&SD3, "status = %d \n", status);
+        chprintf((BaseSequentialStream *)&SD3, "loop= %d \n", loop_counter);
         check_prox(&prox_values);  
         switch(status){
             case FOLLOWING:
@@ -91,18 +95,34 @@ static THD_FUNCTION(MoveDirections, arg) {
                 //it it doesn't sees the target anymore it comes back to a random mouvement  
                 if (check_camera()==FALSE)
                 {
+                    loop_counter=0;
                     status=RANDOM;
                 }
+                
                 break;
             case RANDOM:
                 
                 if (object_detection()==FALSE)
                 {
-                    //fordward avoiding obstacles 
-                    //less_simple_control(&prox_values);
-                    status=RANDOM;
-                    left_motor_set_speed(LOW_SPEED);
-                    right_motor_set_speed(LOW_SPEED);          
+                    //does a spiral movement that change direction every 5 sec
+
+                    if (loop_counter<=FIVE_SECONDS)
+                    {
+                        //spiral to the right
+                        left_motor_set_speed(HIGH_SPEED);
+                        right_motor_set_speed(LOW_SPEED+100);
+                        loop_counter++;
+                    }
+                    else if (loop_counter<=TEN_SECONDS)
+                    {
+                        right_motor_set_speed(HIGH_SPEED);
+                        left_motor_set_speed(LOW_SPEED+100);
+                        loop_counter++;
+                    }
+                    else{
+                        loop_counter=0;
+                    }
+                              
                 }
                 else
                 {   
@@ -117,26 +137,118 @@ static THD_FUNCTION(MoveDirections, arg) {
                             //turn left as long as the middle sensor doesn't detect something in the camera range
                             left_motor_set_speed(-LOW_SPEED);
                             right_motor_set_speed(HIGH_SPEED);
-                            status=RANDOM;
                         }
                         else
                         {
                             //turn right as long as the middle sensor doesn't detect something in the camera range
                             left_motor_set_speed(HIGH_SPEED);
                             right_motor_set_speed(-LOW_SPEED);
-                            status=RANDOM;
                         }
                     }
                     //if we detect the target we start the "target chase " algorithm
                     else
                     {
                         set_front_led(1);
+                        loop_counter=0;
                         status=FOLLOWING;
                     }
                 }
                 break;
             case PROXIMITY:
                 set_front_led(0);
+                switch(active_prox_sensor){
+                    case IR1:
+                        //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(111);
+                            right_motor_set_speed(-111);
+                        }
+                        break;
+                    case IR2:
+                        //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(415);
+                            right_motor_set_speed(-415);
+                        }
+                        break;
+                    case IR3:
+                        //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(646);
+                            right_motor_set_speed(-646);
+                        }
+                        break;
+                    case IR4:
+                    //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(1092);
+                            right_motor_set_speed(-1092);
+                        }
+                        break;
+                    case IR5:
+                    //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(-1092);
+                            right_motor_set_speed(1092);
+                        }
+                        break;
+                    case IR6:
+                        //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(-646);
+                            right_motor_set_speed(646);
+                        }
+                        break;
+                    case IR7:
+                        //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(-415);
+                            right_motor_set_speed(415);
+                        }
+                        break;
+                    case IR8:
+                    //first we turn
+                        if (loop_counter==0)
+                        {
+                            loop_counter++;
+                            //the speed values are a constant and depends in the geometry of the robot and the steps motors 
+                            left_motor_set_speed(-111);
+                            right_motor_set_speed(111);
+                        }
+                        break;    
+                }
+                if (loop_counter==1)
+                {
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
+                    loop_counter++;
+                }
+                else if (loop_counter>=2)
+                {
+                    loop_counter=0;
+                    status=RANDOM;
+                }
                 break;
         }
         
@@ -283,207 +395,39 @@ uint8_t check_camera(void){
 
 void check_prox(proximity_msg_t *prox_values){
     
-    uint8_t sensor=NO_PROX_DETECTED;//arbitrary value that allow us to recognise if no sensor proximity was detected
+
     for (int i = 0; i < PROX_SENS; ++i)
     {
         if (prox_values->delta[i]>LIM_PROX)
         {
-            sensor=i;
+            active_prox_sensor=i;
         }
     }
     //chprintf((BaseSequentialStream *)&SD3, "sensor = %d \n", sensor);
-    if (sensor==NO_PROX_DETECTED)
+    if (active_prox_sensor == NO_PROX_DETECTED)
     {
         set_body_led(1);
-        if (status==FOLLOWING)
+        if (status==PROXIMITY)
         {
-            status=FOLLOWING; // mettre un break à la place ?  
-        }
-        else{
+            loop_counter=0;
             status=RANDOM;
+        }
+        else if (status==RANDOM){
+            status=RANDOM;
+        }
+        else if (status==FOLLOWING)
+        {
+            status=FOLLOWING;
         }
     }
     else{
-        set_body_led(0);
-        status=PROXIMITY;
-        switch(sensor){
-            case IR1:
-                //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(111);
-                    right_motor_set_speed(-111);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-                else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR2:
-                //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(415);
-                    right_motor_set_speed(-415);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-                else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR3:
-                //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(646);
-                    right_motor_set_speed(-646);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-               else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR4:
-            //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(1092);
-                    right_motor_set_speed(-1092);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-               else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR5:
-            //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(-1092);
-                    right_motor_set_speed(1092);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-                else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR6:
-                //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(-646);
-                    right_motor_set_speed(646);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-                else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR7:
-                //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(-415);
-                    right_motor_set_speed(415);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-               else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;
-            case IR8:
-            //first we turn
-                if (loop_counter==0)
-                {
-                    loop_counter++;
-                    //the speed values are a constant and depends in the geometry of the robot and the steps motors 
-                    left_motor_set_speed(-111);
-                    right_motor_set_speed(111);
-                }
-                else if (loop_counter==1)
-                {
-                    left_motor_set_speed(-LOW_SPEED);
-                    right_motor_set_speed(-LOW_SPEED);
-                    loop_counter++;
-                }
-                else if (loop_counter>=2)
-                {
-                    loop_counter=0;
-                    status=RANDOM;
-
-                }
-                break;    
+        if (status != PROXIMITY)
+        {
+            loop_counter=0;
+            status=PROXIMITY;         
         }
+
+
     }
 
 }
