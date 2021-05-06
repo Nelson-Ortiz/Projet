@@ -12,12 +12,7 @@
  *
  */
 void init_th_camera(void);
-/*
- * @brief   Computes the obstacle distance from the robot 
- *
- * @return        The distance in cm
- */
-uint8_t get_distance_cm(void);
+
 /*
  * @brief   filtrates the green pixels from the image 
  * 
@@ -29,6 +24,7 @@ uint8_t get_distance_cm(void);
  */
 uint8_t get_green_pixel(uint8_t *img_pixel_ptr);
 uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr);
+
 /*
  * @brief   compute the with in pixels of the obstacle seen from the camera
  * 
@@ -37,25 +33,22 @@ uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr);
  * @param  *black_line          pointer to the vector containing the width and position in pixels of the obstacle 
  *
  */
-void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line );
-/*
- * @brief   updates the obstacle status if it is detected and/or if moved it's pixel positions
- * 
- */
+void compute_width(const uint8_t *image_array, uint16_t line_size);
 
-void update_obstacle_status( uint16_t* properties);
 /*
  * @brief   return the obstacle situation
- * 
  *
  * @return              [-320,320] middle of the obstacle position in pixels
  *						400 No obstacle found
- *
  */
-
 int16_t get_obstacle_situation(void);
 
-
+/*
+ * @brief   Computes the obstacle distance from the robot 
+ *
+ * @return        The distance in cm
+ */
+uint8_t get_distance_cm(void);
 
 
 #endif

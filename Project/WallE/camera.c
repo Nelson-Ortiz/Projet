@@ -2,14 +2,12 @@
 #include "camera.h"
 #include "camera/dcmi_camera.h"
 
-
-
 #include "ch.h"
 #include "hal.h"
 #include <chprintf.h>
 #include <usbcfg.h>
 
-#include <main.h>
+// #include <main.h>
 #include <camera/po8030.h>
 
 
@@ -22,17 +20,15 @@
 #define BLACK_PIXEL_VALUE 10 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
-#define WIDTH 0
-#define LINE_START_PIXEL 1 //no used
 #define MIN_LIN_VALUE 100 // in order to filter the noise 
 
+#define OFFSET 320 // we put the zero in the middle of the image 
 
-#define OFFSET 320 // we put the zero in the midel of the image 
+//#define PIX2CM 1
 
-
-#define PIX2CM 1
-
-//static uint8_t distance_cm = 0;
+// obstacle status
+static uint16_t width = 0;
+static uint8_t distance_cm = 0;
 static int16_t obstacle_status=0;
 
 //semaphore
@@ -49,21 +45,15 @@ static THD_FUNCTION(CaptureImage, arg) {
     dcmi_enable_double_buffering();
     dcmi_set_capture_mode(CAPTURE_ONE_SHOT);
     dcmi_prepare();
-    //systime_t time;
-
     while(1){
         //starts a capture
-        //time = chVTGetSystemTime();
         
         dcmi_capture_start();
         //waits for the capture to be done
         wait_image_ready();
         
         //signals an image has been captured
-        chBSemSignal(&image_ready_sem);     
-        
-        //time = chVTGetSystemTime() - time;
-        // chprintf((BaseSequentialStream *)&SD3, "time = %d \n", time);    
+        chBSemSignal(&image_ready_sem);         
     }
 }
 
@@ -77,7 +67,6 @@ static THD_FUNCTION(ProcessImage, arg) {
     uint8_t *img_buff_ptr;
     uint8_t image[IMAGE_BUFFER_SIZE] = {0};
     uint8_t im_ready_counter = 0;
-    uint16_t black_line[2]={0};
 
     while(1){
         //waits until an image has been captured
@@ -87,34 +76,23 @@ static THD_FUNCTION(ProcessImage, arg) {
         // average is done over 
         if(im_ready_counter == 0){
             //difference finie
-            for (int i = 0; i < IMAGE_BUFFER_SIZE-1; i++){
-                image[i]= (image[i+1]-image[i])/5;
-            }
+            // for (int i = 0; i < IMAGE_BUFFER_SIZE-1; i++){
+            //     image[i]= (image[i+1]-image[i])/5;
+            // }
             SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
-            get_width(image, IMAGE_BUFFER_SIZE, black_line);
-            update_obstacle_status(black_line);
+            compute_width(image, IMAGE_BUFFER_SIZE);
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
-
-            
-            //distance_cm=DISTANCE(black_line[WIDTH]);
-            
             //chprintf((BaseSequentialStream *)&SD3, "obstacle = %d \n", obstacle_status);
-            // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
-            // chprintf((BaseSequentialStream *)&SD3, "distance = %d \n", distance_cm);
-            
-
         }
         else{
             im_ready_counter--;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= (image[i] + get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
             }
-        }
-        
-        
+        } 
     }
 }
 
@@ -154,13 +132,7 @@ uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ //checker que c'est bien ca ?
     return *img_pixel_ptr;
 }
 
-// void difference_finie(const uint8_t *image_array, uint16_t line_size){
-//     for(int i = 0; i<line_size-1; i++){
-//         *(image_array+i) = *(image_array+i+1)-*(image_array+i);
-//     }
-// }
-
-void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line ){
+void compute_width(const uint8_t *image_array, uint16_t line_size){
 
     uint16_t line_width=0; 
     uint16_t line_start = 0;
@@ -172,12 +144,8 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
     for (int i = 0; i < line_size; ++i)
     {
         pixel_value = *(image_array+i);
-
-
-
         if (pixel_value <= BLACK_PIXEL_VALUE && i<=(line_size-1))
         {
-            
             if (counting == FALSE){
                 start_point = i; 
                 counting =TRUE;
@@ -186,46 +154,34 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
             else{ 
                 pixel_counter++; 
             }
-            
-            
         }
-
         else{
             counting = FALSE; 
-            if (pixel_counter >= line_width && pixel_counter>=MIN_LIN_VALUE)
-            {
+            if (pixel_counter >= line_width && pixel_counter>=MIN_LIN_VALUE){
                 line_width =pixel_counter;
                 line_start = start_point;
                 pixel_counter=0;
             }
             else { pixel_counter=0; }
         }
-
     }
-
-    *(black_line)=line_width;
-    *(black_line+1)=line_start;
-
-}
-
-void update_obstacle_status( uint16_t* properties){
-    int16_t width= *(properties+WIDTH);
-    int16_t pos = *(properties+LINE_START_PIXEL);
-    if (width== 0)
-    {
+    if (line_width== 0){
         obstacle_status=TARGET_NOT_FOUND;
     }
     else{
-        
-        obstacle_status= (width/2) +pos - OFFSET; 
+        obstacle_status= (line_width/2) + line_start - OFFSET; 
     }
-
+    width = line_width;
+    distance_cm = DISTANCE(line_width);
 }
 
 int16_t get_obstacle_situation(void){
     return obstacle_status;
 }
 
+uint8_t get_distance_cm(void){
+    return distance_cm;
+}
 
 
 
