@@ -314,8 +314,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                 else if (loop_counter>=2)
@@ -336,8 +336,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                 else if (loop_counter>=2)
@@ -358,8 +358,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                else if (loop_counter>=2)
@@ -380,8 +380,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                else if (loop_counter>=2)
@@ -402,8 +402,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                 else if (loop_counter>=2)
@@ -424,8 +424,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                 else if (loop_counter>=2)
@@ -446,8 +446,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                else if (loop_counter>=2)
@@ -468,8 +468,8 @@ void check_prox(proximity_msg_t *prox_values){
                 }
                 else if (loop_counter==1)
                 {
-                    left_motor_set_speed(-HIGH_SPEED);
-                    right_motor_set_speed(-HIGH_SPEED);
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
                 }
                 else if (loop_counter>=2)
