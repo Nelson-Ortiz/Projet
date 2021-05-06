@@ -54,6 +54,8 @@ void check_prox(proximity_msg_t *prox_values);
 uint8_t check_camera(void);
 uint8_t object_detection(void);
 
+void lighting_garland(void);
+
 static uint8_t status=RANDOM;
 static uint8_t loop_counter=0;
 
@@ -87,7 +89,8 @@ static THD_FUNCTION(MoveDirections, arg) {
         switch(status){
             case FOLLOWING:
                 left_motor_set_speed(0);
-                right_motor_set_speed(0);   
+                right_motor_set_speed(0);
+                lighting_garland();   
                 //it it doesn't sees the target anymore it comes back to a random mouvement  
                 if (check_camera()==FALSE)
                 {
@@ -486,4 +489,25 @@ void check_prox(proximity_msg_t *prox_values){
         }
     }
 
+}
+
+
+void lighting_garland(void){
+    static uint8_t led_counter = 0;
+    if(led_counter == 0){
+        led_counter ++;
+        set_led(LED1,LED_TOGGLE);
+    }
+    else if(led_counter == 1){
+        led_counter ++;
+        set_led(LED3,LED_TOGGLE);
+    }
+    else if(led_counter == 2){
+        led_counter ++;
+        set_led(LED5,LED_TOGGLE);
+    }
+    else {
+        led_counter = 0;
+        set_led(LED7,LED_TOGGLE);
+    }
 }
