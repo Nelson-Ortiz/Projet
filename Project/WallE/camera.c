@@ -18,7 +18,7 @@
 #define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 2 /*en byte  [ 1 byte en mode FORMAT_YYYY
                                     2 bytes en mode FORMAT_RBG565 ] */
-#define AVERAGE_NBR_IMAGE 10
+#define AVERAGE_NBR_IMAGE 2
 #define BLACK_PIXEL_VALUE 10 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
@@ -34,9 +34,90 @@
 
 //static uint8_t distance_cm = 0;
 static int16_t obstacle_status=0;
+//static float distance_cm = 0;
+static uint16_t line_position = IMAGE_BUFFER_SIZE/2;    //middle
 
 //semaphore
 static BSEMAPHORE_DECL(image_ready_sem, TRUE);
+
+/*
+ *  Returns the line's width extracted from the image buffer given
+ *  Returns 0 if line not found
+ */
+uint16_t extract_line_width(uint8_t *buffer){
+
+    uint16_t i = 0, begin = 0, end = 0, width = 0;
+    uint8_t stop = 0, wrong_line = 0, line_not_found = 0;
+    uint32_t mean = 0;
+
+    static uint16_t last_width = PXTOCM/GOAL_DISTANCE;
+
+    //performs an average
+    for(uint16_t i = 0 ; i < IMAGE_BUFFER_SIZE ; i++){
+        mean += buffer[i];
+    }
+    mean /= IMAGE_BUFFER_SIZE;
+
+    do{
+        wrong_line = 0;
+        //search for a begin
+        while(stop == 0 && i < (IMAGE_BUFFER_SIZE - WIDTH_SLOPE))
+        { 
+            //the slope must at least be WIDTH_SLOPE wide and is compared
+            //to the mean of the image
+            if(buffer[i] > mean && buffer[i+WIDTH_SLOPE] < mean)
+            {
+                begin = i;
+                stop = 1;
+            }
+            i++;
+        }
+        //if a begin was found, search for an end
+        if (i < (IMAGE_BUFFER_SIZE - WIDTH_SLOPE) && begin)
+        {
+            stop = 0;
+            
+            while(stop == 0 && i < IMAGE_BUFFER_SIZE)
+            {
+                if(buffer[i] > mean && buffer[i-WIDTH_SLOPE] < mean)
+                {
+                    end = i;
+                    stop = 1;
+                }
+                i++;
+            }
+            //if an end was not found
+            if (i > IMAGE_BUFFER_SIZE || !end)
+            {
+                line_not_found = 1;
+            }
+        }
+        else//if no begin was found
+        {
+            line_not_found = 1;
+        }
+
+        //if a line too small has been detected, continues the search
+        if(!line_not_found && (end-begin) < MIN_LINE_WIDTH){
+            i = end;
+            begin = 0;
+            end = 0;
+            stop = 0;
+            wrong_line = 1;
+        }
+    }while(wrong_line);
+
+    if(line_not_found){
+        begin = 0;
+        end = 0;
+        width = 0;
+    }else{
+        last_width = width = (end - begin);
+        line_position = (begin + end)/2; //gives the line position.
+    }
+
+        return width;
+}
 
 static THD_WORKING_AREA(waCaptureImage, 256);
 static THD_FUNCTION(CaptureImage, arg) {
@@ -79,6 +160,8 @@ static THD_FUNCTION(ProcessImage, arg) {
     uint8_t im_ready_counter = 0;
     uint16_t black_line[2]={0};
 
+    //bool send_to_computer = true;
+
     while(1){
         //waits until an image has been captured
         chBSemWait(&image_ready_sem);
@@ -87,7 +170,8 @@ static THD_FUNCTION(ProcessImage, arg) {
         // average is done over 
         if(im_ready_counter == 0){
             SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
-            get_width(image, IMAGE_BUFFER_SIZE, black_line);
+            //search for a line in the image and gets its width in pixels
+            black_line[WIDTH] = extract_line_width(image);
             update_obstacle_status(black_line);
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
@@ -200,14 +284,14 @@ void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_l
 
 void update_obstacle_status( uint16_t* properties){
     int16_t width= *(properties+WIDTH);
-    int16_t pos = *(properties+LINE_START_PIXEL);
+    //int16_t pos = *(properties+LINE_START_PIXEL);
     if (width== 0)
     {
         obstacle_status=TARGET_NOT_FOUND;
     }
     else{
         
-        obstacle_status= (width/2) +pos - OFFSET; 
+        obstacle_status= line_position; 
     }
 
 }

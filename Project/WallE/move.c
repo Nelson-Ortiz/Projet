@@ -84,7 +84,7 @@ static THD_FUNCTION(MoveDirections, arg) {
         //right_motor_set_speed(0);  
         //===============================================================================
         check_prox(&prox_values); 
-        //chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", active_prox_sensor);
+        chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", get_obstacle_situation());
         //chprintf((BaseSequentialStream *)&SD3, "status = %d \n", status);
         //chprintf((BaseSequentialStream *)&SD3, "loop= %d \n", loop_counter);
          
