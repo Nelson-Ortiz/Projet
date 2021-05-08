@@ -34,7 +34,7 @@
 #define IR8     7
 
 
-#define MIN_CAMERA_RANGE 100 //closer than this and the camera stops detecting accurately
+#define MIN_CAMERA_RANGE 300 //closer than this and the camera stops detecting accurately
 #define MAX_CAMERA_RANGE 300 // further than this and the obstacle is too far 
 
 //for the moment the speeds available are defined and constant trough the project
@@ -83,11 +83,11 @@ static THD_FUNCTION(MoveDirections, arg) {
         //left_motor_set_speed(0);
         //right_motor_set_speed(0);  
         //===============================================================================
-
-        //chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", object_detection());
-        chprintf((BaseSequentialStream *)&SD3, "status = %d \n", status);
-        chprintf((BaseSequentialStream *)&SD3, "loop= %d \n", loop_counter);
-        check_prox(&prox_values);  
+        check_prox(&prox_values); 
+        //chprintf((BaseSequentialStream *)&SD3, "ToF = %d \n", active_prox_sensor);
+        //chprintf((BaseSequentialStream *)&SD3, "status = %d \n", status);
+        //chprintf((BaseSequentialStream *)&SD3, "loop= %d \n", loop_counter);
+         
         switch(status){
             case FOLLOWING:
                 left_motor_set_speed(0);
@@ -105,7 +105,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                 if (object_detection()==FALSE)
                 {
                     //does a spiral movement that change direction every 5 sec
-
+                    /*
                     if (loop_counter<=FIVE_SECONDS)
                     {
                         //spiral to the right
@@ -119,13 +119,30 @@ static THD_FUNCTION(MoveDirections, arg) {
                         left_motor_set_speed(LOW_SPEED+100);
                         loop_counter++;
                     }
-                    else{
+                    else
+                    {
                         loop_counter=0;
                     }
-                              
+                      */
+                    left_motor_set_speed(HIGH_SPEED+100);
+                    right_motor_set_speed(HIGH_SPEED+100);          
                 }
                 else
                 {   
+                    if (loop_counter==1)
+                    {
+                        loop_counter=0;
+                    }
+                    else if (loop_counter==0)
+                    {
+                        //when it detects an obstacle it stops for a moment in order to stabilize the camera signal
+                        left_motor_set_speed(0);
+                        right_motor_set_speed(0);
+                        loop_counter++;
+                        break;
+                    }
+
+
                     //if we detected an object in the camera working proximity we check its nature
                     if (check_camera()==FALSE)
                     {
@@ -135,14 +152,14 @@ static THD_FUNCTION(MoveDirections, arg) {
                         if (rand()< RAND_MAX/2)
                         {
                             //turn left as long as the middle sensor doesn't detect something in the camera range
-                            left_motor_set_speed(-LOW_SPEED);
-                            right_motor_set_speed(HIGH_SPEED);
+                            left_motor_set_speed(-LOW_SPEED-100);
+                            right_motor_set_speed(HIGH_SPEED+100);
                         }
                         else
                         {
                             //turn right as long as the middle sensor doesn't detect something in the camera range
-                            left_motor_set_speed(HIGH_SPEED);
-                            right_motor_set_speed(-LOW_SPEED);
+                            left_motor_set_speed(HIGH_SPEED+100);
+                            right_motor_set_speed(-LOW_SPEED-100);
                         }
                     }
                     //if we detect the target we start the "target chase " algorithm
@@ -156,6 +173,26 @@ static THD_FUNCTION(MoveDirections, arg) {
                 break;
             case PROXIMITY:
                 set_front_led(0);
+                if (loop_counter==1)
+                {
+                    left_motor_set_speed(-LOW_SPEED);
+                    right_motor_set_speed(-LOW_SPEED);
+                    loop_counter++;
+                    break;
+                }
+                else if (loop_counter==2)
+                {
+                    left_motor_set_speed(0);
+                    right_motor_set_speed(0);
+                    loop_counter++;
+                    break;
+                }
+                else if (loop_counter>=3)
+                {
+                    loop_counter=0;
+                    status=RANDOM;
+                    break;
+                }
                 switch(active_prox_sensor){
                     case IR1:
                         //first we turn
@@ -186,6 +223,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                             left_motor_set_speed(646);
                             right_motor_set_speed(-646);
                         }
+
                         break;
                     case IR4:
                     //first we turn
@@ -195,6 +233,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                             //the speed values are a constant and depends in the geometry of the robot and the steps motors 
                             left_motor_set_speed(1092);
                             right_motor_set_speed(-1092);
+                            set_front_led(1);
                         }
                         break;
                     case IR5:
@@ -236,19 +275,23 @@ static THD_FUNCTION(MoveDirections, arg) {
                             left_motor_set_speed(-111);
                             right_motor_set_speed(111);
                         }
-                        break;    
+                        break;
+                    case NO_PROX_DETECTED:
+                        loop_counter=0;
+                        status=RANDOM;    
                 }
-                if (loop_counter==1)
+                /*if (loop_counter==1)
                 {
                     left_motor_set_speed(-LOW_SPEED);
                     right_motor_set_speed(-LOW_SPEED);
                     loop_counter++;
+                    set_front_led(0);
                 }
                 else if (loop_counter>=2)
                 {
                     loop_counter=0;
                     status=RANDOM;
-                }
+                }*/
                 break;
         }
         
@@ -368,7 +411,6 @@ uint8_t object_detection(void){
     //chekc the long range sensor to see if an object entered the camera working range
     if (VL53L0X_get_dist_mm()<=MIN_CAMERA_RANGE)
     {
-        
         //an object entered the camera detection range 
         return TRUE; 
     }
@@ -395,14 +437,22 @@ uint8_t check_camera(void){
 
 void check_prox(proximity_msg_t *prox_values){
     
-
-    for (int i = 0; i < PROX_SENS; ++i)
+    if (status!=RANDOM)
     {
-        if (prox_values->delta[i]>LIM_PROX)
+        return;
+    }
+    else
+    {
+        active_prox_sensor=NO_PROX_DETECTED;
+        for (int i = 0; i < PROX_SENS; ++i)
         {
+            if (prox_values->delta[i]>LIM_PROX)
+            {
             active_prox_sensor=i;
+            }
         }
     }
+    
     //chprintf((BaseSequentialStream *)&SD3, "sensor = %d \n", sensor);
     if (active_prox_sensor == NO_PROX_DETECTED)
     {
@@ -421,10 +471,17 @@ void check_prox(proximity_msg_t *prox_values){
         }
     }
     else{
-        if (status != PROXIMITY)
+        if (status == RANDOM)
         {
             loop_counter=0;
             status=PROXIMITY;         
+        }
+        else if (status==FOLLOWING)
+        {
+            status=FOLLOWING;
+        }
+        else{
+            status=PROXIMITY;
         }
 
 

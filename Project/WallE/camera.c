@@ -18,7 +18,7 @@
 #define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 2 /*en byte  [ 1 byte en mode FORMAT_YYYY
                                     2 bytes en mode FORMAT_RBG565 ] */
-#define AVERAGE_NBR_IMAGE 5
+#define AVERAGE_NBR_IMAGE 10
 #define BLACK_PIXEL_VALUE 10 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
@@ -86,7 +86,7 @@ static THD_FUNCTION(ProcessImage, arg) {
         img_buff_ptr = dcmi_get_last_image_ptr();
         // average is done over 
         if(im_ready_counter == 0){
-            //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+            SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
             get_width(image, IMAGE_BUFFER_SIZE, black_line);
             update_obstacle_status(black_line);
             im_ready_counter = AVERAGE_NBR_IMAGE;
