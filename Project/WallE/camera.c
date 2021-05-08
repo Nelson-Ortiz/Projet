@@ -18,7 +18,7 @@
 #define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 1 /*en byte  [ 1 byte en mode FORMAT_YYYY
                                     2 bytes en mode FORMAT_RBG565 ] */
-#define AVERAGE_NBR_IMAGE 2
+#define AVERAGE_NBR_IMAGE 5
 #define BLACK_PIXEL_VALUE 10 
 
 #define DISTANCE(px) ((0.0013f * px *px) - (0.4531f * px) + 47.465f) // polynomial fitting curve ; distance in cm
@@ -126,7 +126,12 @@ static THD_FUNCTION(CaptureImage, arg) {
     (void)arg;
 
     //Takes pixels 0 to IMAGE_BUFFER_SIZE of the line 10 + 11 (minimum 2 lines because reasons)
-    po8030_advanced_config(FORMAT_YYYY, 0, 10, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
+    po8030_advanced_config(FORMAT_YYYY, 0, 300, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
+    //set contrast to maximum
+    po8030_set_contrast(127);
+    // disable auto exposure
+    //po8030_set_ae(0);
+
     dcmi_enable_double_buffering();
     dcmi_set_capture_mode(CAPTURE_ONE_SHOT);
     dcmi_prepare();
