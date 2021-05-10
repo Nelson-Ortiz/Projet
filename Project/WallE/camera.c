@@ -16,7 +16,7 @@
 
 #define GREEN_MSB_PIXEL_MASK 0b00000111
 #define GREEN_LSB_PIXEL_MASK 0b11100000
-#define TAILLE_PIXEL 1 /*en byte  [ 1 byte en mode FORMAT_YYYY
+#define TAILLE_PIXEL 2 /*en byte  [ 1 byte en mode FORMAT_YYYY
                                     2 bytes en mode FORMAT_RBG565 ] */
 #define AVERAGE_NBR_IMAGE 5
 #define BLACK_PIXEL_VALUE 10 
@@ -126,7 +126,7 @@ static THD_FUNCTION(CaptureImage, arg) {
     (void)arg;
 
     //Takes pixels 0 to IMAGE_BUFFER_SIZE of the line 10 + 11 (minimum 2 lines because reasons)
-    po8030_advanced_config(FORMAT_YYYY, 0, 300, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
+    po8030_advanced_config(FORMAT_RGB565, 0, 300, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
     //set contrast to maximum
     po8030_set_contrast(127);
     // disable auto exposure
@@ -180,7 +180,7 @@ static THD_FUNCTION(ProcessImage, arg) {
             update_obstacle_status(black_line);
             im_ready_counter = AVERAGE_NBR_IMAGE;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
-                image[i]= get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL);
+                image[i]= get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
 
             
@@ -195,7 +195,7 @@ static THD_FUNCTION(ProcessImage, arg) {
         else{
             im_ready_counter--;
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
-                image[i]= (image[i] + get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
+                image[i]= (image[i] + get_green_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
             }
         }
         
