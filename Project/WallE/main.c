@@ -91,6 +91,8 @@ int main(void)
     po8030_start();
     //starts the motors
     motors_init();
+    //stars the speaker thread
+    playMelodyStart();
     //starts proximity sensors
     proximity_start();
 
@@ -118,36 +120,10 @@ int main(void)
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-
     /* Infinite loop. */
     while (1) {
-        //chprintf((BaseSequentialStream *)&SD3, "obstacle=%d\n", get_obstacle_situation());
-        /*if (get_obstacle_situation()< -20)
-        {
-            set_led(LED7,1);
-            set_led(LED3,0);
-            set_led(LED1,0);
-        }
-        else if (get_obstacle_situation()==400){
-            set_led(LED7,0);
-            set_led(LED3,0);
-            set_led(LED1,0);
-
-        }
-        else if (get_obstacle_situation()<30 && get_obstacle_situation()>-30){
-            set_led(LED1,1);
-            set_led(LED7,0);
-            set_led(LED3,0);
-
-        }
-        else{
-            set_led(LED1,0);
-            set_led(LED7,0);
-            set_led(LED3,1);
-        }
-        */
-
-        chThdSleepMilliseconds(100);
+    
+    chThdSleepMilliseconds(100);
     }
 }
 

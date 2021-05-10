@@ -8,6 +8,7 @@
 #include <usbcfg.h>
 #include "communication.h"
 #include "leds.h"
+#include "audio/play_melody.h"
 
 #include "main.h"
 
@@ -90,6 +91,7 @@ static THD_FUNCTION(MoveDirections, arg) {
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
+
 
     while(1){
 
