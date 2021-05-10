@@ -79,7 +79,7 @@ static uint8_t active_prox_sensor= NO_PROX_DETECTED;
 
 
 
-static THD_WORKING_AREA(waMoveDirections, 1024);
+static THD_WORKING_AREA(waMoveDirections, 128);
 static THD_FUNCTION(MoveDirections, arg) {
 	(void) arg;
     chRegSetThreadName(__FUNCTION__);

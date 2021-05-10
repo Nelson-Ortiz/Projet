@@ -92,7 +92,7 @@ int main(void)
     //starts the motors
     motors_init();
     //stars the speaker thread
-    playMelodyStart();
+    //playMelodyStart();
     //starts proximity sensors
     proximity_start();
 
@@ -121,6 +121,8 @@ int main(void)
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
     /* Infinite loop. */
+    // Test audio.
+    //playMelody(MARIO, ML_SIMPLE_PLAY, NULL);
     while (1) {
     
     chThdSleepMilliseconds(100);
