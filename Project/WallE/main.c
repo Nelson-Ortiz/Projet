@@ -93,21 +93,17 @@ int main(void)
     motors_init();
     //stars the speaker thread
     //playMelodyStart();
+    
     //starts proximity sensors
     proximity_start();
 
 
-    
-
-
-    //inti_th_motor();
+    //starts the capture and image processing thread thread 
     init_th_camera();
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
     init_movedirections();
-    //set_front_led(1);
-
 
     //important to have this after the bus init
     calibrate_ir();
@@ -115,16 +111,15 @@ int main(void)
     //starts the USB communication
     //usb_start(); //On l'utilise avec SDU1
     
-    //init_obstacledetection();
    
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
     /* Infinite loop. */
+
+    while (1) {
     // Test audio.
     //playMelody(MARIO, ML_SIMPLE_PLAY, NULL);
-    while (1) {
-    
     chThdSleepMilliseconds(100);
     }
 }

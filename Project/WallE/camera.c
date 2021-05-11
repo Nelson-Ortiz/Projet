@@ -40,11 +40,19 @@ static uint16_t line_position = IMAGE_BUFFER_SIZE/2;    //middle
 //semaphore
 static BSEMAPHORE_DECL(image_ready_sem, TRUE);
 
+
+
 /*
  *  Returns the line's width extracted from the image buffer given
  *  Returns 0 if line not found
  */
 uint16_t extract_line_width(uint8_t *buffer){
+/*===================================================================
+* The next algortihm is taken from the correction of the TP4 of the course 
+* "Systèmes embarqués et robotique" gyben by Prof. Francesco Mondada and Dr. Frank Bonnet at EPFL.
+* 
+* Date: 16/05/2021
+====================================================================*/
 
     uint16_t i = 0, begin = 0, end = 0, width = 0;
     uint8_t stop = 0, wrong_line = 0, line_not_found = 0;
@@ -129,7 +137,7 @@ static THD_FUNCTION(CaptureImage, arg) {
     po8030_advanced_config(FORMAT_YYYY, 0, 300, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
     //set contrast to maximum
     po8030_set_contrast(127);
-    // disable auto exposure
+    // disable auto exposure if very good light conditioning is possible, otherswise let it on
     //po8030_set_ae(0);
 
     dcmi_enable_double_buffering();

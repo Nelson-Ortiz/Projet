@@ -23,7 +23,7 @@
 
 /*=====================================================================================*/
 #define MIN_CAMERA_RANGE 200 //further than this and the camera signal becomes not fiable
-#define LIM_PROX 200 // If the sensor value is higher than this then it means an obstacle was detected
+#define LIM_PROX 70 // If the sensor value is higher than this then it means an obstacle was detected
 /*=====================================================================================*/
 
 //for the moment the speeds available are defined and constant trough the project
@@ -122,11 +122,15 @@ static THD_FUNCTION(MoveDirections, arg) {
                 //does a little show with the lights
                 lighting_garland();
                 break;
+
             case SEARCH:
+                clear_leds();
                 search_algorithm();                
                 break;
+
             case NEAR_OBJECT:
                 set_front_led(0);
+                clear_leds();
                 near_object_algorithm();
                 break;
         }        
