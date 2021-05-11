@@ -772,7 +772,7 @@ static THD_FUNCTION(PlayMelodyThd, arg) {
 void playMelodyStart(void){
 
 	//create the thread
-	chThdCreateStatic(waPlayMelodyThd, sizeof(waPlayMelodyThd), NORMALPRIO, PlayMelodyThd, NULL);
+	chThdCreateStatic(waPlayMelodyThd, sizeof(waPlayMelodyThd), NORMALPRIO-1, PlayMelodyThd, NULL);
 }
 
 void playMelody(song_selection_t choice, play_melody_option_t option, melody_t* external_melody){

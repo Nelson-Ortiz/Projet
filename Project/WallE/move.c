@@ -23,7 +23,7 @@
 
 /*=====================================================================================*/
 #define MIN_CAMERA_RANGE 200 //further than this and the camera signal becomes not fiable
-#define LIM_PROX 70 // If the sensor value is higher than this then it means an obstacle was detected
+#define LIM_PROX 100 // If the sensor value is higher than this then it means an obstacle was detected
 /*=====================================================================================*/
 
 //for the moment the speeds available are defined and constant trough the project
@@ -92,6 +92,7 @@ static THD_FUNCTION(MoveDirections, arg) {
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
 
+    playMelody(IMPOSSIBLE_MISSION,ML_SIMPLE_PLAY,NULL);  
 
     while(1){
 
@@ -104,7 +105,7 @@ static THD_FUNCTION(MoveDirections, arg) {
 
         */
         check_prox(&prox_values); 
-
+    
 
         switch(status){
 
@@ -121,11 +122,14 @@ static THD_FUNCTION(MoveDirections, arg) {
                 
                 //does a little show with the lights
                 lighting_garland();
+                
+
                 break;
 
             case SEARCH:
                 clear_leds();
-                search_algorithm();                
+                search_algorithm(); 
+          
                 break;
 
             case NEAR_OBJECT:
@@ -198,6 +202,7 @@ void search_algorithm(void){
             set_front_led(1);
             loop_counter=0;
             status=TARGET_DETECTED;
+            playMelody(WE_ARE_THE_CHAMPIONS,ML_SIMPLE_PLAY,NULL);
         }
     }
 

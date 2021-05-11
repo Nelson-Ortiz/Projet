@@ -91,11 +91,10 @@ int main(void)
     po8030_start();
     //starts the motors
     motors_init();
-    //stars the speaker thread
-    //playMelodyStart();
-    
     //starts proximity sensors
     proximity_start();
+    //Digital-to-Analog converter start. Needed for the speakers
+    dac_start();
 
 
     //starts the capture and image processing thread thread 
@@ -111,15 +110,15 @@ int main(void)
     //starts the USB communication
     //usb_start(); //On l'utilise avec SDU1
     
-   
+       //stars the speaker thread
+    playMelodyStart();
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
     /* Infinite loop. */
 
     while (1) {
-    // Test audio.
-    //playMelody(MARIO, ML_SIMPLE_PLAY, NULL);
+
     chThdSleepMilliseconds(100);
     }
 }
