@@ -42,8 +42,6 @@
 #include "uc_usage.h"
 
 #include "move.h"
-#include "obstacle.h"
-#include "motor.h"
 #include "camera.h"
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
@@ -55,13 +53,14 @@ messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
+/*
 void SendUint8ToComputer(uint8_t* data, uint16_t size) 
 {
     chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)"START", 5);
     chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)&size, sizeof(uint16_t));
     chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)data, size);
 }
-
+*/
 static void serial_start(void)
 {
     static SerialConfig ser_cfg = {
@@ -102,21 +101,21 @@ int main(void)
 
     /** Inits the Inter Process Communication bus. */
     messagebus_init(&bus, &bus_lock, &bus_condvar);
+    
+    //initialize the moving thread
     init_movedirections();
 
     //important to have this after the bus init
     calibrate_ir();
 
-    //starts the USB communication
-    //usb_start(); //On l'utilise avec SDU1
     
-       //stars the speaker thread
+    //stars the speaker thread
     playMelodyStart();
 
     //wait 2 sec to be sure the e-puck is in a stable position
     chThdSleepMilliseconds(2000);
-    /* Infinite loop. */
 
+    /* Infinite loop. */
     while (1) {
 
     chThdSleepMilliseconds(100);

@@ -14,8 +14,6 @@
 
 
 
-#define GREEN_MSB_PIXEL_MASK 0b00000111
-#define GREEN_LSB_PIXEL_MASK 0b11100000
 #define TAILLE_PIXEL 1 /*en byte  [ 1 byte en mode FORMAT_YYYY
                                     2 bytes en mode FORMAT_RBG565 ] */
 #define AVERAGE_NBR_IMAGE 5
@@ -32,10 +30,13 @@
 
 #define PIX2CM 1
 
-//static uint8_t distance_cm = 0;
+
 static int16_t obstacle_status=0;
-//static float distance_cm = 0;
 static uint16_t line_position = IMAGE_BUFFER_SIZE/2;    //middle
+
+//internal functions
+uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr);
+void update_obstacle_status( uint16_t width);
 
 //semaphore
 static BSEMAPHORE_DECL(image_ready_sem, TRUE);
@@ -48,7 +49,7 @@ static BSEMAPHORE_DECL(image_ready_sem, TRUE);
  */
 uint16_t extract_line_width(uint8_t *buffer){
 /*===================================================================
-* The next algortihm is taken from the correction of the TP4 of the course 
+* The next algortihm is taken from the TP4 correction of the course 
 * "Systèmes embarqués et robotique" gyben by Prof. Francesco Mondada and Dr. Frank Bonnet at EPFL.
 * 
 * Date: 16/05/2021
@@ -57,8 +58,6 @@ uint16_t extract_line_width(uint8_t *buffer){
     uint16_t i = 0, begin = 0, end = 0, width = 0;
     uint8_t stop = 0, wrong_line = 0, line_not_found = 0;
     uint32_t mean = 0;
-
-    static uint16_t last_width = PXTOCM/GOAL_DISTANCE;
 
     //performs an average
     for(uint16_t i = 0 ; i < IMAGE_BUFFER_SIZE ; i++){
@@ -120,12 +119,13 @@ uint16_t extract_line_width(uint8_t *buffer){
         end = 0;
         width = 0;
     }else{
-        last_width = width = (end - begin);
+        /*last_width =*/ width = (end - begin);
         line_position = (begin + end)/2; //gives the line position.
     }
 
         return width;
 }
+
 
 static THD_WORKING_AREA(waCaptureImage, 256);
 static THD_FUNCTION(CaptureImage, arg) {
@@ -135,29 +135,28 @@ static THD_FUNCTION(CaptureImage, arg) {
 
     //Takes pixels 0 to IMAGE_BUFFER_SIZE of the line 10 + 11 (minimum 2 lines because reasons)
     po8030_advanced_config(FORMAT_YYYY, 0, 300, IMAGE_BUFFER_SIZE, 2, SUBSAMPLING_X1, SUBSAMPLING_X1);
+    
+    //The next lines can be edited by the user in order to improve the camera recognition in function of the light conditions 
+    /*=================================================================*/
     //set contrast to maximum
-    po8030_set_contrast(127);
+    /*po8030_set_contrast(127);*/
+
     // disable auto exposure if very good light conditioning is possible, otherswise let it on
-    //po8030_set_ae(0);
+    po8030_set_ae(0);
+    /*=================================================================*/
 
     dcmi_enable_double_buffering();
     dcmi_set_capture_mode(CAPTURE_ONE_SHOT);
     dcmi_prepare();
-    //systime_t time;
 
     while(1){
-        //starts a capture
-        //time = chVTGetSystemTime();
-        
+        //starts a capture 
         dcmi_capture_start();
         //waits for the capture to be done
         wait_image_ready();
         
         //signals an image has been captured
         chBSemSignal(&image_ready_sem);     
-        
-        //time = chVTGetSystemTime() - time;
-        // chprintf((BaseSequentialStream *)&SD3, "time = %d \n", time);    
     }
 }
 
@@ -171,37 +170,39 @@ static THD_FUNCTION(ProcessImage, arg) {
     uint8_t *img_buff_ptr;
     uint8_t image[IMAGE_BUFFER_SIZE] = {0};
     uint8_t im_ready_counter = 0;
-    uint16_t black_line[2]={0};
+    uint16_t line_width=0;
 
-    //bool send_to_computer = true;
 
     while(1){
         //waits until an image has been captured
         chBSemWait(&image_ready_sem);
         //gets the pointer to the array filled with the last image in RGB565    
         img_buff_ptr = dcmi_get_last_image_ptr();
-        // average is done over 
+        
+        // average is done over AVERAGE_NBR_IMAGE
         if(im_ready_counter == 0){
-            SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
+            //SendUint8ToComputer(&image[0], IMAGE_BUFFER_SIZE);
             //search for a line in the image and gets its width in pixels
-            black_line[WIDTH] = extract_line_width(image);
-            update_obstacle_status(black_line);
+            line_width = extract_line_width(image);
+
+
+            update_obstacle_status(line_width);
+            
+            //we restart the averaging
             im_ready_counter = AVERAGE_NBR_IMAGE;
+            
+            //we store the new values 
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
-
             
-            //distance_cm=DISTANCE(black_line[WIDTH]);
-            
-            //chprintf((BaseSequentialStream *)&SD3, "obstacle = %d \n", obstacle_status);
-            // chprintf((BaseSequentialStream *)&SD3, "position = %d \n", black_line[1]);
-            // chprintf((BaseSequentialStream *)&SD3, "distance = %d \n", distance_cm);
-            
-
         }
+
         else{
+
             im_ready_counter--;
+
+            //the average is done here
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
                 image[i]= (image[i] + get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
             }
@@ -220,73 +221,15 @@ void init_th_camera(void){
 
 // Other functions
 
-uint8_t get_green_pixel(uint8_t *img_pixel_ptr){
-    uint8_t pixel_MSB = *img_pixel_ptr;
-    uint8_t pixel_LSB = *(img_pixel_ptr + 1);
-    uint8_t green_pixel = 0;
-    pixel_MSB = (pixel_MSB & GREEN_MSB_PIXEL_MASK ) <<3;
-    pixel_LSB = (pixel_LSB & GREEN_LSB_PIXEL_MASK) >> 5;
-    green_pixel = pixel_MSB | pixel_LSB; 
-    return green_pixel; 
-}
-
-uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ //checker que c'est bien ca ? 
+//this function facilitates the switch between each camera modes
+uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ 
     return *img_pixel_ptr;
-}
-
-void get_width(const uint8_t *image_array, uint16_t line_size, uint16_t *black_line ){
-
-    uint16_t line_width=0; 
-    uint16_t line_start = 0;
-    uint16_t pixel_counter=0; 
-    uint16_t start_point =0;
-    uint16_t pixel_value = 0;
-    uint16_t counting = 0; 
-
-    for (int i = 0; i < line_size; ++i)
-    {
-        pixel_value = *(image_array+i);
+} 
 
 
 
-        if (pixel_value <= BLACK_PIXEL_VALUE && i<=(line_size-1))
-        {
-            
-            if (counting == FALSE){
-                start_point = i; 
-                counting =TRUE;
-                pixel_counter++;
-            }
-            else{ 
-                pixel_counter++; 
-            }
-            
-            
-        }
-
-        else{
-            counting = FALSE; 
-            if (pixel_counter >= line_width && pixel_counter>=MIN_LIN_VALUE)
-            {
-                line_width =pixel_counter;
-                line_start = start_point;
-                pixel_counter=0;
-            }
-            else { pixel_counter=0; }
-        }
-
-    }
-
-    *(black_line)=line_width;
-    *(black_line+1)=line_start;
-
-}
-
-void update_obstacle_status( uint16_t* properties){
-    int16_t width= *(properties+WIDTH);
-    //int16_t pos = *(properties+LINE_START_PIXEL);
-    if (width== 0)
-    {
+void update_obstacle_status( uint16_t width){
+    if (width== 0){
         obstacle_status=TARGET_NOT_FOUND;
     }
     else{
