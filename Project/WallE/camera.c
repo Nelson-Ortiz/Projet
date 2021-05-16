@@ -35,7 +35,7 @@ static int16_t obstacle_status=0;
 static uint16_t line_position = IMAGE_BUFFER_SIZE/2;    //middle
 
 //internal functions
-uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr);
+uint8_t  get_pixel(uint8_t *img_pixel_ptr);
 void update_obstacle_status( uint16_t width);
 
 //semaphore
@@ -119,7 +119,7 @@ uint16_t extract_line_width(uint8_t *buffer){
         end = 0;
         width = 0;
     }else{
-        /*last_width =*/ width = (end - begin);
+        width = (end - begin);
         line_position = (begin + end)/2; //gives the line position.
     }
 
@@ -193,7 +193,7 @@ static THD_FUNCTION(ProcessImage, arg) {
             
             //we store the new values 
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
-                image[i]= get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL);
+                image[i]= get_pixel(img_buff_ptr+i*TAILLE_PIXEL);
             }
             
         }
@@ -204,7 +204,7 @@ static THD_FUNCTION(ProcessImage, arg) {
 
             //the average is done here
             for (int i = 0; i < IMAGE_BUFFER_SIZE; i++){
-                image[i]= (image[i] + get_Y_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
+                image[i]= (image[i] + get_pixel(img_buff_ptr+i*TAILLE_PIXEL))/2;
             }
         }
         
@@ -222,7 +222,7 @@ void init_th_camera(void){
 // Other functions
 
 //this function facilitates the switch between each camera modes
-uint8_t  get_Y_pixel(uint8_t *img_pixel_ptr){ 
+uint8_t  get_pixel(uint8_t *img_pixel_ptr){ 
     return *img_pixel_ptr;
 } 
 

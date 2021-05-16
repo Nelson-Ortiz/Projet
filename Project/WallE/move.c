@@ -117,7 +117,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                 //it it doesn't sees the target anymore it comes back to a SEARCH mouvement  
                 if (check_camera()==FALSE){
                     loop_counter=0;
-                    set_front_led(0);
+                    set_front_led(LED_OFF);
                     clear_leds();
                     status=SEARCH;
                 }
@@ -144,7 +144,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                 break;
 
             case NEAR_OBJECT:
-                set_front_led(0);
+                set_front_led(LED_OFF);
                 clear_leds();
                 near_object_algorithm();
                 break;
@@ -193,8 +193,8 @@ void search_algorithm(void){
         //if we detected an object in the camera working proximity we check its nature
         if (check_camera()==FALSE){
             //if it is an obstacle we avoid it 
-            set_front_led(0);
-            //Randomlyy chose left or rigth 
+            set_front_led(LED_OFF);
+            //Randomly choose left or rigth 
             if (rand()< RAND_MAX/2){
                 //turn left as long as the middle sensor doesn't detect something in the camera range
                 left_motor_set_speed(-LOW_SPEED-100);
@@ -208,7 +208,7 @@ void search_algorithm(void){
         }
         //if we detect the target we start the "target chase " algorithm
         else{
-            set_front_led(1);
+            set_front_led(LED_ON);
             loop_counter=0;
             status=TARGET_DETECTED;
              
@@ -283,7 +283,6 @@ void near_object_algorithm (void) {
                 loop_counter++;
                 left_motor_set_speed(SPEED_150_DEG);
                 right_motor_set_speed(-SPEED_150_DEG);
-                set_front_led(1);
             }
             break;
         case IR5:
@@ -375,7 +374,7 @@ void check_prox(proximity_msg_t *prox_values){
     //chprintf((BaseSequentialStream *)&SD3, "sensor = %d \n", sensor);
     //if no close object was detected
     if (active_prox_sensor == NO_PROX_DETECTED){
-        set_body_led(1);
+        set_body_led(LED_ON);
         //if we were on the NEAR_OBJECT algorithm that means that we just finished checking an object, so we switch to SEARCH
         if (status==NEAR_OBJECT){
             loop_counter=0;
