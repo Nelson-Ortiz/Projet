@@ -118,6 +118,7 @@ static THD_FUNCTION(MoveDirections, arg) {
                 if (check_camera()==FALSE){
                     loop_counter=0;
                     set_front_led(0);
+                    clear_leds();
                     status=SEARCH;
                 }
                 

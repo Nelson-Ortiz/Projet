@@ -8,20 +8,10 @@
 #include "hal.h"
 #include "shell.h"
 
-#include "aseba_vm/aseba_node.h"
-#include "aseba_vm/skel_user.h"
-#include "aseba_vm/aseba_can_interface.h"
-#include "aseba_vm/aseba_bridge.h"
 #include "audio/audio_thread.h"
 #include "audio/play_melody.h"
 #include "audio/play_sound_file.h"
-#include "audio/microphone.h"
 #include "camera/po8030.h"
-#include "epuck1x/Asercom.h"
-#include "epuck1x/Asercom2.h"
-#include "epuck1x/a_d/advance_ad_scan/e_acc.h"
-#include "sensors/battery_level.h"
-#include "sensors/imu.h"
 #include "sensors/mpu9250.h"
 #include "sensors/proximity.h"
 #include "sensors/VL53L0X/VL53L0X.h"
@@ -35,7 +25,6 @@
 #include "memory_protection.h"
 #include "motors.h"
 #include "sdio.h"
-#include "selector.h"
 #include "spi_comm.h"
 #include "usbcfg.h"
 #include "communication.h"
@@ -46,21 +35,12 @@
 
 #define SHELL_WA_SIZE   THD_WORKING_AREA_SIZE(2048)
 
-#define PROX_SENS 7
-#define LIM_PROX 100
 
 messagebus_t bus;
 MUTEX_DECL(bus_lock);
 CONDVAR_DECL(bus_condvar);
 
-/*
-void SendUint8ToComputer(uint8_t* data, uint16_t size) 
-{
-    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)"START", 5);
-    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)&size, sizeof(uint16_t));
-    chSequentialStreamWrite((BaseSequentialStream *)&SD3, (uint8_t*)data, size);
-}
-*/
+
 static void serial_start(void)
 {
     static SerialConfig ser_cfg = {

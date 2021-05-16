@@ -141,7 +141,7 @@ static THD_FUNCTION(CaptureImage, arg) {
     //set contrast to maximum
     /*po8030_set_contrast(127);*/
 
-    // disable auto exposure if very good light conditioning is possible, otherswise let it on
+    // disable auto exposure if very good light conditioning is possible, otherswise let it enabled
     po8030_set_ae(0);
     /*=================================================================*/
 
